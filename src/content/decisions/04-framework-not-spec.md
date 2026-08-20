@@ -1,7 +1,7 @@
 ---
-headline: Gave the partner the framework instead of the spec.
-context: Integrating Google Home Platform into third-party hardware had no established model. The default was to hand a partner a specification, wait, and validate at the end, which puts every defect at the most expensive point in the schedule.
-call: Build the testing framework jointly with LG, with shared entrance criteria and shared visibility into defects, rather than treating the integration as a delivery.
-followed: The integration shipped with smart home functionality working across both platforms. LG moved from vendor to strategic partner, and the framework became the reference model for third-party platform work that followed.
+headline: Replaced vendor specification delivery with a co-engineered partnership framework.
+context: Third-party integration of the Google Home Platform into partner hardware lacked an operational blueprint. The legacy model relied on handing off static specs to partners and validating at end-of-funnel, shifting defect discovery to the most expensive phase of the product lifecycle.
+call: Co-designed a joint integration and testing framework directly with LG, establishing shared entrance and exit criteria, unified bug SLAs, and real-time defect visibility.
+followed: Shipped the integration flawlessly with smart home functionality synchronized across both software platforms. Elevated LG from a tactical hardware vendor to a strategic ecosystem partner, establishing the reference operational model for all subsequent 3P platform integrations.
 order: 4
 ---

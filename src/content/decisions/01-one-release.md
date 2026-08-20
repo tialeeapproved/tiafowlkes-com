@@ -1,7 +1,7 @@
 ---
-headline: Shipped one release instead of ten.
-context: A court deadline in Sonos v. Google required firmware changes across the in-market portfolio. Standard practice was to release device by device, sequenced by team readiness. The date was set by the court and the sequence did not fit inside it.
-call: Consolidate the entire portfolio into a single coordinated release, and hold software, marketing, and legal to one shared timeline rather than their own.
-followed: Firmware changes delivered across 720K+ devices affecting more than 10M in market, on the legal deadline. Two daily standups held the schedule, one with software and one with marketing and launch. Leadership adopted the model for subsequent cross-functional releases.
+headline: Consolidated ten fragmented releases into a single synchronized launch window.
+context: A court mandate in Sonos v. Google mandated firmware modifications across the active in-market portfolio. Standard operating procedure dictated sequential, device-by-device rollouts based on isolated team readiness, which failed to meet the court-ordered deadline.
+call: Consolidated the entire product portfolio into a single, synchronized release gate, enforcing a unified operational timeline across Software Engineering, Product Marketing, Legal, and PR.
+followed: Successfully deployed firmware updates across 720K+ devices impacting 10M+ active units on the legal deadline. Established two daily cross-functional control towers to eliminate cross-PA blockers, creating a repeatable framework adopted by executive leadership for subsequent high-stakes multi-product launches.
 order: 1
 ---

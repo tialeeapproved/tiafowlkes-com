@@ -1,15 +1,15 @@
 /* ============================================================
    PROGRAMS — breadth first, depth second.
    `portfolio` is the matrix at the top. `programs` are the
-   detail panels below it.
+   detail sections below it.
    ============================================================ */
 
 export const programsLead =
-  'Four years across the Nest and Google TV portfolio, leading the entertainment vertical. Hardware and software, first-party and third-party, from unreleased hardware through in-market release.';
+  'Four years leading end-to-end program execution across Nest and Google TV within the entertainment vertical. Governing complex hardware/software integrations across 1P/3P ecosystems from early validation through global commercialization.';
 
 export const portfolio = [
   {
-    label: 'Defined strategy',
+    label: 'Strategic scope',
     items: [
       'Google TV Streamer 4K',
       'Chromecast with Google TV',
@@ -37,24 +37,23 @@ export const portfolio = [
     ],
   },
   {
-    label: 'Platforms',
+    label: 'Ecosystem platforms',
     items: ['Google TV', 'Google Home Platform', 'Matter', 'Assistant', 'Fitbit'],
   },
   {
-    label: 'Cross-functional scope',
+    label: 'Cross-functional governance',
     items: [
-      'Product',
+      'Product Management',
       'Technical Program Management',
-      'Software Engineering',
-      'Hardware Engineering',
-      'User Experience',
+      'Software & Hardware Engineering',
+      'UX Design & Research',
       'Legal',
-      'Marketing',
-      'Public Relations',
-      'Compliance',
-      'Quality Assurance',
-      'External partners (LG, Walmart, ADT)',
-      'Vendor teams',
+      'Product Marketing',
+      'PR',
+      'Regulatory Compliance',
+      'QA',
+      '3P Strategic Partners (LG, Walmart, ADT)',
+      'Global Vendor Operations',
     ],
   },
 ];
@@ -71,57 +70,56 @@ export const programs: Program[] = [
   {
     id: 'streamer-4k',
     name: 'Google TV Streamer 4K',
-    descriptor: 'Path to quality, entrance criteria through scale approval',
+    descriptor: 'End-to-end validation architecture & executive release gating',
     metrics: ['2,600+ participants', '~10K devices', '≥95% production validation bar'],
     points: [
-      'Defined the testing strategy end to end: entrance and success criteria, distribution, activation schedules, and allocation across three phases',
-      'Ran the first compatibility testing of Matter over Thread and Matter over Wi-Fi against a hub device, with no prior framework to work from',
-      'Delivered insight directly to the general manager and executive leadership, informing launch decisions that landed the product at 4.5 satisfaction and an NPS of 21',
+      'Architected the end-to-end testing and quality strategy, establishing entrance/exit criteria, global distribution pipelines, and multi-phase cohort allocation models.',
+      'Pioneered the initial validation framework for Matter over Thread and Matter over Wi-Fi on hub architecture with no existing blueprint.',
+      'Delivered strategic telemetry and risk synthesis directly to the GM and executive VP leads, driving data-backed launch approvals that achieved a 4.5 user satisfaction score and 21 NPS.',
     ],
   },
   {
     id: 'commercialization',
     name: 'Google TV Streamer 4K, commercialization',
-    descriptor: 'Third-party partner readiness and launch',
-    metrics: ['$2M+ in sales', '1M+ activations', '20 launch markets'],
+    descriptor: 'Global partner readiness, cross-PA launch, & go-to-market execution',
+    metrics: ['$2M+ initial sales', '1M+ activations', '20 launch markets'],
     points: [
-      'Managed external partner relationships across LG, Walmart, and third-party manufacturers through onboarding, allocation, and performance tracking',
-      'Built the coordination frameworks that carried the product from readiness through launch, improving throughput 22%',
-      'Coordinated the factory image and out-of-box experience releases across the Google Home app, Android TV, and Assistant teams to hold feature quality through each phase',
+      'Governed external partner integration across LG, Walmart, and key OEMs through onboarding, technical allocation, and operational SLA tracking.',
+      'Designed cross-functional coordination playbooks that accelerated commercialization readiness, increasing program throughput by 22%.',
+      'Synchronized factory image flashing and out-of-box experience (OOBE) milestones across Google Home app, Android TV, and Assistant engineering teams to preserve release quality.',
     ],
   },
   {
     id: 'sonos',
     name: 'Sonos v. Google firmware release',
-    descriptor: 'Consolidated release against a court deadline',
+    descriptor: 'High-stakes court-mandated release governance',
     metrics: ['720K+ devices', '10M+ in market', '1 release window'],
     points: [
-      'Owned the cross-functional response, aligning legal, engineering, marketing, and product against dates set outside the company',
-      'Synchronized the software change, the feature activation, and the marketing release into a single timeline',
-      'Unblocked the feature activation against a compressed software schedule and an existing communications calendar',
+      'Owned the cross-functional response unit, unifying Legal, Engineering, Marketing, and Product around strict court-ordered compliance windows.',
+      'Harmonized complex software changes, feature activations, and external communications into a single, synchronized release gate.',
+      'Unblocked critical feature rollouts against an aggressive engineering schedule and established PR communication lockouts.',
     ],
   },
   {
     id: 'lg-webos',
     name: 'LG webOS with Google Home Platform',
-    descriptor: 'Third-party platform integration',
-    metrics: ['2 companies', '0 to 1 framework', '1P and 3P scope'],
+    descriptor: '0-to-1 strategic 3P integration & platform expansion',
+    metrics: ['2 enterprise entities', '0-to-1 framework', '1P & 3P alignment'],
     points: [
-      'Owned the partnership between Google and LG end to end, aligning stakeholders across both organizations',
-      'Established the integration and testing framework for third-party platform work, where none existed',
-      'Resolved third-party device incompatibility and firmware education gaps reaching users in market',
-      'Positioned LG as a strategic platform partner and set the reference model for subsequent third-party integrations',
+      'Led executive alliance management between Google and LG, driving operational alignment across product, engineering, and business development leads.',
+      'Authored the foundational integration, testing, and compliance framework for 3P platform expansion across the smart home ecosystem.',
+      'Resolved critical cross-platform interoperability issues and field telemetry gaps impacting in-market hardware.',
     ],
   },
   {
     id: 'chromecast-hd',
     name: 'Chromecast HD',
-    descriptor: 'Full program ownership, device through in-market',
-    metrics: ['5.8K devices', '3.4K users', '1 owner'],
+    descriptor: 'Full-lifecycle program ownership from validation to post-launch',
+    metrics: ['5.8K deployed units', '3.4K active users', 'Single-threaded lead'],
     points: [
-      'Ran the program independently from distribution through issue resolution, feeding findings into plan-of-record changes',
-      'Identified a late usability gap in voice control through the remote, then made participant feedback a gated requirement in the setup and pilot phases of every program that followed',
-      'Established the feedback integration standard now applied across the portfolio',
+      'Directed program execution independently from initial hardware allocation through defect resolution, feeding field telemetry directly into Plan of Record (POR) adjustments.',
+      'Identified a critical late-stage voice remote usability defect, leading to the institutionalization of gated user feedback checkpoints across all downstream portfolio programs.',
+      'Established the standardized telemetry integration model now utilized across the entire hardware vertical.',
     ],
   },
 ];

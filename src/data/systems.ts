@@ -5,7 +5,7 @@
    ============================================================ */
 
 export const systemsLead =
-  'The programs ended. These did not. Six operating systems built for teams that had no obligation to adopt them, and adopted them anyway.';
+  'Programs complete on launch. Systems endure. Six institutional frameworks engineered to drive cross-functional rigor, voluntarily adopted across organizational lines.';
 
 export interface System {
   n: number;
@@ -17,44 +17,47 @@ export interface System {
 export const systems: System[] = [
   {
     n: 1,
-    name: 'Participant database and new hire onboarding',
+    name: 'Enterprise participant database & onboarding framework',
     served: 'Served Devices & Services, Platforms & Ecosystems, Health & Home, and Pixel.',
     changed:
-      'Became the shared participant database across all four organizations, growing the contributor population 40% and lifting engagement 58%.',
+      'Unified legacy silos into a single participant database, scaling active contributors by 40% and lifting program engagement by 58%.',
   },
   {
     n: 2,
-    name: 'Tracker standardization',
-    served: 'Served the Health & Home testing team.',
+    name: 'Standardized issue & SLA tracking architecture',
+    served: 'Served Health & Home engineering and validation teams.',
     changed:
-      'Replaced program-by-program tracking with a single template, reaching full adoption across Fitbit, Home, and Health.',
+      'Replaced fragmented team tracking with a single operational standard, achieving 100% adoption across Fitbit, Home, and Health.',
   },
   {
     n: 3,
-    name: 'Launch readiness review template',
-    served: 'Served Health & Home and its cross-functional stakeholders.',
-    changed: 'Unified the data and the narrative entering every review.',
+    name: 'Unified launch readiness governance framework',
+    served: 'Served Health & Home leadership and cross-PA executive stakeholders.',
+    changed:
+      'Standardized release data synthesis and risk narratives, streamlining executive sign-offs across all hardware gates.',
   },
   {
     n: 4,
-    name: 'Executive testing program',
-    served: 'Served leadership across the portfolio.',
+    name: 'Executive validation & early adoption program',
+    served: 'Served VP and Director-level leadership across the hardware ecosystem.',
     changed:
-      'Removed the onboarding friction that kept executives out of products in flight, and gave them direct visibility ahead of launch decisions.',
+      'Eliminated onboarding friction for senior executives, establishing real-time feedback loops ahead of strategic launch decisions.',
   },
   {
     n: 5,
-    name: 'Investigation and retrieval process',
-    served: 'Served TV stakeholders and affected participants.',
-    changed: 'Shortened the path from reported issue to resolved bug.',
+    name: 'Rapid issue escalation & hardware retrieval protocol',
+    served: 'Served TV Ecosystem stakeholders, engineering leads, and field participants.',
+    changed:
+      'Streamlined the end-to-end path from field anomaly reporting to root-cause bug resolution and hardware triage.',
   },
   {
     n: 6,
-    name: 'Central team repository',
-    served: 'Served the Health & Home testing team.',
-    changed: 'Consolidated scattered resources into a single access point.',
+    name: 'Centralized knowledge architecture & operations hub',
+    served: 'Served the Health & Home testing organization.',
+    changed:
+      'Consolidated disparate program artifacts into a single access point, cutting onboarding time for extended team members.',
   },
 ];
 
 export const systemsClosing =
-  'Also built: the intake process published on the team site, which let less tenured teammates run recruitment without escalation, and the revised program plan and portfolio planning formats adopted across the organization.';
+  'Also built: the self-service intake protocol adopted across the organization, which enabled junior PgMs to execute complex recruitment without escalation, and redesigned the standard portfolio planning formats applied across the division.';

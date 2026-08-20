@@ -1,7 +1,7 @@
 ---
-headline: Funded two platform partners before anyone asked for them.
-context: Matter over Thread and Spatial Audio were emerging capabilities with no owner, no budget line, and no place in the product pipeline.
-call: Negotiate cross-team alignment and secure the budget to bring both into the pipeline, then build joint testing roadmaps with each partner.
-followed: Both capabilities entered the portfolio with structured testing behind them, and the results fed directly into product decisions rather than arriving after them.
+headline: Proactively funded and integrated emerging platform technologies ahead of roadmap demand.
+context: Matter over Thread and Spatial Audio represented strategic industry standards but lacked defined program ownership, allocated budget, or entry points within the active product pipeline.
+call: Championed cross-PA alignment, secured dedicated strategic budget to integrate both technologies into the testing pipeline, and established joint validation roadmaps with partner engineering leads.
+followed: Successfully onboarded both capabilities into the portfolio with structured validation data, enabling executive leadership to make proactive, data-backed commercialization decisions.
 order: 7
 ---

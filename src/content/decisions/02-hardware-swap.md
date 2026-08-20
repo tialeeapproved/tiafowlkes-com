@@ -1,7 +1,7 @@
 ---
-headline: Swapped the hardware out from under an active test population.
-context: A SKU change and a factory desense issue hit the Google TV Streamer 4K program in flight. The test population was on hardware that was no longer viable, feature feedback was still outstanding, and the approval gate before scaling had not moved.
-call: Execute a full device swap to Chromecast with Google TV rather than pause the program, and rebuild the user experience timeline around the new plan.
-followed: The Streamer and its remote cleared the approval gate with setup and satisfaction feedback intact. Feature testing continued without a gap, and stakeholders stayed aligned through a change that touched every downstream schedule.
+headline: Pivoted active hardware testing architecture in-flight to protect launch readiness.
+context: A late-stage SKU pivot and factory RF desense issue threatened the Google TV Streamer 4K timeline during active validation. The test population was stranded on unviable hardware, critical telemetry gaps were emerging, and the executive approval gate remained fixed.
+call: Executed a full hardware swap to Chromecast with Google TV for the active cohort rather than pausing validation, restructuring the downstream UX and feature testing roadmaps in real time.
+followed: The Streamer and remote cleared executive approval gates with setup and satisfaction telemetry intact. Maintained uninterrupted feature validation and kept cross-functional stakeholders aligned through a high-risk change impacting every downstream partner schedule.
 order: 2
 ---

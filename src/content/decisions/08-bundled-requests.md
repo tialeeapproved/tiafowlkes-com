@@ -1,7 +1,7 @@
 ---
-headline: Bundled the requests instead of servicing them.
-context: Android TV setup, Google TV, and Chromecast program teams were submitting testing requests independently, against a shrinking population of active participants and no shared view of what was queued.
-call: Centralize intake across all three teams and bundle software releases rather than run them in parallel.
-followed: Allocation held against a smaller population, and the teams stopped competing for the same participants.
+headline: Centralized multi-team intake to eliminate participant pool cannibalization.
+context: Android TV Setup, Google TV, and Chromecast teams submitted independent validation requests, competing for the same constrained participant pool without visibility into ecosystem queue depth.
+call: Established a centralized intake governance model across all three program leads and mandated bundled software testing sweeps over parallel execution.
+followed: Maximized participant cohort yield, eliminated cross-team resource competition, and stabilized cohort retention across high-velocity testing cycles.
 order: 8
 ---

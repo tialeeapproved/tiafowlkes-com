@@ -1,7 +1,7 @@
 ---
-headline: Bought the headcount instead of absorbing the gap.
-context: The vendor site transition ran with one person staffed against a full shipment schedule. Absorbing it would have meant slipping shipments quietly and calling it capacity.
-call: Pull on-site support from the outgoing vendor team for immediate coverage, secure leadership approval for additional headcount the following year, and require two weeks notice on all shipment requests.
-followed: Shipments proceeded on plan through the transition. The team entered the next year staffed to demand rather than to history, and the constraint never reached the programs it would have hit.
+headline: Secured dedicated staffing infrastructure to de-risk vendor transition timelines.
+context: A critical vendor site migration was understaffed, managed by a single resource against a high-volume hardware shipment timeline. Absorbing the gap internally would have silently degraded shipment schedules and obscured true capacity constraints.
+call: Negotiated temporary on-site support from the outgoing vendor team for immediate risk mitigation, secured executive approval for incremental head count, and enforced a two-week advance notice SLA on all shipment requests.
+followed: Maintained 100% on-time shipment execution through the transition. Scaled the operational team to match actual program demand, shielding downstream product roadmaps from capacity bottlenecks.
 order: 6
 ---

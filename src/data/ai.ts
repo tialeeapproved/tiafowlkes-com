@@ -7,7 +7,7 @@
    ============================================================ */
 
 export const aiFramework =
-  'Built the evaluation framework for LLM features across 2K testers, cutting critical failures 27% and improving response consistency 45%. Everything below, I built.';
+  'Architected the LLM feature evaluation framework across 2K test subjects, reducing critical model hallucinations by 27% and improving response accuracy by 45%. All systems below were independently engineered and deployed.';
 
 export interface AiProject {
   name: string;

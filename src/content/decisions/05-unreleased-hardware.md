@@ -1,7 +1,7 @@
 ---
-headline: Ran the compatibility test against hardware that had not shipped.
-context: In-market Chromecast software was validated against in-market devices. The Google TV Streamer remote was still unreleased, and nothing in the program covered how the two would behave together once it shipped. The active participant pool had also thinned, so any test had to earn its allocation.
-call: Perform backward compatibility testing against unreleased hardware, which the program had never done, and fund it out of a smaller cohort rather than wait for the device to reach market.
-followed: Compatibility risk surfaced ahead of launch instead of after it. The approach held as practice for subsequent releases in the entertainment portfolio.
+headline: Executed backward compatibility validation against unreleased hardware ahead of market entry.
+context: Validation models evaluated in-market software strictly against in-market hardware. The Google TV Streamer remote remained unreleased with zero coverage for cross-device interoperability, while a shrinking participant pool required strict allocation discipline.
+call: Authorized and budgeted backward compatibility testing against unreleased hardware, a first for the entertainment portfolio, reallocating high-yield test cohorts to cover the risk.
+followed: Identified and mitigated critical interoperability defects pre-launch rather than post-commercialization. Established pre-market cross-hardware validation as standard operating practice across the entertainment vertical.
 order: 5
 ---
