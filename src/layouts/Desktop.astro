@@ -1,62 +1,68 @@
 ---
 import Base from './Base.astro';
 import MenuBar from '../components/MenuBar.astro';
-import ImpactStrip from '../components/ImpactStrip.astro';
 import FolderIcons from '../components/FolderIcons.astro';
 import Window from '../components/Window.astro';
 import EvidenceCard from '../components/EvidenceCard.astro';
-import { folders, getFolder, type FolderId } from '../data/folders';
-import { allUnits, unitsInFolder } from '../lib/query';
+import { getFolder, type FolderId } from '../data/folders';
+import { unitsInFolder } from '../lib/query';
+import { site } from '../data/site';
 
 interface Props {
-  active: FolderId;
+  /* No active folder = the bare desktop. */
+  active?: FolderId;
 }
 
 const { active } = Astro.props;
-const folder = getFolder(active)!;
-
-/* Every folder is a query over the same library — nothing is
-   duplicated, and counts stay honest automatically. */
-const units = await unitsInFolder(folder);
-const all = await allUnits();
-
-const counts: Record<string, number> = {};
-for (const f of folders) {
-  counts[f.id] = all.filter((u) => u.data.tags.includes(f.tag as never)).length;
-}
+const folder = active ? getFolder(active) : undefined;
+const units = folder ? await unitsInFolder(folder) : [];
 ---
 
-<Base title={folder.label} description={folder.question}>
+<Base
+  title={folder?.label}
+  description={folder?.question ?? site.tagline}
+>
   <MenuBar />
 
-  <main class="shell">
-    <ImpactStrip />
-    <FolderIcons active={active} counts={counts} />
+  <main class:list={['shell', { bare: !folder }]} id="main">
+    <div class="desk">
+      <FolderIcons active={active} />
+    </div>
 
-    <Window title={folder.label} subtitle={folder.question} path={`~/${active}`}>
-      {
-        units.length === 0 ? (
-          <p class="empty">
-            Nothing here yet — this folder is scaffolded and waiting on content.
-          </p>
-        ) : (
-          <div class="stack">
-            {units.map((unit) => (
-              <EvidenceCard unit={unit} />
-            ))}
-          </div>
-        )
-      }
-    </Window>
+    {
+      folder && (
+        <Window title={folder.label} subtitle={folder.question} path={`~/${active}`}>
+          {units.length === 0 ? (
+            <p class="empty">Nothing here yet.</p>
+          ) : (
+            <div class="stack">
+              {units.map((unit) => (
+                <EvidenceCard unit={unit} />
+              ))}
+            </div>
+          )}
+        </Window>
+      )
+    }
   </main>
-
-  <footer class="shell foot mono">
-    <span>© {new Date().getFullYear()} tia fowlkes</span>
-    <a href="/list">View as list</a>
-  </footer>
 </Base>
 
 <style>
+  /* The bare desktop fills the viewport — icons and nothing else. */
+  .bare {
+    display: flex;
+    align-items: center;
+    min-height: calc(100vh - 46px);
+  }
+
+  .desk {
+    padding: var(--s6) 0 var(--s4);
+  }
+
+  .bare .desk {
+    padding: 0 0 var(--s8);
+  }
+
   .stack {
     display: grid;
     gap: var(--s2);
@@ -68,10 +74,15 @@ for (const f of folders) {
     font-size: 0.82rem;
   }
 
-  .foot {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--s2);
-    padding-bottom: var(--s4);
+  @media (max-width: 760px) {
+    .bare {
+      align-items: flex-start;
+      min-height: 0;
+    }
+
+    .desk,
+    .bare .desk {
+      padding: var(--s4) 0;
+    }
   }
 </style>

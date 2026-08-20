@@ -3,11 +3,10 @@ import { folders } from '../data/folders';
 import type { FolderId } from '../data/folders';
 
 interface Props {
-  active: FolderId;
-  counts: Record<string, number>;
+  active?: FolderId;
 }
 
-const { active, counts } = Astro.props;
+const { active } = Astro.props;
 ---
 
 <nav class="icons" aria-label="Folders">
@@ -19,20 +18,18 @@ const { active, counts } = Astro.props;
         aria-current={f.id === active ? 'page' : undefined}
       >
         <span class="glyph" aria-hidden="true">
-          <svg viewBox="0 0 48 38" width="48" height="38">
+          <svg viewBox="0 0 64 50" width="64" height="50">
             <path
-              d="M2 6a4 4 0 0 1 4-4h11.2a4 4 0 0 1 2.83 1.17L23.2 6.3H42a4 4 0 0 1 4 4v22a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V6Z"
+              d="M2 8a6 6 0 0 1 6-6h14.9a6 6 0 0 1 4.24 1.76L30.6 7.3H56a6 6 0 0 1 6 6v29a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V8Z"
               class="folder-back"
             />
             <path
-              d="M2 13h44v19a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V13Z"
+              d="M2 16h60v26a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V16Z"
               class="folder-front"
             />
           </svg>
-          <span class="count">{counts[f.id] ?? 0}</span>
         </span>
         <span class="label">{f.label}</span>
-        <span class="caption">{f.caption}</span>
       </a>
     ))
   }
@@ -40,104 +37,66 @@ const { active, counts } = Astro.props;
 
 <style>
   .icons {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--s2);
-    padding-bottom: var(--s4);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s6);
   }
 
   .icon {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 0.35rem;
-    padding: var(--s2);
-    border: 1px solid transparent;
+    align-items: center;
+    gap: 0.6rem;
+    padding: var(--s1);
     border-radius: var(--radius);
-    transition: background 0.15s, border-color 0.15s;
   }
 
   .icon:hover {
-    background: rgba(255, 255, 255, 0.025);
-    border-color: var(--border-soft);
     color: inherit;
   }
 
-  .icon.active {
-    background: rgba(255, 255, 255, 0.035);
-    border-color: var(--border);
-  }
-
-  .glyph {
-    position: relative;
-    display: block;
-  }
-
   .folder-back {
-    fill: var(--border);
+    fill: #2b2b36;
+    transition: fill 0.15s ease;
   }
 
   .folder-front {
-    fill: #2b2b36;
+    fill: #383844;
+    transition: fill 0.15s ease;
   }
 
-  .icon.active .folder-back,
-  .icon:hover .folder-back {
+  .icon:hover .folder-back,
+  .icon.active .folder-back {
     fill: var(--accent-line);
   }
 
-  .icon.active .folder-front,
-  .icon:hover .folder-front {
+  .icon:hover .folder-front,
+  .icon.active .folder-front {
     fill: var(--accent);
-  }
-
-  .count {
-    position: absolute;
-    right: 6px;
-    bottom: 3px;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--bg);
-  }
-
-  .icon:not(.active) .count {
-    color: var(--text-muted);
   }
 
   .label {
     font-family: var(--font-display);
-    font-size: 1.02rem;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: -0.01em;
+    transition: color 0.15s ease;
   }
 
+  .icon:hover .label,
   .icon.active .label {
     color: var(--accent);
   }
 
-  /* Scope sits under the icon like file metadata on a real desktop.
-     This is what a recruiter reads before clicking anything. */
-  .caption {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    line-height: 1.45;
-    color: var(--text-faint);
-  }
-
-  /* Phone: home screen, not a shrunken desktop. */
   @media (max-width: 760px) {
     .icons {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--s1);
-      padding-bottom: var(--s3);
+      gap: var(--s4) var(--s3);
+      justify-content: flex-start;
     }
 
     .icon {
-      padding: var(--s2) var(--s1);
-    }
-
-    .caption {
-      font-size: 0.64rem;
+      width: calc(50% - var(--s3));
+      align-items: flex-start;
     }
   }
 </style>
