@@ -1,0 +1,66 @@
+---
+import Base from './Base.astro';
+import MenuBar from '../components/MenuBar.astro';
+import FolderIcons from '../components/FolderIcons.astro';
+import Window from '../components/Window.astro';
+import { getFolder, type FolderId } from '../data/folders';
+
+interface Props {
+  active: FolderId;
+  lead: string;
+}
+
+const { active, lead } = Astro.props;
+const folder = getFolder(active)!;
+---
+
+<Base title={folder.label} description={lead}>
+  <MenuBar />
+
+  <main class="shell" id="main">
+    <div class="desk">
+      <FolderIcons active={active} />
+    </div>
+
+    <Window title={folder.label} path={`~/${active}`}>
+      <header class="lead">
+        <h1>{folder.label}</h1>
+        <p>{lead}</p>
+      </header>
+
+      <slot />
+    </Window>
+  </main>
+</Base>
+
+<style>
+  .desk {
+    padding: var(--s4) 0 var(--s3);
+  }
+
+  .lead {
+    max-width: var(--measure);
+    padding-bottom: var(--s4);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.5vw, 2.9rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: var(--s2);
+  }
+
+  .lead p {
+    font-size: 1.06rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 760px) {
+    .desk {
+      padding: var(--s3) 0 var(--s2);
+    }
+  }
+</style>

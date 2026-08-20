@@ -1,0 +1,106 @@
+---
+import { getCollection } from 'astro:content';
+import Page from '../layouts/Page.astro';
+
+const entries = (await getCollection('decisions', ({ data }) => !data.draft)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+
+const lead =
+  'A resume shows what I ran. This shows what I decided. Eight calls made with incomplete information, competing stakeholders, and a schedule that did not move.';
+---
+
+<Page active="decisions" lead={lead}>
+  <div class="log">
+    {
+      entries.map((entry) => (
+        <article class="entry" id={entry.id.replace(/^\d+-/, '')}>
+          <h2>{entry.data.headline}</h2>
+
+          <div class="blocks">
+            <div class="block">
+              <h3>Context</h3>
+              <p>{entry.data.context}</p>
+            </div>
+            <div class="block">
+              <h3>The call</h3>
+              <p>{entry.data.call}</p>
+            </div>
+            <div class="block">
+              <h3>What followed</h3>
+              <p>{entry.data.followed}</p>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</Page>
+
+<style>
+  .log {
+    border-top: 1px solid var(--border);
+  }
+
+  .entry {
+    position: relative;
+    padding: var(--s4) 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* Gate tick — the signature mark, carried from the metric
+     strips. Structural: it marks each entry the way a schedule
+     marks a phase boundary. */
+  .entry::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -1px;
+    width: 28px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  h2 {
+    max-width: 22ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 3vw, 2.05rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin-bottom: var(--s3);
+  }
+
+  .blocks {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s3);
+  }
+
+  h3 {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .block p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+  }
+
+  @media (max-width: 900px) {
+    .blocks {
+      grid-template-columns: 1fr;
+      gap: var(--s2);
+    }
+
+    .block {
+      max-width: var(--measure);
+    }
+  }
+</style>

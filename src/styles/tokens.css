@@ -28,8 +28,11 @@
   --accent-line: rgba(255, 107, 53, 0.35);
 
   /* --- fonts --- */
+  /* Display face carries the personality; body face holds the
+     long-form reading; mono is reserved for metric strips,
+     labels, and tools strips. Three faces, each with a job. */
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-display: 'Inter Tight', var(--font-body);
+  --font-display: 'Space Grotesk', 'Inter Tight', var(--font-body);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* --- scale (8px base) --- */

@@ -1,0 +1,132 @@
+---
+import Page from '../layouts/Page.astro';
+import { aiProjects, aiFramework, education } from '../data/ai';
+
+const lead =
+  'AI outputs fail differently than software does. They come back fluent, confident, and subtly wrong, with nothing flagging the difference. I have built with these tools, tested them at scale, and developed the discipline to catch what reads well and is not right, which is the only way generated work holds a standard.';
+---
+
+<Page active="ai-fluency" lead={lead}>
+  <p class="framework">{aiFramework}</p>
+
+  {
+    aiProjects.length > 0 && (
+      <div class="cards">
+        {aiProjects.map((p) => (
+          <a class="card" href={p.href} target="_blank" rel="noopener">
+            {p.image ? (
+              <img src={p.image} alt="" loading="lazy" />
+            ) : (
+              <span class="thumb" aria-hidden="true" />
+            )}
+            <div class="body">
+              <h2>{p.name}</h2>
+              <p class="descriptor">{p.descriptor}</p>
+              <p class="impact">{p.impact}</p>
+              <p class="tools">Built with: {p.tools.join(' · ')}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    )
+  }
+
+  <p class="education">{education}</p>
+</Page>
+
+<style>
+  /* The opener is set as a pull quote by the Page layout's lead
+     treatment; this is the single line that sits beneath it. */
+  .framework {
+    max-width: var(--measure);
+    padding: var(--s3) 0 var(--s6);
+    border-top: 1px solid var(--accent-line);
+    font-size: 1.02rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s3);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--inset);
+    transition: border-color 0.15s ease;
+  }
+
+  .card:hover {
+    border-color: var(--accent-line);
+    color: inherit;
+  }
+
+  .card img,
+  .thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    background: linear-gradient(140deg, #1b1b23, #101015);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .body {
+    padding: var(--s2) var(--s3) var(--s3);
+  }
+
+  .card h2 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .card:hover h2 {
+    color: var(--accent);
+  }
+
+  .descriptor {
+    margin: 0.2rem 0 var(--s2);
+    font-style: italic;
+    font-size: 0.94rem;
+    color: var(--text-faint);
+  }
+
+  .impact {
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .tools {
+    margin-top: var(--s2);
+    padding-top: var(--s1);
+    border-top: 1px solid var(--border-soft);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.03em;
+    color: var(--text-faint);
+  }
+
+  .education {
+    padding-top: var(--s6);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+  }
+
+  @media (max-width: 760px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

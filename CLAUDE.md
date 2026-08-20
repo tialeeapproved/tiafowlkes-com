@@ -16,7 +16,7 @@
 
 ### Why this one has a build step
 
-The other sites are a handful of pages with no repeated content, so plain HTML is right for them. This site has four folders plus a page per evidence unit, all sharing one layout — in plain HTML, changing the menu bar would mean editing every file. It also serves one content library three different ways (folders, list view, and later a chatbot), which would mean maintaining three copies by hand.
+The other sites are a handful of pages with no repeated content, so plain HTML is right for them. This site has a desktop plus four pages that share one frame — in plain HTML, changing the menu bar would mean editing every file. The eight decision entries are also generated from data rather than hand-written markup, so the layout can change once and apply to all of them.
 
 Astro still outputs plain static HTML. Same speed, same free hosting.
 
@@ -28,24 +28,31 @@ npm run build    # static output → dist/
 
 ---
 
-## The core idea — folders are queries, not directories
+## Structure — a desktop over four pages
 
-> *"I don't want to have to keep making a new brochure each time I go to a team."*
+The landing page is a bare desktop: four folders, nothing else. Each folder opens one page, and each page has its own layout because each answers a different question.
 
-Every piece of evidence lives **once** in `src/content/evidence/` and carries tags. Folders, the list view, and (later) the chatbot are all different queries over that one library. Nothing is ever written twice.
-
-| Folder | Question it answers | What belongs in it |
-|---|---|---|
-| **Decisions** | How does she think? | A call with a tradeoff |
-| **Programs** | What has she delivered? | Something bounded that shipped |
-| **Systems** | What did she leave behind? | A mechanism still running without her |
-| **AI Fluency** | Can she work where the field is going? | Shipped, not theoretical |
+| Folder | Question it answers | Layout | Source |
+|---|---|---|---|
+| **Decisions** | How does she think? | Stacked decision log — headline + Context / The call / What followed | `src/content/decisions/*.md` |
+| **Programs** | What has she delivered? | Portfolio matrix, then detail sections with metric strips | `src/data/programs.ts` |
+| **Systems** | What did she leave behind? | Six-tile numbered grid | `src/data/systems.ts` |
+| **AI Fluency** | Can she work where the field is going? | Opener, then linked project cards | `src/data/ai.ts` |
 
 **Tiebreaker** when something fits more than one: *if it still runs without her, it's a System. If it ended when it shipped, it's a Program. If the story is the call rather than the work, it's a Decision.*
 
+### Design rules from the copy brief
+
+- **A record, not a pitch.** It should read like a well-set internal document that happens to be beautiful. Precision over warmth.
+- **Metric strips are load-bearing.** A recruiter reads them before any prose. They get the treatment of a program artifact — an allocation table with gate ticks, not a row of text.
+- **Numbering appears only on Systems**, where the six are a genuine inventory. Nothing else on the site is numbered.
+- **Sentence case headings throughout.** No title case.
+- **One signature mark**, carried everywhere: the accent gate tick. It marks each decision entry and each division in a metric strip. Structural, not decorative.
+- Motion restrained. Responsive to 380px. Visible keyboard focus. Reduced motion respected.
+
 ---
 
-## Writing evidence — the part that matters most
+## Writing copy — the part that matters most
 
 Tia is currently **L4 at Google targeting L5**. Her evidence clears that bar; the risk is writing it at the wrong altitude.
 
@@ -66,7 +73,7 @@ Beats 2 and 3 are the difference between a record of judgment and a record of ac
 
 ### 🔒 Never in this repo
 
-Product codenames, colleague names, internal assessment documents, interview notes, unreleased hardware details, or client project READMEs. The evidence library is the public surface and nothing else feeds it. When in doubt, describe the *shape* of the work — "an ambiguous setup metric" lands without naming anything.
+Internal assessment documents, interview notes, colleague names, or client project READMEs. Product names and figures on the site were reviewed and approved by Tia for publication — do not add new ones without asking her first.
 
 ---
 
@@ -77,12 +84,14 @@ Product codenames, colleague names, internal assessment documents, interview not
 | Accent color | `src/styles/tokens.css` — one line, marked |
 | Any color or spacing | `src/styles/tokens.css` — **never hardcode a hex anywhere else** |
 | Hero, links, email | `src/data/site.ts` |
-| The impact strip | `src/data/site.ts` → `impact` |
-| Folder names, captions, order | `src/data/folders.ts` |
-| Add evidence | new `.md` in `src/content/evidence/` |
-| Hide something in progress | `draft: true` in its frontmatter |
-| Redact a client | `confidential: true` in its frontmatter |
-| Layout everywhere | `src/layouts/Desktop.astro` |
+| Folder names and order | `src/data/folders.ts` |
+| Add or edit a decision | `src/content/decisions/*.md` |
+| Hide a decision in progress | `draft: true` in its frontmatter |
+| Program copy, portfolio matrix | `src/data/programs.ts` |
+| The six systems | `src/data/systems.ts` |
+| AI Fluency project cards | `src/data/ai.ts` |
+| The desktop landing | `src/layouts/Desktop.astro` |
+| Shared page frame | `src/layouts/Page.astro` |
 
 **Content never lives inside a component.** Components only arrange things.
 
@@ -92,10 +101,8 @@ Product codenames, colleague names, internal assessment documents, interview not
 
 1. **Every folder is a URL** — `/decisions`, `/programs`. Back button works, any view is shareable.
 2. **Everything prerenders to static HTML.** The desktop is a shell over real pages, so it stays indexable and works with JS off.
-3. **`view as list`** is authentic to any real OS *and* it's the fast, semantic, screen-reader-clean path. Not a fallback — don't let it rot.
-4. **No animation theater.** Windows open instantly. Boot sequences and fake Finder chrome read as a CodePen demo and undercut the work.
-5. **Decisions opens by default** — content on screen in the first second. A program manager's site being confusing to navigate contradicts the competency being claimed.
-6. **Mobile is a phone home screen**, not a shrunken desktop. Recruiters open links on phones constantly.
+3. **No animation theater.** Windows open instantly. Boot sequences and fake Finder chrome read as a CodePen demo and undercut the work.
+4. **Mobile is a phone home screen**, not a shrunken desktop. Recruiters open links on phones constantly.
 
 ---
 
@@ -113,7 +120,7 @@ Product codenames, colleague names, internal assessment documents, interview not
 ## Not yet built
 
 - [ ] Chatbot (`/api/chat`) — paste a role, get a match report **with gap bridging**. It may reframe a gap using real adjacent evidence; it may never invent experience. The only server route on the site.
-- [ ] `⌘K` search across all units
-- [ ] Per-team saved views (`/for/[team]`)
+- [ ] **AI Fluency project cards** — deliberately empty. The clickability is the argument, so no placeholders. Needs: the iOS app (name, what it does, state, link, stack), the AI tutoring engagement (nameable client? what's linkable?), which tialeeapproved client sites belong here with URLs, and whether this site gets its own card.
 - [ ] Resume PDF → `public/resume/tia-fowlkes-resume.pdf`
+- [ ] LinkedIn URL in `src/data/site.ts`
 - [ ] Custom domain cutover

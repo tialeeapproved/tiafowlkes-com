@@ -2,87 +2,30 @@
 import Base from './Base.astro';
 import MenuBar from '../components/MenuBar.astro';
 import FolderIcons from '../components/FolderIcons.astro';
-import Window from '../components/Window.astro';
-import EvidenceCard from '../components/EvidenceCard.astro';
-import { getFolder, type FolderId } from '../data/folders';
-import { unitsInFolder } from '../lib/query';
 import { site } from '../data/site';
-
-interface Props {
-  /* No active folder = the bare desktop. */
-  active?: FolderId;
-}
-
-const { active } = Astro.props;
-const folder = active ? getFolder(active) : undefined;
-const units = folder ? await unitsInFolder(folder) : [];
 ---
 
-<Base
-  title={folder?.label}
-  description={folder?.question ?? site.tagline}
->
+<Base description={site.tagline}>
   <MenuBar />
 
-  <main class:list={['shell', { bare: !folder }]} id="main">
-    <div class="desk">
-      <FolderIcons active={active} />
-    </div>
-
-    {
-      folder && (
-        <Window title={folder.label} subtitle={folder.question} path={`~/${active}`}>
-          {units.length === 0 ? (
-            <p class="empty">Nothing here yet.</p>
-          ) : (
-            <div class="stack">
-              {units.map((unit) => (
-                <EvidenceCard unit={unit} />
-              ))}
-            </div>
-          )}
-        </Window>
-      )
-    }
+  <main class="desktop shell" id="main">
+    <FolderIcons />
   </main>
 </Base>
 
 <style>
-  /* The bare desktop fills the viewport — icons and nothing else. */
-  .bare {
+  .desktop {
     display: flex;
     align-items: center;
     min-height: calc(100vh - 46px);
-  }
-
-  .desk {
-    padding: var(--s6) 0 var(--s4);
-  }
-
-  .bare .desk {
-    padding: 0 0 var(--s8);
-  }
-
-  .stack {
-    display: grid;
-    gap: var(--s2);
-  }
-
-  .empty {
-    color: var(--text-faint);
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
+    padding-bottom: var(--s8);
   }
 
   @media (max-width: 760px) {
-    .bare {
+    .desktop {
       align-items: flex-start;
       min-height: 0;
-    }
-
-    .desk,
-    .bare .desk {
-      padding: var(--s4) 0;
+      padding: var(--s4) var(--s3);
     }
   }
 </style>
