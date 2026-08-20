@@ -1,0 +1,120 @@
+---
+import type { Unit } from '../lib/query';
+import { displayOrg } from '../lib/query';
+
+interface Props {
+  unit: Unit;
+}
+
+const { unit } = Astro.props;
+const { data } = unit;
+---
+
+<a href={`/e/${unit.id}`} class="card">
+  <div class="head">
+    <h3>{data.title}</h3>
+    {
+      data.outcome && (
+        <span class="outcome">
+          <b>{data.outcome.value}</b>
+          <em>{data.outcome.label}</em>
+        </span>
+      )
+    }
+  </div>
+
+  <p class="summary">{data.summary}</p>
+
+  <div class="meta mono">
+    <span>{displayOrg(unit)}</span>
+    {data.period && <span>{data.period}</span>}
+    {data.role && <span>{data.role}</span>}
+  </div>
+</a>
+
+<style>
+  .card {
+    display: block;
+    padding: var(--s2) var(--s3);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    background: var(--inset);
+    transition: border-color 0.15s, transform 0.15s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-line);
+    color: inherit;
+  }
+
+  .head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--s2);
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  .card:hover h3 {
+    color: var(--accent);
+  }
+
+  .outcome {
+    flex: none;
+    text-align: right;
+    line-height: 1.2;
+  }
+
+  .outcome b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--accent);
+  }
+
+  .outcome em {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-faint);
+  }
+
+  .summary {
+    max-width: var(--measure);
+    margin-top: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 0.9rem;
+    margin-top: var(--s2);
+  }
+
+  @media (max-width: 620px) {
+    .head {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .outcome {
+      text-align: left;
+    }
+
+    .outcome b {
+      display: inline;
+      margin-right: 0.4rem;
+    }
+  }
+</style>

@@ -1,0 +1,49 @@
+/* ============================================================
+   DESIGN TOKENS — the whole look lives here.
+   Change the accent on ONE line below.
+   ============================================================ */
+
+:root {
+  /* --- surfaces --- */
+  --bg: #0b0b0f;            /* desktop backdrop */
+  --bg-grad: #101017;       /* subtle backdrop wash */
+  --window: #14141a;        /* window body */
+  --window-bar: #1a1a22;    /* window title bar */
+  --inset: #101015;
+  --border: #24242e;
+  --border-soft: #1c1c24;
+
+  /* --- type --- */
+  --text: #ededf2;
+  --text-muted: #8a8a99;
+  --text-faint: #5a5a68;
+
+  /* --- ACCENT — swap this one line ---
+     ember   #ff6b35
+     lime    #c6f24e
+     blue    #5b8cff
+     none    #ededf2                                        */
+  --accent: #ff6b35;
+  --accent-dim: rgba(255, 107, 53, 0.14);
+  --accent-line: rgba(255, 107, 53, 0.35);
+
+  /* --- fonts --- */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Inter Tight', var(--font-body);
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* --- scale (8px base) --- */
+  --s1: 0.5rem;
+  --s2: 1rem;
+  --s3: 1.5rem;
+  --s4: 2rem;
+  --s6: 3rem;
+  --s8: 4.5rem;
+
+  --radius-window: 12px;
+  --radius: 8px;
+  --radius-sm: 5px;
+
+  --measure: 68ch;
+  --shell-max: 1180px;
+}

@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import MenuBar from '../components/MenuBar.astro';
+import Window from '../components/Window.astro';
+---
+
+<Base title="Not found">
+  <MenuBar />
+  <main class="shell">
+    <div class="pad">
+      <Window title="Not found" path="~/404">
+        <p>That file isn't on this desktop.</p>
+        <p><a href="/">Back to the desktop →</a></p>
+      </Window>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .pad {
+    padding-top: var(--s6);
+  }
+
+  p {
+    color: var(--text-muted);
+    margin-bottom: var(--s2);
+  }
+
+  a {
+    color: var(--accent);
+  }
+</style>
