@@ -51,7 +51,6 @@ export const aiProjects: AiProject[] = [
       { name: 'Jive Turkeys', href: 'https://www.jiveturkeysdetroit.com/' },
       { name: 'JC-Eyes', href: 'https://www.jc-eyes.com/' },
       { name: 'Brows by Lolo', href: 'https://browsbylolo.com/' },
-      { name: 'Digital Audit' },
     ],
   },
 ];
