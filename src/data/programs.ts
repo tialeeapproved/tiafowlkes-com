@@ -98,18 +98,6 @@ export const programs: Program[] = [
     ],
   },
   {
-    id: 'commercialization',
-    name: 'Google TV Streamer 4K, commercialization',
-    icon: 'streamer-4k',
-    descriptor: 'Global partner readiness, cross-PA launch, & go-to-market execution',
-    metrics: ['$2M+ initial sales', '1M+ activations', '20 launch markets'],
-    points: [
-      'Governed external partner integration across LG, Walmart, and key OEMs through onboarding, technical allocation, and operational SLA tracking.',
-      'Designed cross-functional coordination playbooks that accelerated commercialization readiness, increasing program throughput by 22%.',
-      'Synchronized factory image flashing and out-of-box experience (OOBE) milestones across Google Home app, Android TV, and Assistant engineering teams to preserve release quality.',
-    ],
-  },
-  {
     id: 'sonos',
     name: 'Sonos v. Google firmware release',
     icon: 'nest-audio',

@@ -14,14 +14,12 @@ export interface AiProject {
   /* The narrative cards use `impact`. The web card uses `pills`
      instead — a roster reads faster as a roster. */
   impact?: string;
-  pills?: { name: string; href: string; builtWith?: string }[];
+  /* `href` is optional: a pill with no live URL yet renders as
+     plain text rather than a link to nowhere. */
+  pills?: { name: string; href?: string; builtWith?: string }[];
   tools?: string[];
   wide?: boolean;
 }
-
-/* Every pill points at that project's case study on the
-   tialeeapproved portfolio, which is where the work is written up. */
-const P = 'https://www.tialeeapproved.com';
 
 export const aiProjects: AiProject[] = [
   {
@@ -44,16 +42,16 @@ export const aiProjects: AiProject[] = [
       'Custom web platforms and user interfaces built via AI-driven development workflows',
     wide: true,
     pills: [
-      { name: 'Living on Purpose', href: `${P}/lop-audit-1`, builtWith: 'Claude Code' },
-      { name: 'Frequency 313', href: `${P}/frequency313`, builtWith: 'Claude Code' },
-      { name: 'Two-Six Project', href: `${P}/portfolio-two-six-project` },
-      { name: "Zoe's Kitchen", href: `${P}/portfolio-zoes-kitchen` },
-      { name: '5 Star Carolina', href: `${P}/5starcarolina` },
-      { name: 'Purposely Prepared', href: `${P}/portfolio-purposely-prepared` },
-      { name: 'Jive Turkeys', href: `${P}/portfolio-jive-turkeys` },
-      { name: 'JC-Eyes', href: `${P}/portfolio-jc-eyes` },
-      { name: 'Brows by Lolo', href: `${P}/portfolio-brows-by-lolo` },
-      { name: 'Digital Audit', href: `${P}/lop-audit` },
+      { name: 'Living on Purpose', href: 'https://living-on-purpose.org/', builtWith: 'Claude Code' },
+      { name: 'Frequency 313', builtWith: 'Claude Code' },
+      { name: 'Two-Six Project', href: 'https://www.twosixproject.com/' },
+      { name: "Zoe's Kitchen", href: 'https://www.zoes-kitchen.com/' },
+      { name: '5 Star Carolina', href: 'https://www.5starcarolina.com/' },
+      { name: 'Purposely Prepared', href: 'https://www.purposelyprepared.com/' },
+      { name: 'Jive Turkeys', href: 'https://www.jiveturkeysdetroit.com/' },
+      { name: 'JC-Eyes', href: 'https://www.jc-eyes.com/' },
+      { name: 'Brows by Lolo', href: 'https://browsbylolo.com/' },
+      { name: 'Digital Audit' },
     ],
   },
 ];
