@@ -89,7 +89,7 @@ The desktop loads **no webfonts**. Content pages pass `fonts` to `Base.astro`, w
 
 ## Writing copy — the part that matters most
 
-Tia is currently **L4 at Google targeting L5**. Her evidence clears that bar; the risk is writing it at the wrong altitude.
+Tia was **L4 at Google (Feb 2021 – June 2025)** and is targeting **L5**. She is no longer there — she has been running Independent Strategic Advisory out of New York since. Nothing on the site may imply current Google employment. Her evidence clears that bar; the risk is writing it at the wrong altitude.
 
 **Every page follows the same four beats:**
 
@@ -162,6 +162,4 @@ Internal assessment documents, interview notes, colleague names, or client proje
 ## Not yet built
 
 - [ ] Chatbot (`/api/chat`) — paste a role, get a match report **with gap bridging**. It may reframe a gap using real adjacent evidence; it may never invent experience. The only server route on the site.
-- [ ] Resume PDF → `public/resume/tia-fowlkes-resume.pdf`
-- [ ] LinkedIn URL in `src/data/site.ts`
 - [ ] Custom domain cutover

@@ -17,7 +17,6 @@ export const site = {
   facts: ['Technical Program Manager', 'New York based', 'B.S. Computer Science'],
 
   links: [
-    // TODO (Tia): LinkedIn URL
-    { label: 'LinkedIn', href: '#' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/tiafowlkes' },
   ],
 } as const;
