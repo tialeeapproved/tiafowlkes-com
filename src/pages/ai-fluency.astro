@@ -8,31 +8,14 @@ import { aiLead, aiProjects, aiTools } from '../data/ai';
       posture as the `?` on the desktop. Both become links to /ask on
       the day the route exists; nothing else here has to change. */}
   <div class="tryme pane pop">
-    <span class="kb" aria-hidden="true">
-      <svg viewBox="0 0 26 15" width="52" height="30" shape-rendering="crispEdges">
-        <rect x="0" y="1" width="26" height="14" fill="#10171e"></rect>
-        <rect x="0" y="1" width="26" height="1" fill="#4a5560"></rect>
-        <g fill="#e8eef4">
-          <rect x="2" y="3" width="2" height="2"></rect>
-          <rect x="5" y="3" width="2" height="2"></rect>
-          <rect x="8" y="3" width="2" height="2"></rect>
-          <rect x="11" y="3" width="2" height="2"></rect>
-          <rect x="14" y="3" width="2" height="2"></rect>
-          <rect x="17" y="3" width="2" height="2"></rect>
-          <rect x="20" y="3" width="2" height="2"></rect>
-          <rect x="3" y="6" width="2" height="2"></rect>
-          <rect x="6" y="6" width="2" height="2"></rect>
-          <rect x="9" y="6" width="2" height="2"></rect>
-          <rect x="12" y="6" width="2" height="2"></rect>
-          <rect x="15" y="6" width="2" height="2"></rect>
-          <rect x="18" y="6" width="2" height="2"></rect>
-          <rect x="21" y="6" width="2" height="2"></rect>
-          <rect x="2" y="9" width="3" height="2"></rect>
-          <rect x="7" y="9" width="11" height="2"></rect>
-          <rect x="20" y="9" width="3" height="2"></rect>
-        </g>
-      </svg>
-    </span>
+    <img
+      class="kb"
+      src="/icons/chat.png"
+      width="42"
+      height="42"
+      alt=""
+      aria-hidden="true"
+    />
 
     <span class="copy">
       <span class="title">Try me</span>
@@ -41,6 +24,27 @@ import { aiLead, aiProjects, aiTools } from '../data/ai';
 
     <span class="soon meta">Coming soon</span>
   </div>
+
+  <section class="matrix pane pop" aria-label="Tooling">
+    <p class="label">Working toolkit</p>
+    <div class="tools">
+      {
+        aiTools.map((t) => (
+          <div class="tool">
+            <img src={`/ai/${t.slug}.webp`} width="34" height="34" alt="" loading="lazy" />
+            <div>
+              <p class="name">{t.name}</p>
+              <ul>
+                {t.uses.map((u) => (
+                  <li>{u}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 
   <div class="cards">
     {
@@ -74,26 +78,6 @@ import { aiLead, aiProjects, aiTools } from '../data/ai';
     }
   </div>
 
-  <section class="matrix pane pop" aria-label="Tooling">
-    <p class="label">Working toolkit</p>
-    <div class="tools">
-      {
-        aiTools.map((t) => (
-          <div class="tool">
-            <img src={`/ai/${t.slug}.webp`} width="34" height="34" alt="" loading="lazy" />
-            <div>
-              <p class="name">{t.name}</p>
-              <ul>
-                {t.uses.map((u) => (
-                  <li>{u}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  </section>
 </Page>
 
 <style>
@@ -107,26 +91,26 @@ import { aiLead, aiProjects, aiTools } from '../data/ai';
     border-radius: var(--r-md);
   }
 
+  /* `pixelated` keeps the 21-pixel grid square at any zoom, and the
+     ring pulses out from the face rather than scaling it — scaling
+     pixel art off its grid makes the blocks shimmer. */
   .kb {
-    display: flex;
-    flex: none;
-    padding: 8px 10px;
-    border-radius: var(--r-sm);
-    background: rgba(255, 255, 255, 0.62);
-    animation: kb-pulse 2.4s ease-in-out infinite;
-  }
-
-  .kb svg {
     display: block;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    image-rendering: pixelated;
+    animation: kb-pulse 2.4s ease-in-out infinite;
   }
 
   @keyframes kb-pulse {
     0%,
     100% {
-      box-shadow: 0 0 0 0 rgba(16, 23, 30, 0.22);
+      box-shadow: 0 0 0 0 rgba(230, 180, 20, 0.5);
     }
-    55% {
-      box-shadow: 0 0 0 11px rgba(16, 23, 30, 0);
+    60% {
+      box-shadow: 0 0 0 13px rgba(230, 180, 20, 0);
     }
   }
 
@@ -251,7 +235,7 @@ import { aiLead, aiProjects, aiTools } from '../data/ai';
 
   /* ---- tool matrix ---- */
   .matrix {
-    margin-top: 16px;
+    margin-bottom: 16px;
     padding: 26px 28px;
     border-radius: var(--r-md);
   }

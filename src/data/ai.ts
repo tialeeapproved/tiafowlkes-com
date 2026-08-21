@@ -6,7 +6,7 @@
    ============================================================ */
 
 export const aiLead =
-  'Architected an LLM feature evaluation framework across 2K test subjects, cutting model hallucinations 27% and lifting response accuracy 45%. Everything below was independently engineered, deployed, and shipped.';
+  'Hands-on application of LLMs and agentic frameworks; building custom automations, predictive risk engines, and production web platforms while deploying reliable generative features at scale.';
 
 export interface AiProject {
   name: string;
