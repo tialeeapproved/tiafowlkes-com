@@ -23,7 +23,7 @@ anything else, **this file wins.**
   technical implementation.
 
 ### Google — Technical Program Manager
-**February 2021 – June 2025 · Mountain View, CA**
+**February 2021 – June 2025 · Mountain View, CA (remote)**
 
 - Architected testing strategy for Google Home App LLM-integrated features across 2K
   testers, reducing critical AI failures by 27% and improving response consistency by

@@ -8,12 +8,17 @@ fluency to translate advanced technical capabilities into high-quality user expe
 
 ## Where she is now
 
-Running **Independent Strategic Advisory** from New York, NY (October 2016 – present;
-her primary focus since leaving Google). This is the bridge, not the headline — the
-four years at Google are the centre of gravity of her experience, and the advisory work
-is what she has been doing since.
+**New York, NY.** Her Google role was remote against a Mountain View, CA base; she
+relocated to New York, where she runs her independent consulting practice. She is not
+relocating again — see `targeting.md`.
 
 She left Google in **June 2025**. Do not describe her as currently at Google.
+
+**Independent Strategic Advisory** has run since October 2016 — a long-standing practice
+that ran alongside her Google tenure, and her primary focus since leaving. Do not
+describe it as something she started in 2025. That said, the four years at Google are
+the centre of gravity of her experience: lead with those, and treat the advisory work
+as the current chapter rather than the headline.
 
 ## Contact
 
