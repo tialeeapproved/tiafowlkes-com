@@ -50,7 +50,7 @@ const lead =
 
   .head {
     display: flex;
-    align-items: flex-start;
+    align-items: baseline;
     gap: 18px;
     padding-bottom: 26px;
     margin-bottom: 26px;
@@ -61,12 +61,14 @@ const lead =
      tertiary weight so it never competes with the headline. */
   .idx {
     flex: none;
-    padding-top: 7px;
+    padding-top: 0;
   }
 
   h2 {
-    max-width: 26ch;
+    /* No measure cap — the headline uses the card's full width so
+       phrases don't break early and land mid-thought. */
     font-size: clamp(20px, 2.4vw, 27px);
+    text-wrap: balance;
     font-weight: 300;
     letter-spacing: -0.025em;
     line-height: 1.2;

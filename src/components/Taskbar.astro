@@ -22,7 +22,9 @@ import { site } from '../data/site';
     justify-content: space-between;
     gap: var(--s2);
     height: var(--taskbar-h);
-    padding: 2px var(--s1);
+    /* Enough inset that the buttons' outer bevels are not clipped
+       by the edge of the screen. */
+    padding: 3px 8px;
     background: var(--ui-bg);
     border-top: 2px solid var(--ui-highlight);
   }
