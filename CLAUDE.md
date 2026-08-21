@@ -37,7 +37,7 @@ The landing page is a bare desktop: four folders, nothing else. Each folder open
 | **Decisions** | How does she think? | Stacked decision log — headline + Constraint / The call / Impact | `src/content/decisions/*.md` |
 | **Programs** | What has she delivered? | Portfolio matrix, then detail sections with metric strips | `src/data/programs.ts` |
 | **Systems** | What did she leave behind? | Six-tile numbered grid | `src/data/systems.ts` |
-| **AI Fluency** | Can she work where the field is going? | Opener, then linked project cards | `src/data/ai.ts` |
+| **AI Fluency** | Can she work where the field is going? | Two engineered-system cards, then the client web roster as pills | `src/data/ai.ts` |
 
 **Tiebreaker** when something fits more than one: *if it still runs without her, it's a System. If it ended when it shipped, it's a Program. If the story is the call rather than the work, it's a Decision.*
 
@@ -66,6 +66,7 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **The folders never move.** The rail is `position: fixed` on the desktop — deliberately out of the document flow, so the window centres on the page instead of being pushed into whatever space is left beside it. The taskbar is fixed too.
 - **The window is centred** with `margin: auto` on `.stage`, not `justify-content: center` — auto margins centre a short page but never clip the top of a long one.
 - **`Ask` is a desktop icon**, drawn as a period help file beneath AI Fluency. It is where the chatbot will live. It is not in the taskbar.
+- **The AI Fluency pills do not link out.** They name tialeeapproved client sites, and this site exists to land full-time corporate roles — sending a recruiter to the freelance storefront blurs the one line the whole project is built on. The names are the evidence; the links are not needed and would cost more than they add.
 - **The product shots are cut out, never collaged.** Tia's source images are grids of products with names baked in, in a font that is not the site's. Each product is cut to its own transparent file and the name is set as real HTML, so the matrix stays one typeface. They run at 30px in a fixed square box with `object-fit: contain` — recognition, not decoration. The Matter mark is white and was recoloured to the site's ink; a white glyph is invisible on these cards.
 - **Tia's exit is decided in the `<head>`, not next to the element.** `Base.astro` stamps `data-from="desktop"` on `<html>` from the referrer before the body is parsed, and her visibility is pure CSS off that attribute — so the browser can never paint a frame with her missing. A script sitting next to the element is too late: the browser is free to paint the partially-parsed body first, and that one hidden frame *is* the blink. It was diagnosed twice from the wrong end; do not move this decision back into the body. The separate `.dissolve` script only starts the fade, and waits on `img.decode()` so the animation does not run over an image that has not painted.
 - **The clouds run off the wall clock.** Each page is a fresh document, so the animation would restart on every navigation. An inline script in `Sky.astro` sets a negative `animation-delay` from `Date.now() % cycle`, putting each layer exactly where it would have been — so moving between folders looks like one continuous sky. Without JS the clouds just start at the beginning.
@@ -157,7 +158,6 @@ Internal assessment documents, interview notes, colleague names, or client proje
 ## Not yet built
 
 - [ ] Chatbot (`/api/chat`) — paste a role, get a match report **with gap bridging**. It may reframe a gap using real adjacent evidence; it may never invent experience. The only server route on the site.
-- [ ] **AI Fluency project cards** — deliberately empty. The clickability is the argument, so no placeholders. Needs: the iOS app (name, what it does, state, link, stack), the AI tutoring engagement (nameable client? what's linkable?), which tialeeapproved client sites belong here with URLs, and whether this site gets its own card.
 - [ ] Resume PDF → `public/resume/tia-fowlkes-resume.pdf`
 - [ ] LinkedIn URL in `src/data/site.ts`
 - [ ] Custom domain cutover
