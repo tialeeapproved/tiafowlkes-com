@@ -63,6 +63,10 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **Sentence case headings throughout.** No title case.
 - **Metric strips are load-bearing** — a recruiter reads them before any prose. They render as mono chips on their own row.
 - **Legibility over the clouds is a blur problem, not an opacity problem.** Raising `--g-panel` past ~0.5 makes the glass read as plain white paper and kills the effect. If cloud edges are fighting the text, raise `--blur` (currently 60px) or soften the cloud fills in `Sky.astro` instead.
+- **The folders never move.** The rail is `position: sticky` and the taskbar is fixed. Only the window scrolls.
+- **Long pages are a card stack, not a column.** Each section sits in a `.slot` pinned to the same offset, so cards rise and settle over one another and the reader never sees how far there is to go. Scrollbars are hidden for the same reason.
+- **Stacked cards must occlude.** A translucent card ghosts the text of the card sliding beneath it — there is no styling around that. `.slot > .pane` runs near-opaque on purpose; the glass reading comes from the window they sit in and the gaps between them. Do not "fix" this by making them transparent again.
+- `.pop` is the scroll-driven rise, behind `@supports (animation-timeline: view())`. Unsupported browsers get the cards, just without the motion. Both the rise and the pinning switch off under `prefers-reduced-motion`.
 - Only the clouds move, and they stop under `prefers-reduced-motion`.
 - Responsive to 380px. Visible keyboard focus. Real contrast.
 

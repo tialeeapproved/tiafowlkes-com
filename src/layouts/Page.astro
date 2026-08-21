@@ -53,7 +53,12 @@ const folder = getFolder(active)!;
     padding: 22px;
   }
 
+  /* The folders never move. They sit on the desktop, and the
+     window scrolls past them. */
   .rail {
+    position: sticky;
+    top: 22px;
+    align-self: flex-start;
     flex: none;
   }
 
@@ -96,6 +101,7 @@ const folder = getFolder(active)!;
     }
 
     .rail {
+      position: static;
       width: 100%;
     }
 

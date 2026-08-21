@@ -9,7 +9,7 @@ import { programsLead, portfolio, programs } from '../data/programs';
   <section class="matrix" aria-label="Portfolio">
     {
       portfolio.map((col) => (
-        <div class="col pane">
+        <div class="col pane pop">
           <p class="label">{col.label}</p>
           <ul>
             {col.items.map((item) => (
@@ -22,10 +22,11 @@ import { programsLead, portfolio, programs } from '../data/programs';
   </section>
 
   <!-- Depth second. -->
-  <section class="detail" aria-label="Program detail">
+  <section class="detail stack" aria-label="Program detail">
     {
       programs.map((p) => (
-        <article class="program pane" id={p.id}>
+        <div class="slot">
+        <article class="program pane pop" id={p.id}>
           <h2>{p.name}</h2>
           <p class="descriptor">{p.descriptor}</p>
 
@@ -37,6 +38,7 @@ import { programsLead, portfolio, programs } from '../data/programs';
             ))}
           </ul>
         </article>
+        </div>
       ))
     }
   </section>
@@ -70,10 +72,6 @@ import { programsLead, portfolio, programs } from '../data/programs';
     border-top: 1px solid var(--g-border-soft);
   }
 
-  .detail {
-    display: grid;
-    gap: 20px;
-  }
 
   .program {
     padding: 34px;

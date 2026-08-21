@@ -28,7 +28,9 @@ const { title, close = '/' } = Astro.props;
 <style>
   .win {
     position: relative;
-    overflow: hidden;
+    /* No overflow:hidden — it would make this a scroll container
+       and stop the cards inside from pinning. Corners are clipped
+       by matching radii instead. */
     border: 1px solid var(--g-border);
     border-radius: var(--r-lg);
     background: var(--g-panel);
@@ -46,6 +48,7 @@ const { title, close = '/' } = Astro.props;
     position: absolute;
     inset: 0;
     pointer-events: none;
+    border-radius: inherit;
     background: radial-gradient(
       circle at 18% 0%,
       rgba(255, 255, 255, 0.55) 0%,
@@ -64,6 +67,7 @@ const { title, close = '/' } = Astro.props;
     align-items: center;
     gap: 12px;
     padding: 13px 16px;
+    border-radius: calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     background: linear-gradient(to bottom, var(--g-title-from), var(--g-title-to));
   }

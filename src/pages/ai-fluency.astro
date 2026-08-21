@@ -7,7 +7,7 @@ const lead =
 ---
 
 <Page active="ai-fluency" lead={lead}>
-  <section class="framework pane">
+  <section class="framework pane pop">
     <p class="label">Evaluation framework</p>
     <p>{aiFramework}</p>
   </section>
@@ -16,7 +16,7 @@ const lead =
     aiProjects.length > 0 && (
       <div class="cards">
         {aiProjects.map((p) => (
-          <a class="card pane" href={p.href} target="_blank" rel="noopener">
+          <a class="card pane pop" href={p.href} target="_blank" rel="noopener">
             {p.image ? (
               <img src={p.image} alt="" loading="lazy" />
             ) : (

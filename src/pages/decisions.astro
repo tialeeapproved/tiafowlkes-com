@@ -11,10 +11,11 @@ const lead =
 ---
 
 <Page active="decisions" lead={lead}>
-  <div class="log">
+  <div class="log stack">
     {
       entries.map((entry, i) => (
-        <article class="entry pane" id={entry.id.replace(/^\d+-/, '')}>
+        <div class="slot">
+        <article class="entry pane pop" id={entry.id.replace(/^\d+-/, '')}>
           <header class="head">
             <span class="meta idx">{String(i + 1).padStart(2, '0')}</span>
             <h2>{entry.data.headline}</h2>
@@ -35,16 +36,13 @@ const lead =
             </div>
           </div>
         </article>
+        </div>
       ))
     }
   </div>
 </Page>
 
 <style>
-  .log {
-    display: grid;
-    gap: 20px;
-  }
 
   .entry {
     padding: 34px;
