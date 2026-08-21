@@ -28,15 +28,15 @@ const { active } = Astro.props;
   .icons {
     display: flex;
     flex-direction: column;
-    gap: 26px;
-    width: 84px;
+    gap: 34px;
+    width: 116px;
   }
 
   .icon {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 84px;
+    width: 116px;
     cursor: pointer;
   }
 
@@ -44,31 +44,32 @@ const { active } = Astro.props;
      so it stays crisp at any density. */
   .folder {
     position: relative;
-    width: 32px;
-    height: 26px;
+    width: 56px;
+    height: 45px;
     background: var(--folder);
     border: 1px solid #000;
     box-shadow:
-      inset 1px 1px 0 #fff,
-      inset -1px -1px 0 var(--folder-dark),
-      1px 1px 0 #000;
+      inset 2px 2px 0 #fff,
+      inset -2px -2px 0 var(--folder-dark),
+      2px 2px 0 #000;
   }
 
   .folder::before {
     content: '';
     position: absolute;
-    top: -6px;
+    top: -10px;
     left: -1px;
-    width: 14px;
-    height: 6px;
+    width: 24px;
+    height: 10px;
     background: var(--folder);
     border: 1px solid #000;
     border-bottom: none;
-    box-shadow: inset 1px 1px 0 #fff;
+    box-shadow: inset 2px 2px 0 #fff;
   }
 
   .label {
-    margin-top: 6px;
+    margin-top: 10px;
+    font-size: 12px;
     padding: 1px 3px;
     text-align: center;
     line-height: 1.25;
@@ -101,13 +102,13 @@ const { active } = Astro.props;
     .icons {
       flex-direction: row;
       flex-wrap: wrap;
-      gap: 16px 10px;
+      gap: 26px 14px;
       width: 100%;
     }
 
     .icon {
-      width: calc(25% - 8px);
-      min-width: 68px;
+      width: calc(50% - 10px);
+      min-width: 96px;
     }
   }
 </style>

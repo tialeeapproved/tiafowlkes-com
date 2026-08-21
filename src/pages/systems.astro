@@ -1,13 +1,13 @@
 ---
-import Page from '../layouts/Page.astro';
+import Glass from '../layouts/Glass.astro';
 import { systemsLead, systems, systemsClosing } from '../data/systems';
 ---
 
-<Page active="systems" lead={systemsLead} wide>
+<Glass active="systems" lead={systemsLead}>
   <ol class="grid">
     {
       systems.map((s) => (
-        <li class="tile raised">
+        <li class="tile glass">
           <span class="n" aria-hidden="true">
             {String(s.n).padStart(2, '0')}
           </span>
@@ -20,71 +20,83 @@ import { systemsLead, systems, systemsClosing } from '../data/systems';
   </ol>
 
   <p class="closing">{systemsClosing}</p>
-</Page>
+</Glass>
 
 <style>
   .grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--s3);
+    gap: 16px;
   }
 
   .tile {
-    padding: var(--s3);
+    display: flex;
+    flex-direction: column;
+    padding: 28px 26px;
+    border-radius: var(--r-md);
   }
 
   /* The only numerals on the site. These six are an inventory,
-     which is what earns them. Set in the mono face and sunken
-     like a readout. */
+     which is what earns them. Set large and low-contrast so they
+     order the grid without shouting. */
   .n {
-    display: inline-block;
-    margin-bottom: var(--s2);
-    padding: 1px 7px;
-    background: var(--select-bg);
-    color: var(--select-text);
-    font-family: var(--font-mono);
-    font-size: 15px;
-    line-height: 1.3;
+    display: block;
+    margin-bottom: 20px;
+    font-family: var(--g-mono);
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.22);
   }
 
   h2 {
-    margin-bottom: var(--s2);
-    font-size: 14px;
-    font-weight: bold;
+    margin-bottom: 14px;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
     line-height: 1.35;
+    color: var(--g-text);
   }
 
   .served,
   .changed {
     font-size: 13px;
-    line-height: 1.55;
+    line-height: 1.6;
   }
 
   .served {
-    margin-bottom: 6px;
-    color: #444;
+    margin-bottom: 10px;
+    color: var(--g-text-3);
+  }
+
+  .changed {
+    color: var(--g-text-2);
   }
 
   .closing {
-    max-width: var(--measure);
-    margin-top: var(--s6);
-    padding-top: var(--s3);
-    border-top: 1px solid var(--ui-shadow);
-    box-shadow: 0 -1px 0 var(--ui-highlight) inset;
+    max-width: 76ch;
+    margin-top: 34px;
+    padding-top: 26px;
+    border-top: 1px solid var(--g-border-soft);
     font-size: 13px;
-    line-height: 1.6;
-    color: #333;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--g-text-3);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     .grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 620px) {
+  @media (max-width: 660px) {
     .grid {
       grid-template-columns: 1fr;
+    }
+
+    .tile {
+      padding: 22px 20px;
     }
   }
 </style>

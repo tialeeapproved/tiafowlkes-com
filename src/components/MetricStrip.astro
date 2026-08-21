@@ -1,7 +1,7 @@
 ---
 /* Load-bearing. A recruiter reads these before any prose, so
-   they get the treatment of a real dialog readout: white sunken
-   wells in a row, the way the Levels inputs sit. */
+   they sit as their own row of glass chips in the mono face —
+   the readout, separated from the argument. */
 
 interface Props {
   metrics: string[];
@@ -11,36 +11,34 @@ const { metrics } = Astro.props;
 ---
 
 <div class="strip">
-  {
-    metrics.map((m) => (
-      <span class="well sunken">{m}</span>
-    ))
-  }
+  {metrics.map((m) => <span class="chip">{m}</span>)}
 </div>
 
 <style>
   .strip {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--s1);
-    margin-bottom: var(--s3);
+    gap: 8px;
+    margin-bottom: 24px;
   }
 
-  .well {
-    flex: 1 1 auto;
-    min-width: 130px;
-    padding: 5px 8px;
-    font-family: var(--font-mono);
+  .chip {
+    padding: 7px 14px;
+    border: 1px solid var(--g-border);
+    border-radius: 100px;
+    background: var(--g-panel-flat);
+    font-family: var(--g-mono);
     font-size: 12px;
     line-height: 1.4;
-    color: var(--ui-text);
-    text-align: center;
+    color: var(--g-text);
+    white-space: nowrap;
   }
 
-  @media (max-width: 620px) {
-    .well {
-      flex: 1 1 100%;
-      text-align: left;
+  @media (max-width: 560px) {
+    .chip {
+      font-size: 11px;
+      padding: 6px 11px;
+      white-space: normal;
     }
   }
 </style>

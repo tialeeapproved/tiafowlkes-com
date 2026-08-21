@@ -3,7 +3,7 @@
    ============================================================ */
 
 export const site = {
-  name: 'tia fowlkes',
+  name: 'Tia Fowlkes',
   role: 'Technical Program Manager',
   tagline:
     'Four years across the Nest and Google TV portfolio, leading the entertainment vertical.',

@@ -1,0 +1,487 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Nodum OS - Settings &amp; Integrations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@100;400&amp;display=swap" rel="stylesheet" vid="7">
+    <style vid="8">
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-tertiary: rgba(255, 255, 255, 0.3);
+            --accent: rgba(255, 255, 255, 0.15);
+            --blur: blur(28px);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 8px;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: #050505;
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .environment {
+            position: fixed;
+            top: -5%;
+            left: -5%;
+            width: 110vw;
+            height: 110vh;
+            background-image: url('https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=2500&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: blur(25px) brightness(0.2) saturate(1.2);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass {
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 var(--glass-highlight);
+            border-radius: var(--radius-lg);
+            position: relative;
+        }
+
+        .os-bar {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 8px 24px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            z-index: 100;
+        }
+
+        .workspace-container {
+            position: relative;
+            width: 1280px;
+            height: 960px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            padding: 80px 40px 40px;
+            gap: 32px;
+            z-index: 10;
+        }
+
+        .sidebar {
+            height: 100%;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .settings-content {
+            height: 100%;
+            padding: 40px;
+            overflow-y: auto;
+            scrollbar-width: none;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        .settings-content::-webkit-scrollbar { display: none; }
+
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-header {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-tertiary);
+            font-weight: 600;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-primary);
+        }
+
+        .menu-item svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 1.5;
+            fill: none;
+            stroke: currentColor;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+        }
+
+        .section-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .integration-card {
+            padding: 24px;
+            border-radius: var(--radius-md);
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: transform 0.2s;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .status-badge {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 100px;
+            text-transform: uppercase;
+        }
+
+        .status-badge.connected {
+            background: rgba(50, 215, 75, 0.1);
+            color: #32D74B;
+            border: 1px solid rgba(50, 215, 75, 0.2);
+        }
+
+        .status-badge.disconnected {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-tertiary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .card-info h4 {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .card-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .toggle-info h5 {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .toggle-info p {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .switch {
+            width: 36px;
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .switch.on { background: #32D74B; }
+        .switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+        .switch.on::after { transform: translateX(16px); }
+
+        .btn-small {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 100px;
+            color: var(--text-primary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-small:hover { background: rgba(255,255,255,0.1); }
+
+        .agent-behavior-box {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-top: 16px;
+        }
+
+        .slider-control {
+            margin-top: 24px;
+        }
+
+        .slider-track {
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .slider-fill {
+            position: absolute;
+            height: 100%;
+            background: var(--text-primary);
+            width: 65%;
+            border-radius: 2px;
+        }
+
+        .slider-thumb {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            left: 65%;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            font-family: var(--font-mono);
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body vid="9">
+    <div class="environment" vid="10"></div>
+
+    <nav class="glass os-bar" vid="11">
+        <div class="brand" vid="12">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" vid="13"><circle cx="12" cy="12" r="10" vid="14"></circle><path d="M12 2a10 10 0 0 1 10 10" vid="15"></path></svg>
+            Nodum OS
+        </div>
+        <div vid="16">Settings</div>
+        <div style="font-family: var(--font-mono); color: var(--text-tertiary);" vid="17">v0.9.4_config</div>
+    </nav>
+
+    <div class="workspace-container" vid="18">
+        <aside class="glass sidebar" vid="19">
+            <div class="menu-section" vid="20">
+                <div class="menu-header" vid="21">Preferences</div>
+                <div class="menu-item" vid="22">
+                    <svg viewBox="0 0 24 24" vid="23"><circle cx="12" cy="12" r="3" vid="24"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" vid="25"></path></svg>
+                    General
+                </div>
+                <div class="menu-item active" vid="26">
+                    <svg viewBox="0 0 24 24" vid="27"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" vid="28"></path></svg>
+                    Integrations
+                </div>
+                <div class="menu-item" vid="29">
+                    <svg viewBox="0 0 24 24" vid="30"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" vid="31"></path></svg>
+                    Notifications
+                </div>
+            </div>
+
+            <div class="menu-section" vid="32">
+                <div class="menu-header" vid="33">Intelligence</div>
+                <div class="menu-item" vid="34">
+                    <svg viewBox="0 0 24 24" vid="35"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" vid="36"></path></svg>
+                    Agent Behavior
+                </div>
+                <div class="menu-item" vid="37">
+                    <svg viewBox="0 0 24 24" vid="38"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" vid="39"></path></svg>
+                    Forge Rules
+                </div>
+            </div>
+            
+            <div class="menu-section" style="margin-top: auto;" vid="40">
+                <div class="menu-item" vid="41">
+                    <svg viewBox="0 0 24 24" vid="42"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" vid="43"></path><polyline points="16 17 21 12 16 7" vid="44"></polyline><line x1="21" y1="12" x2="9" y2="12" vid="45"></line></svg>
+                    Sign Out
+                </div>
+            </div>
+        </aside>
+
+        <main class="glass settings-content" vid="46">
+            <div vid="47">
+                <h2 class="section-title" vid="48">Connected Channels</h2>
+                <p class="section-desc" vid="49">Manage sources and destinations for your intelligence workflow.</p>
+                
+                <div class="integration-grid" vid="50">
+                    <div class="integration-card" vid="51">
+                        <div class="card-top" vid="52">
+                            <div class="brand-icon" vid="53">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" vid="54"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z" vid="55"></path></svg>
+                            </div>
+                            <span class="status-badge connected" vid="56">Active</span>
+                        </div>
+                        <div class="card-info" vid="57">
+                            <h4 vid="58">Instagram</h4>
+                            <p vid="59">Watching @tech_insider and @ai_builder for new Reels and carousels.</p>
+                        </div>
+                        <button class="btn-small" vid="60">Configure Scraper</button>
+                    </div>
+
+                    <div class="integration-card" vid="61">
+                        <div class="card-top" vid="62">
+                            <div class="brand-icon" vid="63">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" vid="64"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" vid="65"></path></svg>
+                            </div>
+                            <span class="status-badge connected" vid="66">Active</span>
+                        </div>
+                        <div class="card-info" vid="67">
+                            <h4 vid="68">X (Twitter)</h4>
+                            <p vid="69">Ingesting saved bookmarks and mentions in real-time.</p>
+                        </div>
+                        <button class="btn-small" vid="70">Sync Settings</button>
+                    </div>
+
+                    <div class="integration-card" vid="71">
+                        <div class="card-top" vid="72">
+                            <div class="brand-icon" vid="73">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" vid="74"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" vid="75"></path></svg>
+                            </div>
+                            <span class="status-badge disconnected" vid="76">Inactive</span>
+                        </div>
+                        <div class="card-info" vid="77">
+                            <h4 vid="78">WhatsApp Bot</h4>
+                            <p vid="79">Send voice notes or links directly to your Nodum inbox.</p>
+                        </div>
+                        <button class="btn-small" style="background: var(--text-primary); color: #000;" vid="80">Connect</button>
+                    </div>
+                </div>
+            </div>
+
+            <div vid="81">
+                <h2 class="section-title" vid="82">Agent Behavior</h2>
+                <p class="section-desc" vid="83">Fine-tune how Nodum's intelligence engine processes your knowledge.</p>
+                
+                <div class="agent-behavior-box" vid="84">
+                    <div class="toggle-row" vid="85">
+                        <div class="toggle-info" vid="86">
+                            <h5 vid="87">Recursive Analysis</h5>
+                            <p vid="88">Agent will look for deeper connections between historical and new nodes.</p>
+                        </div>
+                        <div class="switch on" vid="89"></div>
+                    </div>
+
+                    <div class="toggle-row" vid="90">
+                        <div class="toggle-info" vid="91">
+                            <h5 vid="92">Auto-Forge Drafts</h5>
+                            <p vid="93">Automatically generate content drafts when a cluster reaches 5+ nodes.</p>
+                        </div>
+                        <div class="switch" vid="94"></div>
+                    </div>
+
+                    <div class="slider-control" vid="95">
+                        <div class="toggle-info" vid="96">
+                            <h5 vid="97">Inference Depth</h5>
+                            <p vid="98">Higher depth leads to more abstract connections but slower processing.</p>
+                        </div>
+                        <div class="slider-track" vid="99">
+                            <div class="slider-fill" vid="100"></div>
+                            <div class="slider-thumb" vid="101"></div>
+                        </div>
+                        <div class="slider-labels" vid="102">
+                            <span vid="103">Literal</span>
+                            <span vid="104">Balanced</span>
+                            <span vid="105">Speculative</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div vid="106">
+                <h2 class="section-title" vid="107">Storage &amp; Privacy</h2>
+                <div class="agent-behavior-box" style="padding: 16px; display: flex; align-items: center; justify-content: space-between;" vid="108">
+                    <div vid="109">
+                        <p style="font-size: 13px; font-family: var(--font-mono); color: var(--text-secondary);" vid="110">ENCRYPTION_STATUS: AES-256 ACTIVE</p>
+                    </div>
+                    <button class="btn-small" style="border-color: rgba(255, 69, 58, 0.3); color: #FF453A;" vid="111">Wipe Workspace Data</button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body></html>

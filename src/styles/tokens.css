@@ -61,3 +61,35 @@
   --taskbar-h: 30px;
   --measure: 74ch;
 }
+
+/* ============================================================
+   GLASS — the content pages.
+   The desktop stays Windows 95; every page it opens is glass.
+   ============================================================ */
+
+:root {
+  --g-bg: #050505;
+  --g-panel: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  --g-panel-flat: rgba(255, 255, 255, 0.02);
+  --g-border: rgba(255, 255, 255, 0.08);
+  --g-border-soft: rgba(255, 255, 255, 0.05);
+  --g-highlight: rgba(255, 255, 255, 0.05);
+  --g-hover: rgba(255, 255, 255, 0.05);
+
+  --g-text: rgba(255, 255, 255, 0.9);
+  --g-text-2: rgba(255, 255, 255, 0.5);
+  --g-text-3: rgba(255, 255, 255, 0.3);
+
+  --blur: blur(28px);
+
+  --r-lg: 24px;
+  --r-md: 16px;
+  --r-sm: 8px;
+
+  --g-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --g-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+}

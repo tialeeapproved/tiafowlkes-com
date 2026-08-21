@@ -1,0 +1,410 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Nodum OS - Initialize Workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@100;400&amp;display=swap" rel="stylesheet" vid="7">
+    <style vid="8">
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-tertiary: rgba(255, 255, 255, 0.3);
+            --accent: rgba(255, 255, 255, 0.15);
+            --blur: blur(28px);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 8px;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: #050505;
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .environment {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=2500&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: blur(40px) brightness(0.2) saturate(0.8);
+            z-index: 0;
+        }
+
+        .glass {
+            background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+            border-radius: var(--radius-lg);
+            position: relative;
+        }
+
+        .os-bar {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 8px 24px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            z-index: 100;
+        }
+
+        .os-bar .brand {
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .workspace {
+            position: relative;
+            width: 1280px;
+            height: 960px;
+            display: grid;
+            grid-template-columns: 280px 1fr 340px;
+            gap: 24px;
+            padding: 80px 32px 32px;
+            z-index: 10;
+        }
+
+        .sidebar {
+            height: 100%;
+            padding: 32px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-tertiary);
+            padding-left: 8px;
+            margin-bottom: 4px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.03);
+            color: var(--text-primary);
+        }
+
+        .menu-item svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        
+        .center-stage {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .empty-prompt {
+            text-align: center;
+            max-width: 440px;
+            padding: 64px 48px;
+            border-radius: 32px;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.03) 0%, transparent 100%);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .empty-icon-ring {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.01);
+            position: relative;
+        }
+
+        .empty-icon-ring::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px dashed var(--text-tertiary);
+            animation: rotate 20s linear infinite;
+        }
+
+        .empty-icon-ring svg {
+            width: 32px;
+            height: 32px;
+            color: var(--text-tertiary);
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .empty-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .connect-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: var(--text-primary);
+            color: #000;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .connect-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .operations {
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .panel-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-tertiary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--glass-border), transparent);
+        }
+
+        .status-card {
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .status-label { color: var(--text-secondary); }
+        .status-value { font-family: var(--font-mono); color: var(--text-tertiary); }
+
+        .progress-track {
+            height: 4px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--text-secondary);
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .source-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .source-pill {
+            padding: 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .source-pill:hover {
+            background: rgba(255,255,255,0.06);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body vid="9">
+    <div class="environment" vid="10"></div>
+
+    <nav class="glass os-bar" vid="11">
+        <div class="brand" vid="12">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" vid="13"><circle cx="12" cy="12" r="10" vid="14"></circle><path d="M12 2a10 10 0 0 1 10 10" vid="15"></path></svg>
+            Nodum OS
+        </div>
+        <div vid="16">Workspace 1</div>
+        <div style="font-family: var(--font-mono); opacity: 0.4;" vid="17">READY_FOR_INIT</div>
+    </nav>
+
+    <main class="workspace" vid="18">
+        <aside class="glass sidebar" vid="19">
+            <div class="menu-section" vid="20">
+                <div class="menu-header" vid="21">Knowledge Graph</div>
+                <div class="menu-item" vid="22">
+                    <svg viewBox="0 0 24 24" vid="23"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" vid="24"></rect><line x1="16" y1="2" x2="16" y2="6" vid="25"></line><line x1="8" y1="2" x2="8" y2="6" vid="26"></line><line x1="3" y1="10" x2="21" y2="10" vid="27"></line></svg>
+                    Topic Clusters
+                </div>
+            </div>
+
+            <div class="menu-section" vid="28">
+                <div class="menu-header" vid="29">Intelligence</div>
+                <div class="menu-item" vid="30"><svg viewBox="0 0 24 24" vid="31"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" vid="32"></polygon></svg>Key Insights</div>
+                <div class="menu-item" vid="33"><svg viewBox="0 0 24 24" vid="34"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" vid="35"></path><polyline points="14 2 14 8 20 8" vid="36"></polyline></svg>Summaries</div>
+                <div class="menu-item" vid="37"><svg viewBox="0 0 24 24" vid="38"><circle cx="12" cy="12" r="10" vid="39"></circle><line x1="12" y1="16" x2="12" y2="12" vid="40"></line></svg>Content Gaps</div>
+            </div>
+
+            <div class="menu-section" style="margin-top: auto;" vid="41">
+                <div class="menu-header" vid="42">Forge Layer</div>
+                <div class="menu-item" vid="43"><svg viewBox="0 0 24 24" vid="44"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" vid="45"></path></svg>Draft Scripts</div>
+                <div class="menu-item" vid="46"><svg viewBox="0 0 24 24" vid="47"><rect x="3" y="3" width="18" height="18" rx="2" vid="48"></rect></svg>Content Plans</div>
+            </div>
+        </aside>
+
+        <section class="center-stage" vid="49">
+            <div class="empty-prompt" vid="50">
+                <div class="empty-icon-ring" vid="51">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" vid="52">
+                        <path d="M12 22V12m0 0l-4 4m4-4l4 4" vid="53"></path>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7" vid="54"></path>
+                        <path d="M7.5 7.13l3.6-4.79a1.1 1.1 0 0 1 1.8 0l3.6 4.79" vid="55"></path>
+                    </svg>
+                </div>
+                <h2 vid="56">Awaiting Intelligence</h2>
+                <p class="empty-desc" vid="57">Your workspace is a blank slate. Connect a content source to begin clustering insights and generating Forge assets.</p>
+                
+                <button class="connect-btn" vid="58">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" vid="59"><line x1="12" y1="5" x2="12" y2="19" vid="60"></line><line x1="5" y1="12" x2="19" y2="12" vid="61"></line></svg>
+                    Connect Source
+                </button>
+
+                <div class="source-grid" vid="62">
+                    <div class="source-pill" vid="63">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" vid="64"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z" vid="65"></path></svg>
+                        Instagram
+                    </div>
+                    <div class="source-pill" vid="66">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" vid="67"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" vid="68"></path></svg>
+                        X / Twitter
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="glass operations" vid="69">
+            <div class="panel-title" vid="70">Active Processors</div>
+            <div class="status-card" vid="71">
+                <div class="status-row" vid="72">
+                    <span class="status-label" vid="73">Ingestion Engine</span>
+                    <span class="status-value" vid="74">IDLE</span>
+                </div>
+                <div class="progress-track" vid="75"><div class="progress-bar" vid="76"></div></div>
+            </div>
+
+            <div class="status-card" vid="77">
+                <div class="status-row" vid="78">
+                    <span class="status-label" vid="79">Context Analyzer</span>
+                    <span class="status-value" vid="80">STANDBY</span>
+                </div>
+                <div class="progress-track" vid="81"><div class="progress-bar" vid="82"></div></div>
+            </div>
+
+            <div class="panel-title" style="margin-top: 12px;" vid="83">System Logs</div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); line-height: 1.8;" vid="84">
+                [09:41:02] INITIALIZING_WORKSPACE_V1<br vid="85">
+                [09:41:03] HANDSHAKE_PROTOCOL_STABLE<br vid="86">
+                [09:41:03] WAITING_FOR_CONTENT_BUFFER...<br vid="87">
+                [09:41:04] NODE_MAP_CLEARED
+            </div>
+        </aside>
+    </main>
+</body></html>

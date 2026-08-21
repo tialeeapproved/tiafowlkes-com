@@ -1,7 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import Page from '../layouts/Page.astro';
-import Fieldset from '../components/Fieldset.astro';
+import Glass from '../layouts/Glass.astro';
 
 const entries = (await getCollection('decisions', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -11,75 +10,104 @@ const lead =
   'A resume records program execution. This log documents strategic judgment. Eight pivotal program calls made under incomplete information, competing cross-functional priorities, and immovable launch windows.';
 ---
 
-<Page active="decisions" lead={lead} wide>
+<Glass active="decisions" lead={lead}>
   <div class="log">
     {
-      entries.map((entry) => (
-        <article class="entry" id={entry.id.replace(/^\d+-/, '')}>
-          <h2>{entry.data.headline}</h2>
+      entries.map((entry, i) => (
+        <article class="entry glass" id={entry.id.replace(/^\d+-/, '')}>
+          <header class="head">
+            <span class="meta idx">{String(i + 1).padStart(2, '0')}</span>
+            <h2>{entry.data.headline}</h2>
+          </header>
 
           <div class="blocks">
-            <Fieldset legend="Context">
+            <div class="block">
+              <p class="label">Context</p>
               <p>{entry.data.context}</p>
-            </Fieldset>
-            <Fieldset legend="The call">
+            </div>
+            <div class="block">
+              <p class="label">The call</p>
               <p>{entry.data.call}</p>
-            </Fieldset>
-            <Fieldset legend="What followed">
+            </div>
+            <div class="block">
+              <p class="label">What followed</p>
               <p>{entry.data.followed}</p>
-            </Fieldset>
+            </div>
           </div>
         </article>
       ))
     }
   </div>
-</Page>
+</Glass>
 
 <style>
-  .entry {
-    padding-bottom: var(--s6);
-    margin-bottom: var(--s6);
-    /* The era's divider: a groove, not a hairline. */
-    border-bottom: 1px solid var(--ui-shadow);
-    box-shadow: 0 1px 0 var(--ui-highlight);
+  .log {
+    display: grid;
+    gap: 20px;
   }
 
-  .entry:last-child {
-    padding-bottom: 0;
-    margin-bottom: 0;
-    border-bottom: none;
-    box-shadow: none;
+  .entry {
+    padding: 34px;
+  }
+
+  .head {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    padding-bottom: 26px;
+    margin-bottom: 26px;
+    border-bottom: 1px solid var(--g-border-soft);
+  }
+
+  /* The index is orientation, not a ranking — kept in mono at
+     tertiary weight so it never competes with the headline. */
+  .idx {
+    flex: none;
+    padding-top: 7px;
   }
 
   h2 {
-    max-width: 34ch;
-    margin-bottom: var(--s2);
-    font-size: 19px;
-    font-weight: bold;
-    line-height: 1.3;
+    max-width: 26ch;
+    font-size: clamp(20px, 2.4vw, 27px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    color: var(--g-text);
   }
 
   .blocks {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--s3);
+    gap: 28px;
   }
 
-  .blocks p {
-    font-size: var(--size-body);
-    line-height: 1.6;
+  .block .label {
+    margin-bottom: 10px;
+  }
+
+  .block p:last-child {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--g-text-2);
   }
 
   @media (max-width: 900px) {
     .blocks {
       grid-template-columns: 1fr;
-      gap: var(--s2);
+      gap: 22px;
     }
   }
 
   @media (max-width: 720px) {
-    h2 {
-      font-size: 17px;
+    .entry {
+      padding: 24px 20px;
+      border-radius: var(--r-md);
+    }
+
+    .head {
+      gap: 12px;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
     }
   }
 </style>

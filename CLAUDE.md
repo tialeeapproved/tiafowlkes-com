@@ -41,28 +41,31 @@ The landing page is a bare desktop: four folders, nothing else. Each folder open
 
 **Tiebreaker** when something fits more than one: *if it still runs without her, it's a System. If it ended when it shipped, it's a Program. If the story is the call rather than the work, it's a Decision.*
 
-### The visual system — Windows 95
+### The visual system — two worlds
 
-The site is a Windows-95-era desktop, taken from the template in `assets/`. Sky-gradient wallpaper with three layers of panning pixel clouds, gold folder icons, a taskbar, and every page rendered inside a beveled window.
+**The desktop is Windows 95. Every page it opens is glass.** That split is deliberate: an old OS booting into a new one.
 
-**The bevel is the entire design language.** Two utility classes in `global.css` do nearly all of it:
+**Desktop (`/`)** — sky wallpaper with panning pixel clouds, large gold folder icons, and a taskbar carrying only her name plus `?` and Résumé. Styles live in `global.css` + the Win95 half of `tokens.css`. The bevel language is two utility classes:
 
-- `.raised` — a surface that sticks out: windows, buttons, tiles. Highlight on top/left, dark shadow on bottom/right.
-- `.sunken` — a well that goes in: metric readouts, list panels, thumbnails. The reverse.
+- `.raised` — a surface that sticks out: windows, buttons. Highlight top/left, dark shadow bottom/right.
+- `.sunken` — a well that goes in. The reverse.
+- `.chrome` — 11px, font smoothing off, no text selection. Chrome only, never prose.
 
-Grooved dividers use the same trick: `border-bottom: 1px solid var(--ui-shadow)` plus `box-shadow: 0 1px 0 var(--ui-highlight)`.
+**Content pages** — `#050505` with a CSS-generated blurred atmosphere (`Mesh.astro` — layered radial gradients, no image, nothing external). Panels use one class:
 
-**Rules:**
+- `.glass` — diagonal white wash 0.06→0.01, `backdrop-filter: blur(28px)`, hairline border, deep shadow, lit top-left corner via `::before`.
 
-- **Chrome is 11px and pixel-crisp. Prose is not.** The `.chrome` class turns off font smoothing and locks 11px — title bars, labels, buttons, folder names. Body copy runs 14px with smoothing on, because there are eight decision entries to read and unsmoothed prose at length is punishing. Do not put `.chrome` on prose.
-- **Numbering appears only on Systems**, where the six are a genuine inventory. Nothing else is numbered.
+Type is Inter (300 for display, 400 body) with JetBrains Mono for labels and metrics. `.label` is the 10px tracked uppercase mono; `.meta` is the 11px mono. Radii are 24 / 16 / 8.
+
+**Rules that hold in both worlds:**
+
+- **Numbering appears only on Systems**, where the six are a genuine inventory. The index numerals on Decisions are orientation, kept at tertiary contrast so they never read as a ranking.
 - **Sentence case headings throughout.** No title case.
-- **Fieldsets carry structure.** The notched-legend panel from the Levels dialog holds Context / The call / What followed, and the portfolio columns. Reach for `Fieldset.astro` before inventing a new container.
-- **Metric strips are load-bearing** — a recruiter reads them before any prose. They render as sunken white wells in the mono face, the way dialog readouts do.
-- Only the clouds animate, and they stop entirely under `prefers-reduced-motion`. Nothing else moves.
-- Responsive to 380px. Visible keyboard focus (dotted, period-correct). Real contrast.
+- **Metric strips are load-bearing** — a recruiter reads them before any prose. On glass pages they are mono chips on their own row.
+- Only the clouds and the atmosphere drift, and both stop under `prefers-reduced-motion`. Nothing else moves.
+- Responsive to 380px. Visible keyboard focus. Real contrast.
 
-**No webfonts.** Tahoma / Verdana / Geneva are the period faces and already live on the machine, so the site paints instantly.
+The desktop loads **no webfonts** — Tahoma/Verdana/Geneva are already on the machine. Glass pages load Inter and JetBrains Mono.
 
 ---
 
@@ -96,10 +99,13 @@ Internal assessment documents, interview notes, colleague names, or client proje
 | To change this | Edit this |
 |---|---|
 | Any colour, bevel, or spacing | `src/styles/tokens.css` — **never hardcode a hex anywhere else** |
-| The wallpaper and clouds | `src/components/Sky.astro` |
-| Taskbar and its buttons | `src/components/Taskbar.astro` |
-| Window chrome | `src/components/Win.astro` |
-| The notched-legend panel | `src/components/Fieldset.astro` |
+| Desktop wallpaper and clouds | `src/components/Sky.astro` |
+| Taskbar | `src/components/Taskbar.astro` |
+| Win95 window chrome (404) | `src/components/Win.astro` |
+| Glass page frame | `src/layouts/Glass.astro` |
+| Glass top bar | `src/components/GlassBar.astro` |
+| The blurred atmosphere | `src/components/Mesh.astro` |
+| Glass material and shared type | `src/styles/glass.css` |
 | Hero, links, email | `src/data/site.ts` |
 | Folder names and order | `src/data/folders.ts` |
 | Add or edit a decision | `src/content/decisions/*.md` |
@@ -118,7 +124,7 @@ Internal assessment documents, interview notes, colleague names, or client proje
 
 1. **Every folder is a URL** — `/decisions`, `/programs`. Back button works, any view is shareable.
 2. **Everything prerenders to static HTML.** The desktop is a shell over real pages, so it stays indexable and works with JS off.
-3. **The desktop never scales down.** On a phone the folders become a row across the top, the window goes full width, and the taskbar stays. Same design, adapted — never a shrunken desktop.
+3. **The desktop never scales down.** On a phone the folders become a two-column grid and the taskbar stays. Same design, adapted — never a shrunken desktop.
 4. **No dragging, no boot sequence, no window management.** The chrome is the look; the site is still four pages and a back button.
 
 ---

@@ -1,38 +1,13 @@
 ---
 import { site } from '../data/site';
-import { folders } from '../data/folders';
-import type { FolderId } from '../data/folders';
-
-interface Props {
-  active?: FolderId;
-}
-
-const { active } = Astro.props;
 ---
 
 <footer class="taskbar chrome">
-  <a href="/" class="start" aria-label="Desktop">
-    <span class="flag" aria-hidden="true"></span>
-    <span class="start-label">tia fowlkes</span>
-  </a>
-
-  <nav class="tasks" aria-label="Open windows">
-    {
-      folders.map((f) => (
-        <a
-          href={`/${f.id}`}
-          class:list={['task', { on: f.id === active }]}
-          aria-current={f.id === active ? 'page' : undefined}
-        >
-          {f.label}
-        </a>
-      ))
-    }
-  </nav>
+  <a href="/" class="name">{site.name}</a>
 
   <div class="tray">
-    <button type="button" class="tray-btn" aria-label="Ask about Tia's experience" disabled>?</button>
-    <a href={site.resume} class="tray-btn">Résumé</a>
+    <button type="button" class="btn" aria-label="Ask about Tia's experience" disabled>?</button>
+    <a href={site.resume} class="btn">Résumé</a>
   </div>
 </footer>
 
@@ -45,22 +20,20 @@ const { active } = Astro.props;
     z-index: 200;
     display: flex;
     align-items: center;
-    gap: var(--s1);
+    justify-content: space-between;
+    gap: var(--s2);
     height: var(--taskbar-h);
     padding: 2px var(--s1);
     background: var(--ui-bg);
     border-top: 2px solid var(--ui-highlight);
   }
 
-  /* Every taskbar control is the same raised button. */
-  .start,
-  .task,
-  .tray-btn {
+  .name,
+  .btn {
     display: flex;
     align-items: center;
-    gap: 5px;
     height: 22px;
-    padding: 0 8px;
+    padding: 0 12px;
     background: var(--ui-bg);
     border-top: 2px solid var(--ui-highlight);
     border-left: 2px solid var(--ui-highlight);
@@ -72,49 +45,17 @@ const { active } = Astro.props;
     cursor: pointer;
   }
 
-  .start-label {
+  .name {
     font-weight: bold;
   }
 
-  /* The colour block standing in for the flag. */
-  .flag {
-    width: 12px;
-    height: 12px;
-    background:
-      linear-gradient(135deg, var(--select-bg) 50%, transparent 50%),
-      var(--folder);
-    border: 1px solid var(--ui-dark-shadow);
-  }
-
-  /* Pressed-in state — the active page reads as the open window. */
-  .task.on,
-  .start:active,
-  .task:active,
-  .tray-btn:active {
+  .name:active,
+  .btn:active {
     border-top-color: var(--ui-dark-shadow);
     border-left-color: var(--ui-dark-shadow);
     border-right-color: var(--ui-highlight);
     border-bottom-color: var(--ui-highlight);
     box-shadow: inset 1px 1px 0 var(--ui-shadow);
-    background: var(--ui-bg-alt);
-    font-weight: bold;
-  }
-
-  .tasks {
-    display: flex;
-    gap: 3px;
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-  }
-
-  .task {
-    flex: 0 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: block;
-    line-height: 18px;
   }
 
   .tray {
@@ -124,25 +65,8 @@ const { active } = Astro.props;
     border-left: 1px solid var(--ui-shadow);
   }
 
-  .tray-btn:disabled {
+  .btn:disabled {
     color: var(--ui-shadow);
     cursor: default;
-  }
-
-  /* Phone: the start button collapses to the flag, and the task
-     buttons stay — they are the only navigation. */
-  @media (max-width: 720px) {
-    .start-label {
-      display: none;
-    }
-
-    .task {
-      padding: 0 6px;
-      font-size: 10px;
-    }
-
-    .tray-btn {
-      padding: 0 6px;
-    }
   }
 </style>

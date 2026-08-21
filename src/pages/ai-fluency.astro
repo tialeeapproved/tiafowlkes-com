@@ -1,32 +1,32 @@
 ---
-import Page from '../layouts/Page.astro';
-import Fieldset from '../components/Fieldset.astro';
+import Glass from '../layouts/Glass.astro';
 import { aiProjects, aiFramework, education } from '../data/ai';
 
 const lead =
   'AI outputs fail probabilistically rather than deterministically. They return fluent, confident, and subtly flawed responses without structural warning indicators. Building effectively with generative models requires deep technical discipline, rigorous evaluation architecture, and the operational rigor to catch hallucinated accuracy before deployment.';
 ---
 
-<Page active="ai-fluency" lead={lead}>
-  <Fieldset legend="Evaluation framework">
-    <p class="framework">{aiFramework}</p>
-  </Fieldset>
+<Glass active="ai-fluency" lead={lead}>
+  <section class="framework glass">
+    <p class="label">Evaluation framework</p>
+    <p>{aiFramework}</p>
+  </section>
 
   {
     aiProjects.length > 0 && (
       <div class="cards">
         {aiProjects.map((p) => (
-          <a class="card raised" href={p.href} target="_blank" rel="noopener">
+          <a class="card glass" href={p.href} target="_blank" rel="noopener">
             {p.image ? (
-              <img src={p.image} alt="" loading="lazy" class="sunken" />
+              <img src={p.image} alt="" loading="lazy" />
             ) : (
-              <span class="thumb sunken" aria-hidden="true" />
+              <span class="thumb" aria-hidden="true" />
             )}
             <span class="body">
               <span class="name">{p.name}</span>
               <span class="descriptor">{p.descriptor}</span>
               <span class="impact">{p.impact}</span>
-              <span class="tools">Built with: {p.tools.join(' · ')}</span>
+              <span class="tools meta">Built with: {p.tools.join(' · ')}</span>
             </span>
           </a>
         ))}
@@ -34,33 +34,43 @@ const lead =
     )
   }
 
-  <p class="education">{education}</p>
-</Page>
+  <p class="education meta">{education}</p>
+</Glass>
 
 <style>
   .framework {
-    max-width: var(--measure);
-    font-size: var(--size-body);
-    line-height: 1.6;
+    padding: 30px 32px;
+    border-radius: var(--r-md);
+  }
+
+  .framework .label {
+    margin-bottom: 14px;
+  }
+
+  .framework p:last-child {
+    max-width: 76ch;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--g-text);
   }
 
   .cards {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s3);
-    margin-top: var(--s4);
+    gap: 16px;
+    margin-top: 20px;
   }
 
   .card {
     display: block;
-    padding: var(--s2);
+    padding: 16px;
+    border-radius: var(--r-md);
+    transition: background 0.25s, border-color 0.25s;
   }
 
-  .card:active {
-    border-top-color: var(--ui-dark-shadow);
-    border-left-color: var(--ui-dark-shadow);
-    border-right-color: var(--ui-highlight);
-    border-bottom-color: var(--ui-highlight);
+  .card:hover {
+    border-color: rgba(255, 255, 255, 0.16);
   }
 
   .card img,
@@ -69,55 +79,62 @@ const lead =
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
+    border-radius: var(--r-sm);
+    background: linear-gradient(
+      140deg,
+      rgba(255, 255, 255, 0.07),
+      rgba(255, 255, 255, 0.01)
+    );
   }
 
   .body {
     display: block;
-    padding-top: var(--s2);
+    padding: 18px 6px 4px;
   }
 
   .name {
     display: block;
-    font-size: 15px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: -0.015em;
   }
 
   .descriptor {
     display: block;
-    margin: 1px 0 6px;
-    font-style: italic;
+    margin: 4px 0 12px;
     font-size: 13px;
-    color: #333;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--g-text-3);
   }
 
   .impact {
     display: block;
-    font-size: 13px;
-    line-height: 1.55;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--g-text-2);
   }
 
   .tools {
     display: block;
-    margin-top: var(--s2);
-    padding-top: 6px;
-    border-top: 1px dotted var(--ui-face-line);
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: #444;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--g-border-soft);
   }
 
   .education {
-    margin-top: var(--s6);
-    padding-top: var(--s3);
-    border-top: 1px solid var(--ui-shadow);
-    box-shadow: 0 -1px 0 var(--ui-highlight) inset;
-    font-size: 12px;
-    color: #333;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--g-border-soft);
   }
 
   @media (max-width: 720px) {
     .cards {
       grid-template-columns: 1fr;
+    }
+
+    .framework {
+      padding: 24px 20px;
     }
   }
 </style>

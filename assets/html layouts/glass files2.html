@@ -1,0 +1,409 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Nodum OS - Topic Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@100;400&amp;display=swap" rel="stylesheet" vid="7">
+    <style vid="8">
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.5);
+            --text-tertiary: rgba(255, 255, 255, 0.3);
+            --accent: rgba(10, 132, 255, 0.5);
+            --blur: blur(28px);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 8px;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: #050505;
+            color: var(--text-primary);
+            overflow: hidden;
+            width: 1280px;
+            height: 960px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .environment {
+            position: fixed;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1615873968403-89e068629265?q=80&w=2500&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: blur(20px) brightness(0.2) saturate(1.2);
+            z-index: 0;
+        }
+
+        .glass {
+            background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.5);
+            border-radius: var(--radius-lg);
+            position: relative;
+        }
+
+        .os-bar {
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding: 8px 24px;
+            border-radius: 100px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            z-index: 100;
+        }
+
+        .brand { color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+        .brand svg { width: 14px; height: 14px; }
+
+        .app-container {
+            position: relative;
+            width: 1200px;
+            height: 840px;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 24px;
+            z-index: 10;
+            padding: 24px;
+            margin-top: 40px;
+        }
+
+        
+        .sidebar {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .nav-section { display: flex; flex-direction: column; gap: 8px; }
+        .nav-header { 
+            font-size: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.15em; 
+            color: var(--text-tertiary); 
+            padding: 0 8px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-primary);
+        }
+
+        .nav-item svg { width: 16px; height: 16px; opacity: 0.7; }
+        .nav-item.active { border-left: 2px solid #0A84FF; border-radius: 0 8px 8px 0; }
+
+        
+        .explorer-view {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+        }
+
+        .view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 12px;
+        }
+
+        .title-group h2 {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        .title-group p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .graph-controls {
+            display: flex;
+            gap: 8px;
+            background: rgba(0,0,0,0.2);
+            padding: 4px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .filter-chip {
+            padding: 6px 16px;
+            font-size: 11px;
+            border-radius: 100px;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            transition: all 0.2s;
+        }
+
+        .filter-chip.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-primary);
+        }
+
+        
+        .graph-canvas {
+            position: relative;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.02) 0%, transparent 70%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .relationship-lanes {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: space-around;
+            pointer-events: none;
+        }
+
+        .lane {
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--glass-border), transparent);
+            position: relative;
+        }
+
+        .lane-label {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-mono);
+            font-size: 9px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            letter-spacing: 0.1em;
+            white-space: nowrap;
+        }
+
+        .node {
+            position: absolute;
+            width: 180px;
+            padding: 12px;
+            background: rgba(15, 15, 15, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .node:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(10, 132, 255, 0.2);
+            border-color: rgba(10, 132, 255, 0.4);
+        }
+
+        .node-type {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .node-content {
+            font-size: 11px;
+            line-height: 1.4;
+            color: var(--text-secondary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .node-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+        
+        .svg-overlay {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .connection-path {
+            fill: none;
+            stroke: rgba(255,255,255,0.08);
+            stroke-width: 1;
+            stroke-dasharray: 4;
+        }
+
+        
+        .n1 { top: 15%; left: 10%; }
+        .n2 { top: 40%; left: 12%; }
+        .n3 { top: 25%; left: 40%; width: 220px; border-color: rgba(10, 132, 255, 0.5); background: rgba(10, 132, 255, 0.05); }
+        .n4 { top: 60%; left: 38%; }
+        .n5 { top: 15%; left: 70%; }
+        .n6 { top: 50%; left: 72%; }
+        .n7 { top: 75%; left: 75%; }
+
+        .type-concept { color: #BF5AF2; }
+        .type-source { color: #0A84FF; }
+        .type-insight { color: #32D74B; }
+
+        .floating { animation: floatNode 6s ease-in-out infinite alternate; }
+        @keyframes floatNode {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+    </style>
+</head>
+<body vid="9">
+    <div class="environment" vid="10"></div>
+
+    <nav class="glass os-bar" vid="11">
+        <div class="brand" vid="12">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" vid="13"><circle cx="12" cy="12" r="10" vid="14"></circle><path d="M12 2a10 10 0 0 1 10 10" vid="15"></path></svg>
+            Nodum OS
+        </div>
+        <div vid="16">Intelligence Explorer</div>
+        <div style="font-family: var(--font-mono); opacity: 0.5;" vid="17">0.9.4_beta</div>
+    </nav>
+
+    <div class="app-container" vid="18">
+        <aside class="glass sidebar" vid="19">
+            <div class="nav-section" vid="20">
+                <div class="nav-header" vid="21">Knowledge</div>
+                <div class="nav-item active" vid="22">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" vid="23"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" vid="24"></path></svg>
+                    Topic Clusters
+                </div>
+                <div class="nav-item" vid="25">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" vid="26"><circle cx="12" cy="12" r="10" vid="27"></circle><line x1="2" y1="12" x2="22" y2="12" vid="28"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" vid="29"></path></svg>
+                    Source Map
+                </div>
+            </div>
+
+            <div class="nav-section" vid="30">
+                <div class="nav-header" vid="31">Active Cluster</div>
+                <div class="nav-item" style="font-size: 12px;" vid="32">
+                    <div class="node-dot" style="background: #0A84FF;" vid="33"></div>
+                    Claude Code Architecture
+                </div>
+                <div class="nav-item" style="font-size: 12px; opacity: 0.5;" vid="34">
+                    <div class="node-dot" style="background: #BF5AF2;" vid="35"></div>
+                    Agentic Workflows
+                </div>
+            </div>
+            
+            <div class="nav-section" style="margin-top: auto;" vid="36">
+                <div class="nav-item" vid="37">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" vid="38"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" vid="39"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" vid="40"></path></svg>
+                    Forge New Draft
+                </div>
+            </div>
+        </aside>
+
+        <main class="explorer-view" vid="41">
+            <header class="view-header" vid="42">
+                <div class="title-group" vid="43">
+                    <h2 vid="44">Claude Code Architecture</h2>
+                    <p vid="45">Visualizing 14 interconnected nodes and relationship vectors</p>
+                </div>
+                <div class="graph-controls" vid="46">
+                    <div class="filter-chip active" vid="47">All Nodes</div>
+                    <div class="filter-chip" vid="48">Insights</div>
+                    <div class="filter-chip" vid="49">Drafts</div>
+                </div>
+            </header>
+
+            <div class="graph-canvas" vid="50">
+                <div class="relationship-lanes" vid="51">
+                    <div class="lane" vid="52"><span class="lane-label" vid="53">Context</span></div>
+                    <div class="lane" vid="54"><span class="lane-label" vid="55">Process</span></div>
+                    <div class="lane" vid="56"><span class="lane-label" vid="57">Synthesis</span></div>
+                </div>
+
+                <svg class="svg-overlay" vid="58">
+                    <path class="connection-path" d="M 200 150 L 450 250" vid="59"></path>
+                    <path class="connection-path" d="M 200 380 L 450 250" vid="60"></path>
+                    <path class="connection-path" d="M 650 250 L 850 150" vid="61"></path>
+                    <path class="connection-path" d="M 650 250 L 850 450" vid="62"></path>
+                    <path class="connection-path" d="M 850 450 L 880 650" vid="63"></path>
+                </svg>
+
+                
+                <div class="node n1 floating type-source" vid="64">
+                    <div class="node-type" vid="65"><div class="node-dot" style="background: currentColor;" vid="66"></div>Twitter / X</div>
+                    <div class="node-content" vid="67">"Claude Code is basically an OS for your local repo..."</div>
+                </div>
+
+                <div class="node n2 floating type-source" style="animation-delay: -2s;" vid="68">
+                    <div class="node-type" vid="69"><div class="node-dot" style="background: currentColor;" vid="70"></div>Documentation</div>
+                    <div class="node-content" vid="71">Context window management and local file indexing protocols.</div>
+                </div>
+
+                
+                <div class="node n3 type-concept" vid="72">
+                    <div class="node-type" vid="73"><div class="node-dot" style="background: currentColor;" vid="74"></div>Core Concept</div>
+                    <div class="node-content" style="font-size: 13px; -webkit-line-clamp: 4;" vid="75">
+                        The shift from chat-based AI to execution-based terminal agents. Requires high-fidelity context maps of codebases.
+                    </div>
+                </div>
+
+                <div class="node n4 floating type-insight" style="animation-delay: -1s;" vid="76">
+                    <div class="node-type" vid="77"><div class="node-dot" style="background: currentColor;" vid="78"></div>Extraction</div>
+                    <div class="node-content" vid="79">Consensus: Latency in local processing is the primary bottleneck.</div>
+                </div>
+
+                
+                <div class="node n5 floating type-insight" vid="80">
+                    <div class="node-type" vid="81"><div class="node-dot" style="background: currentColor;" vid="82"></div>Content Hook</div>
+                    <div class="node-content" vid="83">"Stop coding in the browser. The terminal is back."</div>
+                </div>
+
+                <div class="node n6 floating type-concept" style="animation-delay: -3s;" vid="84">
+                    <div class="node-type" vid="85"><div class="node-dot" style="background: currentColor;" vid="86"></div>Script Draft</div>
+                    <div class="node-content" vid="87">Video script: Comparing Claude Code vs Cursor for 2025 workflows.</div>
+                </div>
+
+                <div class="node n7 type-insight" vid="88">
+                    <div class="node-type" vid="89"><div class="node-dot" style="background: currentColor;" vid="90"></div>Gap Analysis</div>
+                    <div class="node-content" vid="91">Missing: Discussion on data privacy for enterprise repos.</div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body></html>

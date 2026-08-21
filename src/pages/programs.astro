@@ -1,36 +1,32 @@
 ---
-import Page from '../layouts/Page.astro';
-import Fieldset from '../components/Fieldset.astro';
+import Glass from '../layouts/Glass.astro';
 import MetricStrip from '../components/MetricStrip.astro';
 import { programsLead, portfolio, programs } from '../data/programs';
 ---
 
-<Page active="programs" lead={programsLead} wide>
+<Glass active="programs" lead={programsLead}>
   <!-- Breadth first. -->
-  <section class="portfolio" aria-labelledby="portfolio-h">
-    <h2 id="portfolio-h">Portfolio</h2>
-
-    <div class="matrix">
-      {
-        portfolio.map((col) => (
-          <Fieldset legend={col.label}>
-            <ul class="list sunken">
-              {col.items.map((item) => (
-                <li>{item}</li>
-              ))}
-            </ul>
-          </Fieldset>
-        ))
-      }
-    </div>
+  <section class="matrix" aria-label="Portfolio">
+    {
+      portfolio.map((col) => (
+        <div class="col glass">
+          <p class="label">{col.label}</p>
+          <ul>
+            {col.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </section>
 
   <!-- Depth second. -->
   <section class="detail" aria-label="Program detail">
     {
       programs.map((p) => (
-        <article class="program" id={p.id}>
-          <h3>{p.name}</h3>
+        <article class="program glass" id={p.id}>
+          <h2>{p.name}</h2>
           <p class="descriptor">{p.descriptor}</p>
 
           <MetricStrip metrics={p.metrics} />
@@ -44,97 +40,102 @@ import { programsLead, portfolio, programs } from '../data/programs';
       ))
     }
   </section>
-</Page>
+</Glass>
 
 <style>
-  h2 {
-    font-size: 17px;
-    font-weight: bold;
-  }
-
   .matrix {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--s3);
-    margin-bottom: var(--s6);
+    gap: 16px;
+    margin-bottom: 20px;
   }
 
-  .list {
-    padding: 6px 8px;
+  .col {
+    padding: 24px 22px;
+    border-radius: var(--r-md);
   }
 
-  .list li {
-    padding: 2px 0;
-    font-size: 12px;
-    line-height: 1.5;
+  .col .label {
+    margin-bottom: 16px;
   }
 
-  .list li + li {
-    border-top: 1px dotted var(--ui-face-line);
+  .col li {
+    padding: 7px 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--g-text-2);
+  }
+
+  .col li + li {
+    border-top: 1px solid var(--g-border-soft);
+  }
+
+  .detail {
+    display: grid;
+    gap: 20px;
   }
 
   .program {
-    padding-top: var(--s4);
-    margin-top: var(--s4);
-    border-top: 1px solid var(--ui-shadow);
-    box-shadow: 0 -1px 0 var(--ui-highlight) inset;
+    padding: 34px;
   }
 
-  .program:first-child {
-    padding-top: 0;
-    margin-top: 0;
-    border-top: none;
-    box-shadow: none;
-  }
-
-  h3 {
-    font-size: 17px;
-    font-weight: bold;
+  h2 {
+    font-size: clamp(19px, 2.2vw, 25px);
+    font-weight: 300;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
   }
 
   .descriptor {
-    margin: 2px 0 var(--s2);
+    margin: 8px 0 22px;
+    font-size: 14px;
+    font-weight: 300;
     font-style: italic;
-    font-size: 13px;
-    color: #333;
+    color: var(--g-text-3);
   }
 
   .points {
-    max-width: var(--measure);
+    max-width: 76ch;
   }
 
   .points li {
     position: relative;
-    padding-left: 18px;
-    margin-bottom: 7px;
-    font-size: var(--size-body);
-    line-height: 1.6;
+    padding-left: 20px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--g-text-2);
   }
 
-  /* Period bullet: a small raised square. */
+  .points li:last-child {
+    margin-bottom: 0;
+  }
+
   .points li::before {
     content: '';
     position: absolute;
     left: 0;
-    top: 8px;
-    width: 6px;
-    height: 6px;
-    background: var(--ui-bg);
-    border-top: 1px solid var(--ui-highlight);
-    border-left: 1px solid var(--ui-highlight);
-    border-right: 1px solid var(--ui-dark-shadow);
-    border-bottom: 1px solid var(--ui-dark-shadow);
+    top: 10px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.28);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     .matrix {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 720px) {
     .matrix {
       grid-template-columns: 1fr;
+    }
+
+    .program {
+      padding: 24px 20px;
+      border-radius: var(--r-md);
     }
   }
 </style>
