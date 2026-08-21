@@ -59,6 +59,10 @@
   --s8: 48px;
 
   --taskbar-h: 30px;
+  /* The desktop rail's width. The workspace reserves it as a gutter
+     on both sides, so the centred window can never slide underneath
+     the folders on a narrow laptop or an iPad. */
+  --rail-w: 116px;
   --measure: 74ch;
 }
 

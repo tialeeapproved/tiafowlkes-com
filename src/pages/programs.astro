@@ -75,6 +75,10 @@ import { programsLead, portfolio, programs } from '../data/programs';
   .matrix {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* Columns size to their own content. Stretching them to the
+       tallest one leaves a long dead panel under the short lists
+       once the grid drops to two columns. */
+    align-items: start;
     gap: 16px;
     margin-bottom: 20px;
   }

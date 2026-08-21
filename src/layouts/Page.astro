@@ -102,17 +102,28 @@ const folder = getFolder(active)!;
     color: var(--g-text-2);
   }
 
+  /* Desktop: reserve the rail's width on BOTH sides so the window
+     stays centred on screen and still clears the folders. Padding
+     only one side would slide the window off-centre. */
+  @media (min-width: 901px) {
+    .workspace {
+      padding-left: calc(var(--rail-w) + 40px);
+      padding-right: calc(var(--rail-w) + 40px);
+    }
+  }
+
+  /* Tablet and phone: the rail rejoins the flow as a row across the
+     top — a home screen, not a shrunken desktop. */
   @media (max-width: 900px) {
     .workspace {
-      flex-direction: column;
-      gap: 20px;
-      padding: 16px 14px;
+      gap: 16px;
+      padding: 14px 14px 16px;
     }
 
     .rail {
       position: static;
+      flex: none;
       width: 100%;
-      margin-bottom: 18px;
     }
 
     .stage {
@@ -120,8 +131,28 @@ const folder = getFolder(active)!;
       max-width: none;
     }
 
+    .lead {
+      padding-bottom: 22px;
+      margin-bottom: 22px;
+    }
+
+    .lead h1 {
+      margin-bottom: 14px;
+    }
+
     .sub {
       font-size: 15px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .workspace {
+      padding: 10px 10px 12px;
+      gap: 12px;
+    }
+
+    .sub {
+      font-size: 14px;
     }
   }
 </style>

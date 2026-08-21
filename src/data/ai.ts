@@ -43,7 +43,7 @@ export const aiProjects: AiProject[] = [
     wide: true,
     pills: [
       { name: 'Living on Purpose', href: 'https://living-on-purpose.org/', builtWith: 'Claude Code' },
-      { name: 'Frequency 313', builtWith: 'Claude Code' },
+      { name: 'Frequency 313', href: 'https://frequency313.com/', builtWith: 'Claude Code' },
       { name: 'Two-Six Project', href: 'https://www.twosixproject.com/' },
       { name: "Zoe's Kitchen", href: 'https://www.zoes-kitchen.com/' },
       { name: '5 Star Carolina', href: 'https://www.5starcarolina.com/' },

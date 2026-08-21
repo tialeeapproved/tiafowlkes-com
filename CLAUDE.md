@@ -63,6 +63,8 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **Sentence case headings throughout.** No title case.
 - **Metric strips are load-bearing** — a recruiter reads them before any prose. They render as mono chips on their own row.
 - **Legibility over the clouds is a blur problem, not an opacity problem.** Raising `--g-panel` past ~0.5 makes the glass read as plain white paper and kills the effect. If cloud edges are fighting the text, raise `--blur` (currently 60px) or soften the cloud fills in `Sky.astro` instead.
+- **The workspace reserves the rail's width as a gutter on BOTH sides** (`--rail-w`, above 901px). The rail is out of flow, so a centred 1000px window slides straight under the folders on anything narrower than ~1300px — an iPad or a small laptop. Padding only the left side would push the window off-centre; padding both keeps it centred on screen and clear of the icons.
+- **The rail's breakpoint lives in two files and they must match.** `Page.astro` takes it out of `position: fixed` at 900px; `FolderIcons.astro` turns the column into a row at the same 900px. Drift between them leaves a vertical stack of five icons inside a horizontal strip, eating the viewport.
 - **The folders never move.** The rail is `position: fixed` on the desktop — deliberately out of the document flow, so the window centres on the page instead of being pushed into whatever space is left beside it. The taskbar is fixed too.
 - **The window is centred** with `margin: auto` on `.stage`, not `justify-content: center` — auto margins centre a short page but never clip the top of a long one.
 - **`Ask` is a desktop icon**, drawn as a period help file beneath AI Fluency. It is where the chatbot will live. It is not in the taskbar.
