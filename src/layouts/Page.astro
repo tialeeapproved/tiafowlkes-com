@@ -48,7 +48,10 @@ const folder = getFolder(active)!;
     z-index: 10;
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - var(--taskbar-h));
+    /* Exactly one viewport. The page never scrolls — the window
+       does — so the gap around the frame is always visible. */
+    height: calc(100vh - var(--taskbar-h));
+    height: calc(100dvh - var(--taskbar-h));
     padding: 22px;
   }
 
@@ -62,19 +65,18 @@ const folder = getFolder(active)!;
     z-index: 20;
   }
 
-  /* margin:auto rather than justify-content:center — it centres
-     a short page but never clips the top of a long one. */
   .stage {
+    flex: 1;
+    min-height: 0;
     width: 100%;
     max-width: 1000px;
-    margin: auto;
-    padding-bottom: 34px;
+    margin: 0 auto;
   }
 
   .lead {
     max-width: 66ch;
-    padding-bottom: 34px;
-    margin-bottom: 34px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
     border-bottom: 1px solid var(--g-border-soft);
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
   }

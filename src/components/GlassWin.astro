@@ -1,7 +1,8 @@
 ---
-/* A frosted window floating on the desktop. The wallpaper stays
-   visible and blurred behind it — that blur is the whole effect,
-   so this must never sit on an opaque background. */
+/* A frosted window fixed to the size of the viewport. The window
+   itself never moves or resizes — its contents scroll inside it,
+   so the gap around all four edges is always there and the page
+   never reads as a long column. */
 
 interface Props {
   title: string;
@@ -28,9 +29,13 @@ const { title, close = '/' } = Astro.props;
 <style>
   .win {
     position: relative;
-    /* No overflow:hidden — it would make this a scroll container
-       and stop the cards inside from pinning. Corners are clipped
-       by matching radii instead. */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    /* Safe to clip again now that the scroll container is .body
+       rather than the page — the corners stay round and nothing
+       escapes them. */
+    overflow: hidden;
     border: 1px solid var(--g-border);
     border-radius: var(--r-lg);
     background: var(--g-panel);
@@ -47,6 +52,7 @@ const { title, close = '/' } = Astro.props;
     content: '';
     position: absolute;
     inset: 0;
+    z-index: 0;
     pointer-events: none;
     border-radius: inherit;
     background: radial-gradient(
@@ -56,28 +62,18 @@ const { title, close = '/' } = Astro.props;
     );
   }
 
-  .body {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* The title bar holds position while the window's contents
-     scroll under it, so the page you're in is always named. It
-     runs denser than the window and carries its own blur —
-     content passing beneath would otherwise show through. */
+  /* Chrome. Sits outside the scroll area, so it is simply always
+     there — no pinning needed. */
   .bar {
-    position: sticky;
-    top: 0;
-    z-index: 5;
+    position: relative;
+    z-index: 2;
+    flex: none;
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 13px 16px;
-    border-radius: calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.6);
-    background: rgba(233, 241, 252, 0.86);
-    backdrop-filter: blur(20px) saturate(1.4);
-    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    background: rgba(233, 241, 252, 0.7);
   }
 
   .dots {
@@ -135,8 +131,24 @@ const { title, close = '/' } = Astro.props;
     transform: rotate(-45deg);
   }
 
+  /* THE scroll container. Everything scrolls in here, not on the
+     page — which is what keeps the frame still and the gap
+     constant at the top and the bottom. */
   .body {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 38px 40px 42px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
 
   @media (max-width: 720px) {

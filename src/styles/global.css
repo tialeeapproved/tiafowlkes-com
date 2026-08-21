@@ -55,6 +55,11 @@ body::-webkit-scrollbar {
   height: 0;
 }
 
+/* Content pages scroll inside their window, never on the page. */
+body:has(.workspace) {
+  overflow: hidden;
+}
+
 body {
   min-height: 100%;
   margin: 0;
