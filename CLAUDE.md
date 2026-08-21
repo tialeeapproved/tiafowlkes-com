@@ -161,7 +161,35 @@ Internal assessment documents, interview notes, colleague names, or client proje
 
 ## Not yet built
 
-- [ ] Chatbot (`/api/chat`) — paste a role, get a match report. The only server route on the site. Knowledge base is **built** (see below); the route, the rate limits, and the log page are not.
+- [x] ~~Chatbot~~ — built, on the `ask-bot` branch. Not merged until Tia has tried to break it on the preview URL.
+
+### The Ask bot
+
+| Piece | Where |
+|---|---|
+| The page | `src/pages/ask.astro` — glass window like any folder, `/ask` |
+| The route | `src/pages/api/chat.ts` — **the only file with `prerender = false`** |
+| Knowledge loader | `src/lib/knowledge.ts` — eight named imports, no glob |
+| Redis (rate limit + log) | `src/lib/store.ts` |
+| Question log | `/ask/log?key=…`, gated on `ASK_LOG_KEY` |
+
+**Environment variables** (Vercel → Settings → Environment Variables):
+
+| Name | Needed for | Missing? |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | everything | The bot returns "isn't configured yet" |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | per-IP cap, question log | Injected by the Upstash integration. Bot still works; cap becomes best-effort and nothing is logged |
+| `ASK_LOG_KEY` | reading the log | `/ask/log` returns "Not found" to everyone, including Tia |
+
+**Rules:**
+
+- **The store must never break the conversation.** Every Redis call is wrapped, timed out at 2.5s, and falls back to "allow". A rate limiter that takes the feature down with it is worse than no rate limiter. The real spend ceiling is the monthly cap in the Anthropic console, not this code.
+- **Caps:** 12 messages per conversation, 30 per IP per day, 8000 characters per message. The conversation cap is enforced in both the page and the route — the page for the UX, the route because the page can be bypassed.
+- **The conversation lives in the visitor's tab**, in `sessionStorage`, and is posted in full on every turn. That is how a follow-up knows its antecedent. The server holds no conversation state and should not start.
+- **Roles are filtered on the way in.** Anything that is not `user` or `assistant` is dropped, so a forged `system` turn in the request body cannot become an instruction.
+- **Bubbles are styled in an `is:global` block scoped to `#chat`.** They are built by script and never carry Astro's scope attribute, so scoped rules miss them silently — the styling just does not appear.
+- **The log holds questions only** — no IP, no user agent, no fingerprint. 500 entries, 30-day expiry. Do not add identifying fields to it.
+- **`ANTHROPIC_BASE_URL`** exists so the streaming path can be exercised against a local mock without a real key. Leave it unset in production.
 
 ### The bot's knowledge base — `src/knowledge/`
 

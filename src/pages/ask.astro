@@ -1,0 +1,310 @@
+---
+import Page from '../layouts/Page.astro';
+
+const lead =
+  "Paste a role and I'll tell you where Tia fits it — and where the closest evidence sits when the match isn't direct. I answer from what's on this site and her résumé, and nothing else.";
+---
+
+<Page active="ask" title="Ask" eyebrow="Match a role" lead={lead}>
+  <div class="chat pane" id="chat">
+    <ol class="thread" id="thread" aria-live="polite" aria-atomic="false">
+      <li class="msg bot">
+        <p>
+          Paste a job description, or ask about a program, a decision, or how she works.
+        </p>
+      </li>
+    </ol>
+
+    <form class="composer" id="composer">
+      <label class="sr-only" for="q">Your question</label>
+      <textarea
+        id="q"
+        name="q"
+        rows="1"
+        maxlength="8000"
+        placeholder="Paste a role, or ask a question…"
+        autocomplete="off"></textarea>
+      <button type="submit" id="send" aria-label="Send">Ask</button>
+    </form>
+
+    <p class="foot meta" id="foot">
+      Answers come from this site and Tia's résumé. Nothing you type is tied to you.
+    </p>
+  </div>
+</Page>
+
+<script>
+  const thread = document.getElementById('thread') as HTMLOListElement;
+  const form = document.getElementById('composer') as HTMLFormElement;
+  const input = document.getElementById('q') as HTMLTextAreaElement;
+  const send = document.getElementById('send') as HTMLButtonElement;
+  const foot = document.getElementById('foot') as HTMLParagraphElement;
+
+  const MAX_TURNS = 12;
+  const STORE = 'ask.thread';
+
+  /* The conversation lives in the tab, and travels back up with every
+     request — that is how a follow-up knows what it is following up
+     on. sessionStorage only stops a refresh from wiping it. */
+  let messages: { role: 'user' | 'assistant'; content: string }[] = [];
+  try {
+    messages = JSON.parse(sessionStorage.getItem(STORE) ?? '[]');
+  } catch {}
+
+  const save = () => {
+    try {
+      sessionStorage.setItem(STORE, JSON.stringify(messages));
+    } catch {}
+  };
+
+  function bubble(role: 'user' | 'bot', text: string) {
+    const li = document.createElement('li');
+    li.className = `msg ${role}`;
+    const p = document.createElement('p');
+    p.textContent = text;
+    li.append(p);
+    thread.append(li);
+    li.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    return p;
+  }
+
+  /* Replay anything the tab already had. */
+  for (const m of messages) bubble(m.role === 'user' ? 'user' : 'bot', m.content);
+
+  const grow = () => {
+    input.style.height = 'auto';
+    input.style.height = Math.min(input.scrollHeight, 190) + 'px';
+  };
+  input.addEventListener('input', grow);
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
+  let busy = false;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const question = input.value.trim();
+    if (!question || busy) return;
+
+    if (messages.length >= MAX_TURNS) {
+      bubble('bot', 'That’s as far as one conversation goes. Email tiafowlkes@gmail.com.');
+      return;
+    }
+
+    busy = true;
+    send.disabled = true;
+    input.value = '';
+    grow();
+
+    bubble('user', question);
+    messages.push({ role: 'user', content: question });
+    save();
+
+    const out = bubble('bot', '');
+    out.parentElement!.classList.add('thinking');
+    let answer = '';
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages }),
+      });
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error('no stream');
+      const dec = new TextDecoder();
+
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        answer += dec.decode(value, { stream: true });
+        out.textContent = answer;
+        out.parentElement!.classList.remove('thinking');
+        out.scrollIntoView({ block: 'end' });
+      }
+    } catch {
+      answer =
+        answer ||
+        'Something went wrong reaching the assistant. Email tiafowlkes@gmail.com — she answers.';
+      out.textContent = answer;
+    }
+
+    out.parentElement!.classList.remove('thinking');
+    messages.push({ role: 'assistant', content: answer });
+    save();
+
+    const left = MAX_TURNS - messages.length;
+    if (left <= 3 && left > 0) {
+      foot.textContent = `${Math.ceil(left / 2)} more question${left > 2 ? 's' : ''} in this conversation.`;
+    } else if (left <= 0) {
+      foot.textContent = 'Conversation complete. Email tiafowlkes@gmail.com to keep going.';
+      input.disabled = true;
+    }
+
+    busy = false;
+    send.disabled = false;
+    input.focus();
+  });
+</script>
+
+<!-- Bubbles are built by the script above, so they never carry Astro's
+     scope attribute — these rules have to be global. They stay namespaced
+     under #chat so nothing leaks to the rest of the site. -->
+<style is:global>
+  #chat .msg {
+    max-width: 42rem;
+    padding: 13px 17px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+  }
+
+  #chat .msg.bot {
+    align-self: flex-start;
+    border: 1px solid rgba(16, 23, 30, 0.07);
+    background: rgba(255, 255, 255, 0.72);
+    border-bottom-left-radius: 5px;
+    color: var(--g-text);
+  }
+
+  #chat .msg.user {
+    align-self: flex-end;
+    background: rgba(16, 23, 30, 0.9);
+    border-bottom-right-radius: 5px;
+    color: #f2f6fa;
+  }
+
+  /* Three dots while the first token is still in flight. */
+  #chat .msg.thinking::after {
+    content: '\00B7\00B7\00B7';
+    display: block;
+    font-size: 18px;
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--g-text-3);
+    animation: ask-blink 1.3s ease-in-out infinite;
+  }
+
+  @keyframes ask-blink {
+    0%,
+    100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 720px) {
+    #chat .msg {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<style>
+  .chat {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+
+  .thread {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 26px 26px 22px;
+  }
+
+  .composer {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 14px 16px;
+    border-top: 1px solid rgba(16, 23, 30, 0.08);
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  textarea {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 14px;
+    border: 1px solid rgba(16, 23, 30, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.86);
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--g-text);
+    resize: none;
+  }
+
+  textarea:focus-visible {
+    outline: 2px solid rgba(16, 23, 30, 0.35);
+    outline-offset: 1px;
+  }
+
+  textarea:disabled {
+    opacity: 0.5;
+  }
+
+  button {
+    flex: none;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 12px;
+    background: rgba(16, 23, 30, 0.9);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: #f2f6fa;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  button:hover:not(:disabled) {
+    background: #10171e;
+  }
+
+  button:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  .foot {
+    padding: 12px 18px 16px;
+    border-top: 1px solid rgba(16, 23, 30, 0.06);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .thread {
+      padding: 18px 16px 14px;
+    }
+
+    .composer {
+      padding: 12px;
+    }
+
+    button {
+      padding: 12px 15px;
+    }
+  }
+</style>

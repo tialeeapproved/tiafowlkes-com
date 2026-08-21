@@ -9,15 +9,20 @@ import '../styles/glass.css';
 import { getFolder, type FolderId } from '../data/folders';
 
 interface Props {
-  active: FolderId;
+  active: FolderId | 'ask';
   lead: string;
+  /* Ask is not a folder, so it brings its own title and eyebrow. */
+  title?: string;
+  eyebrow?: string;
 }
 
-const { active, lead } = Astro.props;
-const folder = getFolder(active)!;
+const { active, lead, title, eyebrow } = Astro.props;
+const folder = getFolder(active);
+const heading = title ?? folder!.label;
+const kicker = eyebrow ?? folder!.eyebrow;
 ---
 
-<Base title={folder.label} description={lead} fonts>
+<Base title={heading} description={lead} fonts>
   <!-- The desktop is identical on every page. Only the window
        on top of it changes. -->
   <Sky />
@@ -28,10 +33,10 @@ const folder = getFolder(active)!;
     </div>
 
     <main class="stage g" id="main">
-      <GlassWin title={folder.label}>
+      <GlassWin title={heading}>
         <header class="lead">
-          <p class="label">{folder.eyebrow}</p>
-          <h1>{folder.label}</h1>
+          <p class="label">{kicker}</p>
+          <h1>{heading}</h1>
           <p class="sub">{lead}</p>
         </header>
 

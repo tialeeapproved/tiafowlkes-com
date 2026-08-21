@@ -1,0 +1,102 @@
+---
+/* The question log. Not linked from anywhere and gated on a secret,
+   because an open URL here is a public list of who has been looking
+   at Tia. Set ASK_LOG_KEY in Vercel and open /ask/log?key=<that>. */
+import Base from '../../layouts/Base.astro';
+import { readLog, storeReady } from '../../lib/store';
+
+export const prerender = false;
+
+const expected = import.meta.env.ASK_LOG_KEY ?? process.env.ASK_LOG_KEY;
+const given = Astro.url.searchParams.get('key');
+const ok = Boolean(expected) && given === expected;
+
+const entries = ok ? await readLog() : [];
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleString('en-US', {
+    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+  });
+---
+
+<Base title="Ask log" fonts>
+  <main class="wrap">
+    {
+      !ok ? (
+        <p class="gate">Not found.</p>
+      ) : (
+        <>
+          <header>
+            <h1>What people are asking</h1>
+            <p class="meta">
+              {entries.length} question{entries.length === 1 ? '' : 's'}
+              {storeReady ? '' : ' — no store connected, so nothing is being recorded'}
+              . Questions only, kept 30 days, last 500. Nothing here identifies anyone.
+            </p>
+          </header>
+
+          {entries.length === 0 ? (
+            <p class="empty">Nothing yet.</p>
+          ) : (
+            <ol>
+              {entries.map((e) => (
+                <li>
+                  <p class="when meta">{fmt(e.at)} · message {e.turn}</p>
+                  <p class="q">{e.q}</p>
+                </li>
+              ))}
+            </ol>
+          )}
+        </>
+      )
+    }
+  </main>
+</Base>
+
+<style>
+  .wrap {
+    max-width: 46rem;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    font-family: var(--font-body, system-ui), sans-serif;
+    color: #10171e;
+  }
+
+  .gate { color: #6b7480; }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+
+  header .meta { margin-top: 8px; }
+
+  .empty { margin-top: 28px; color: #6b7480; }
+
+  ol {
+    margin-top: 28px;
+    list-style: none;
+  }
+
+  li {
+    padding: 16px 0;
+    border-top: 1px solid rgba(16, 23, 30, 0.1);
+  }
+
+  .when { margin-bottom: 6px; }
+
+  .q {
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: #253039;
+  }
+
+  .meta {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8892a0;
+  }
+</style>

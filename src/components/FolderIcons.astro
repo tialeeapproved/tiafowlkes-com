@@ -3,7 +3,9 @@ import { folders } from '../data/folders';
 import type { FolderId } from '../data/folders';
 
 interface Props {
-  active?: FolderId;
+  /* 'ask' is not a folder — it is the help file beneath them —
+     but it can still be the current page. */
+  active?: FolderId | 'ask';
 }
 
 const { active } = Astro.props;
@@ -23,10 +25,14 @@ const { active } = Astro.props;
     ))
   }
 
-  <button type="button" class="icon help" aria-label="Ask about Tia's experience" disabled>
+  <a
+    href="/ask"
+    class:list={['icon', 'help', { on: active === 'ask' }]}
+    aria-current={active === 'ask' ? 'page' : undefined}
+  >
     <span class="sheet" aria-hidden="true">?</span>
     <span class="label">Ask</span>
-  </button>
+  </a>
 </nav>
 
 <style>
@@ -79,8 +85,12 @@ const { active } = Astro.props;
     border: 0;
     padding: 0;
     font: inherit;
-    cursor: default;
     opacity: 0.75;
+  }
+
+  .help:hover,
+  .help.on {
+    opacity: 1;
   }
 
   .sheet {
