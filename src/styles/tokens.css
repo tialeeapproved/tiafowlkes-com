@@ -71,11 +71,11 @@
 :root {
   --g-panel: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.82) 0%,
-    rgba(255, 255, 255, 0.68) 100%
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.24) 100%
   );
-  --g-panel-soft: rgba(255, 255, 255, 0.55);
-  --g-panel-inner: rgba(255, 255, 255, 0.4);
+  --g-panel-soft: rgba(255, 255, 255, 0.22);
+  --g-panel-inner: rgba(255, 255, 255, 0.18);
   --g-border: rgba(255, 255, 255, 0.75);
   --g-border-soft: rgba(0, 0, 0, 0.09);
   --g-highlight: rgba(255, 255, 255, 0.9);
@@ -85,10 +85,10 @@
   --g-text-2: rgba(16, 23, 30, 0.72);
   --g-text-3: rgba(16, 23, 30, 0.45);
 
-  --g-title-from: rgba(255, 255, 255, 0.55);
-  --g-title-to: rgba(255, 255, 255, 0.3);
+  --g-title-from: rgba(255, 255, 255, 0.32);
+  --g-title-to: rgba(255, 255, 255, 0.14);
 
-  --blur: blur(30px);
+  --blur: blur(60px);
 
   --r-lg: 20px;
   --r-md: 14px;

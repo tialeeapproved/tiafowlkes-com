@@ -45,7 +45,7 @@ The landing page is a bare desktop: four folders, nothing else. Each folder open
 
 **The desktop never changes.** Sky wallpaper with panning pixel clouds, large gold folder icons, and a taskbar carrying her name plus `?` and Résumé — identical on every page, including the four content pages. Only the window on top of it changes.
 
-**Windows are frosted glass.** `GlassWin.astro` is the panel: white at 0.82→0.68, `backdrop-filter: blur(30px) saturate(1.4)`, a hairline white edge, a lit top-left corner, and a soft drop shadow. The wallpaper stays visible and blurred behind it — **that blur is the entire effect, so a glass window must never sit on an opaque background.**
+**Windows are frosted glass.** `GlassWin.astro` is the panel: white at 0.38→0.24, `backdrop-filter: blur(60px) saturate(1.4)`, a hairline white edge, a lit top-left corner, and a soft drop shadow. The wallpaper stays visible and blurred behind it — **that blur is the entire effect, so a glass window must never sit on an opaque background.**
 
 Because the glass is light, the ink inside it is dark. Do not carry white-on-dark values into these panels.
 
@@ -62,7 +62,7 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **Numbering appears only on Systems**, where the six are a genuine inventory. The index numerals on Decisions are orientation, kept at low contrast so they never read as a ranking.
 - **Sentence case headings throughout.** No title case.
 - **Metric strips are load-bearing** — a recruiter reads them before any prose. They render as mono chips on their own row.
-- **Watch legibility over the clouds.** If a panel's frost drops too far, cloud shapes read through it and text becomes hard to scan. Raise `--g-panel` / `--g-panel-soft` before reaching for anything else.
+- **Legibility over the clouds is a blur problem, not an opacity problem.** Raising `--g-panel` past ~0.5 makes the glass read as plain white paper and kills the effect. If cloud edges are fighting the text, raise `--blur` (currently 60px) or soften the cloud fills in `Sky.astro` instead.
 - Only the clouds move, and they stop under `prefers-reduced-motion`.
 - Responsive to 380px. Visible keyboard focus. Real contrast.
 
