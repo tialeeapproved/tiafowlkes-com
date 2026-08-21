@@ -1,9 +1,12 @@
 /* ============================================================
    AI FLUENCY
-   Systems she built herself. Two are engineered platforms; the
-   third is the client web practice, which is a list rather than
-   a narrative — so it carries pills instead of prose.
+   Two engineered platforms, the client web practice as a roster,
+   and the tool matrix underneath — what she actually reaches for
+   and what she uses each one to do.
    ============================================================ */
+
+export const aiLead =
+  'Architected an LLM feature evaluation framework across 2K test subjects, cutting model hallucinations 27% and lifting response accuracy 45%. Everything below was independently engineered, deployed, and shipped.';
 
 export interface AiProject {
   name: string;
@@ -11,11 +14,14 @@ export interface AiProject {
   /* The narrative cards use `impact`. The web card uses `pills`
      instead — a roster reads faster as a roster. */
   impact?: string;
-  pills?: { name: string; ai?: boolean }[];
+  pills?: { name: string; href: string; builtWith?: string }[];
   tools?: string[];
-  note?: string;
   wide?: boolean;
 }
+
+/* Every pill points at that project's case study on the
+   tialeeapproved portfolio, which is where the work is written up. */
+const P = 'https://www.tialeeapproved.com';
 
 export const aiProjects: AiProject[] = [
   {
@@ -34,20 +40,52 @@ export const aiProjects: AiProject[] = [
   },
   {
     name: 'Web Development & UX',
-    descriptor: 'Ten client sites designed, built, and shipped end to end',
+    descriptor:
+      'Custom web platforms and user interfaces built via AI-driven development workflows',
     wide: true,
     pills: [
-      { name: 'Living on Purpose', ai: true },
-      { name: 'Frequency 313', ai: true },
-      { name: 'Two-Six Project' },
-      { name: "Zoe's Kitchen" },
-      { name: '5 Star Carolina' },
-      { name: 'Purposely Prepared' },
-      { name: 'Jive Turkeys' },
-      { name: 'JC-Eyes' },
-      { name: 'Brows by Lolo' },
-      { name: 'Digital Audit' },
+      { name: 'Living on Purpose', href: `${P}/lop-audit-1`, builtWith: 'Claude Code' },
+      { name: 'Frequency 313', href: `${P}/frequency313`, builtWith: 'Claude Code' },
+      { name: 'Two-Six Project', href: `${P}/portfolio-two-six-project` },
+      { name: "Zoe's Kitchen", href: `${P}/portfolio-zoes-kitchen` },
+      { name: '5 Star Carolina', href: `${P}/5starcarolina` },
+      { name: 'Purposely Prepared', href: `${P}/portfolio-purposely-prepared` },
+      { name: 'Jive Turkeys', href: `${P}/portfolio-jive-turkeys` },
+      { name: 'JC-Eyes', href: `${P}/portfolio-jc-eyes` },
+      { name: 'Brows by Lolo', href: `${P}/portfolio-brows-by-lolo` },
+      { name: 'Digital Audit', href: `${P}/lop-audit` },
     ],
-    note: 'Living on Purpose and Frequency 313 were built with Claude Code.',
+  },
+];
+
+/* ---- the tool matrix ----------------------------------------
+   Cut out of Tia's own image; the capability lines are reset as
+   real text so they use the site's face and reflow on a phone. */
+export interface AiTool {
+  slug: string;
+  name: string;
+  uses: string[];
+}
+
+export const aiTools: AiTool[] = [
+  {
+    slug: 'claude-code',
+    name: 'Claude Code',
+    uses: [
+      'Native apps synced to database',
+      'Site deployment',
+      'Automated reporting + dashboards',
+      'Multi-agent task orchestration',
+    ],
+  },
+  {
+    slug: 'antigravity',
+    name: 'Antigravity',
+    uses: ['Chrome organization', 'Scheduling + task sequencing', 'Async workflow synthesis'],
+  },
+  {
+    slug: 'chatgpt',
+    name: 'ChatGPT',
+    uses: ['Visual concepting', 'Cross-model output verification', 'Quick research + summarization'],
   },
 ];

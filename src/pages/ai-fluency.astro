@@ -1,12 +1,47 @@
 ---
 import Page from '../layouts/Page.astro';
-import { aiProjects } from '../data/ai';
-
-const lead =
-  'Technical evaluation architecture and hands-on LLM development focused on rigorous model testing, hallucination mitigation, and deploying reliable generative features at scale.';
+import { aiLead, aiProjects, aiTools } from '../data/ai';
 ---
 
-<Page active="ai-fluency" lead={lead}>
+<Page active="ai-fluency" lead={aiLead}>
+  {/* The bot is not built yet, so this is deliberately inert — same
+      posture as the `?` on the desktop. Both become links to /ask on
+      the day the route exists; nothing else here has to change. */}
+  <div class="tryme pane pop">
+    <span class="kb" aria-hidden="true">
+      <svg viewBox="0 0 26 15" width="52" height="30" shape-rendering="crispEdges">
+        <rect x="0" y="1" width="26" height="14" fill="#10171e"></rect>
+        <rect x="0" y="1" width="26" height="1" fill="#4a5560"></rect>
+        <g fill="#e8eef4">
+          <rect x="2" y="3" width="2" height="2"></rect>
+          <rect x="5" y="3" width="2" height="2"></rect>
+          <rect x="8" y="3" width="2" height="2"></rect>
+          <rect x="11" y="3" width="2" height="2"></rect>
+          <rect x="14" y="3" width="2" height="2"></rect>
+          <rect x="17" y="3" width="2" height="2"></rect>
+          <rect x="20" y="3" width="2" height="2"></rect>
+          <rect x="3" y="6" width="2" height="2"></rect>
+          <rect x="6" y="6" width="2" height="2"></rect>
+          <rect x="9" y="6" width="2" height="2"></rect>
+          <rect x="12" y="6" width="2" height="2"></rect>
+          <rect x="15" y="6" width="2" height="2"></rect>
+          <rect x="18" y="6" width="2" height="2"></rect>
+          <rect x="21" y="6" width="2" height="2"></rect>
+          <rect x="2" y="9" width="3" height="2"></rect>
+          <rect x="7" y="9" width="11" height="2"></rect>
+          <rect x="20" y="9" width="3" height="2"></rect>
+        </g>
+      </svg>
+    </span>
+
+    <span class="copy">
+      <span class="title">Try me</span>
+      <span class="sub">Paste a role and see where I fit — and where I don't.</span>
+    </span>
+
+    <span class="soon meta">Coming soon</span>
+  </div>
+
   <div class="cards">
     {
       aiProjects.map((p) => (
@@ -19,22 +54,113 @@ const lead =
           {p.pills && (
             <ul class="pills">
               {p.pills.map((s) => (
-                <li class:list={['pill', s.ai && 'ai']}>{s.name}</li>
+                <li>
+                  <a class="pill" href={s.href} target="_blank" rel="noopener">
+                    {s.name}
+                  </a>
+                  {s.builtWith && <span class="built meta">{s.builtWith}</span>}
+                </li>
               ))}
             </ul>
           )}
 
-          <footer class="foot">
-            {p.tools && <p class="meta">Built with: {p.tools.join(' · ')}</p>}
-            {p.note && <p class="meta">{p.note}</p>}
-          </footer>
+          {p.tools && (
+            <footer class="foot">
+              <p class="meta">Built with: {p.tools.join(' · ')}</p>
+            </footer>
+          )}
         </article>
       ))
     }
   </div>
+
+  <section class="matrix pane pop" aria-label="Tooling">
+    <p class="label">Working toolkit</p>
+    <div class="tools">
+      {
+        aiTools.map((t) => (
+          <div class="tool">
+            <img src={`/ai/${t.slug}.webp`} width="34" height="34" alt="" loading="lazy" />
+            <div>
+              <p class="name">{t.name}</p>
+              <ul>
+                {t.uses.map((u) => (
+                  <li>{u}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
 </Page>
 
 <style>
+  /* ---- try me ---- */
+  .tryme {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 16px;
+    padding: 18px 22px;
+    border-radius: var(--r-md);
+  }
+
+  .kb {
+    display: flex;
+    flex: none;
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    background: rgba(255, 255, 255, 0.62);
+    animation: kb-pulse 2.4s ease-in-out infinite;
+  }
+
+  .kb svg {
+    display: block;
+  }
+
+  @keyframes kb-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(16, 23, 30, 0.22);
+    }
+    55% {
+      box-shadow: 0 0 0 11px rgba(16, 23, 30, 0);
+    }
+  }
+
+  .copy {
+    display: block;
+    min-width: 0;
+  }
+
+  .title {
+    display: block;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--g-text);
+  }
+
+  .sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--g-text-2);
+  }
+
+  .soon {
+    flex: none;
+    margin-left: auto;
+    padding: 5px 11px;
+    border: 1px solid rgba(16, 23, 30, 0.09);
+    border-radius: 100px;
+    background: rgba(16, 23, 30, 0.045);
+  }
+
+  /* ---- project cards ---- */
   .cards {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -80,8 +206,16 @@ const lead =
   .pills {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    align-items: flex-start;
+    gap: 10px 8px;
     margin-top: 18px;
+  }
+
+  .pills li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
   }
 
   .pill {
@@ -92,29 +226,97 @@ const lead =
     font-size: 13px;
     line-height: 1.4;
     color: var(--g-text-2);
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
   }
 
-  /* Marked, because "built with Claude Code" is the claim this
-     folder exists to make — it should be visible without reading
-     the line underneath. */
-  .pill.ai {
-    border-color: rgba(16, 23, 30, 0.22);
-    background: rgba(16, 23, 30, 0.075);
-    font-weight: 500;
+  .pill:hover,
+  .pill:focus-visible {
+    border-color: rgba(16, 23, 30, 0.28);
+    background: rgba(16, 23, 30, 0.085);
     color: var(--g-text);
   }
 
-  /* Pushed to the foot of the card so the rule lines up across a
-     row whatever length the prose above it runs to. `:first-of-type`
-     will not do this job — it matches by element, and the descriptor
-     is already the first <p> in the card. */
+  /* The attribution sits with the site it belongs to rather than in
+     a sentence at the foot of the card — you read the claim on the
+     thing making it. */
+  .built {
+    font-size: 10px;
+  }
+
   .foot {
     margin-top: auto;
     padding-top: 20px;
   }
 
-  .foot p + p {
-    margin-top: 5px;
+  /* ---- tool matrix ---- */
+  .matrix {
+    margin-top: 16px;
+    padding: 26px 28px;
+    border-radius: var(--r-md);
+  }
+
+  .matrix > .label {
+    margin-bottom: 20px;
+  }
+
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 26px;
+  }
+
+  .tool {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .tool img {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+  }
+
+  .tool .name {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--g-text);
+  }
+
+  .tool li {
+    position: relative;
+    padding-left: 14px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--g-text-2);
+  }
+
+  .tool li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(16, 23, 30, 0.3);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kb {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .tools {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
   }
 
   @media (max-width: 720px) {
@@ -122,8 +324,18 @@ const lead =
       grid-template-columns: 1fr;
     }
 
-    .card {
+    .card,
+    .matrix {
       padding: 22px 20px;
+    }
+
+    .tryme {
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .soon {
+      margin-left: 0;
     }
   }
 </style>
