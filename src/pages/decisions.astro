@@ -7,7 +7,7 @@ const entries = (await getCollection('decisions', ({ data }) => !data.draft)).so
 );
 
 const lead =
-  'Strategic calls made under ambiguity, competing priorities, and fixed timelines—documenting the judgment behind complex launch gates.';
+  'Strategic calls made under ambiguity, competing priorities, and fixed timelines, documenting the judgment behind complex launch gates.';
 ---
 
 <Page active="decisions" lead={lead}>
@@ -17,22 +17,22 @@ const lead =
         <div class="slot">
         <article class="entry pane pop" id={entry.id.replace(/^\d+-/, '')}>
           <header class="head">
-            <span class="check" aria-hidden="true">✓</span>
+            <img class="check" src="/icons/check.png" width="128" height="96" alt="" aria-hidden="true" />
             <h2>{entry.data.headline}</h2>
           </header>
 
           <div class="blocks">
             <div class="block">
-              <p class="label">Context</p>
-              <p>{entry.data.context}</p>
+              <p class="label">Constraint</p>
+              <p>{entry.data.constraint}</p>
             </div>
             <div class="block">
               <p class="label">The call</p>
               <p>{entry.data.call}</p>
             </div>
             <div class="block">
-              <p class="label">What followed</p>
-              <p>{entry.data.followed}</p>
+              <p class="label">Impact</p>
+              <p>{entry.data.impact}</p>
             </div>
           </div>
         </article>
@@ -57,15 +57,15 @@ const lead =
     border-bottom: 1px solid var(--g-border-soft);
   }
 
-  /* Same treatment as the desktop's help mark: the glyph alone,
-     bold, no container. Marks the call as made and settled. */
+  /* The pixel check, no container — same logic as the desktop's help
+     mark. `pixelated` keeps the blocks square at any scale instead of
+     letting the browser smooth them into a blur. */
   .check {
     flex: none;
-    font-family: var(--font-ui);
-    font-size: 26px;
-    font-weight: bold;
-    line-height: 1;
-    color: #1f9d4d;
+    display: block;
+    width: auto;
+    height: 22px;
+    image-rendering: pixelated;
     align-self: center;
   }
 

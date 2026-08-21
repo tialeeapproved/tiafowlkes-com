@@ -131,34 +131,23 @@ const { state = 'in' } = Astro.props;
     visibility: hidden;
   }
 
-  /* A pixel dissolve rather than a smooth fade: a checkerboard mask
-     whose squares grow, stepped so it lands in discrete chunks the
-     way an old machine would have redrawn it. */
+  /* A plain fade out. */
   .out.dissolve {
     visibility: visible;
-    -webkit-mask-image: repeating-conic-gradient(#000 0% 25%, transparent 0% 50%);
-    mask-image: repeating-conic-gradient(#000 0% 25%, transparent 0% 50%);
-    -webkit-mask-size: 4px 4px;
-    mask-size: 4px 4px;
-    animation: me-dissolve 0.6s steps(8, end) both;
+    animation: me-dissolve 0.5s ease-out both;
   }
 
   @keyframes me-dissolve {
     0% {
       opacity: 1;
-      -webkit-mask-size: 3px 3px;
-      mask-size: 3px 3px;
     }
     99% {
-      opacity: 0.35;
-      -webkit-mask-size: 34px 34px;
-      mask-size: 34px 34px;
+      opacity: 0;
+      visibility: visible;
     }
     100% {
       opacity: 0;
       visibility: hidden;
-      -webkit-mask-size: 40px 40px;
-      mask-size: 40px 40px;
     }
   }
 

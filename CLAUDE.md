@@ -34,7 +34,7 @@ The landing page is a bare desktop: four folders, nothing else. Each folder open
 
 | Folder | Question it answers | Layout | Source |
 |---|---|---|---|
-| **Decisions** | How does she think? | Stacked decision log — headline + Context / The call / What followed | `src/content/decisions/*.md` |
+| **Decisions** | How does she think? | Stacked decision log — headline + Constraint / The call / Impact | `src/content/decisions/*.md` |
 | **Programs** | What has she delivered? | Portfolio matrix, then detail sections with metric strips | `src/data/programs.ts` |
 | **Systems** | What did she leave behind? | Six-tile numbered grid | `src/data/systems.ts` |
 | **AI Fluency** | Can she work where the field is going? | Opener, then linked project cards | `src/data/ai.ts` |

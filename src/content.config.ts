@@ -13,9 +13,9 @@ const decisions = defineCollection({
   schema: z.object({
     /* Declarative, past tense, sentence case. */
     headline: z.string(),
-    context: z.string(),
+    constraint: z.string(),
     call: z.string(),
-    followed: z.string(),
+    impact: z.string(),
     order: z.number(),
     draft: z.boolean().default(false),
   }),

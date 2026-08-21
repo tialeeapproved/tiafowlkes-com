@@ -3,7 +3,12 @@ import { site } from '../data/site';
 ---
 
 <footer class="taskbar chrome">
-  <a href="/" class="name">{site.name}</a>
+  <div class="start">
+    <a href="/" class="name">{site.name}</a>
+    <p class="facts">
+      {site.facts.map((f) => <span>{f}</span>)}
+    </p>
+  </div>
 
   <div class="tray">
     <a href={site.resume} class="btn">Résumé</a>
@@ -27,6 +32,29 @@ import { site } from '../data/site';
     padding: 3px 8px;
     background: var(--ui-bg);
     border-top: 2px solid var(--ui-highlight);
+  }
+
+  .start {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  /* Plain text, deliberately — these are facts, not destinations, so
+     they get no bevel and nothing to click. */
+  .facts {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 12px;
+    color: var(--ui-text);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .facts span + span::before {
+    content: '·';
+    margin-right: 10px;
   }
 
   .name,
@@ -69,5 +97,12 @@ import { site } from '../data/site';
   .btn:disabled {
     color: var(--ui-shadow);
     cursor: default;
+  }
+
+  /* On a phone the bar only has room for the name. */
+  @media (max-width: 720px) {
+    .facts {
+      display: none;
+    }
   }
 </style>
