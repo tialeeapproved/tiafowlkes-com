@@ -27,6 +27,3 @@ export interface AiProject {
    4. This site — recommended as a card, since it's the only
       evidence the reader is already inside of                    */
 export const aiProjects: AiProject[] = [];
-
-export const education =
-  'B.S. Computer Science, User Experience concentration, Michigan State University';

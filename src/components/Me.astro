@@ -31,17 +31,37 @@ const { state = 'in' } = Astro.props;
       {/* She should only dissolve when you have just arrived from the
           desktop. Moving between folders would otherwise flash her in
           and out on every navigation, since each page is a fresh
-          document that cannot know where you came from without asking. */}
+          document that cannot know where you came from without asking.
+
+          Two things have to be true on the very first painted frame or
+          you get a blink. She has to be at full opacity — this script
+          is synchronous and sits right after the element, so the class
+          lands before that first paint — and her image has to be
+          painted. The fade itself therefore waits on `decode()`; coming
+          from the desktop the file is already in cache, so that is a
+          frame at most. Without it the animation would run over an
+          empty box and she would pop in halfway down. */}
       (function () {
         var el = document.querySelector('.me.out');
         if (!el) return;
-        var from = document.referrer;
         var cameFromDesktop = false;
         try {
-          var u = new URL(from);
+          var u = new URL(document.referrer);
           cameFromDesktop = u.origin === location.origin && u.pathname === '/';
         } catch (e) {}
-        if (cameFromDesktop) el.classList.add('dissolve');
+        if (!cameFromDesktop) return;
+
+        el.classList.add('leaving');
+
+        var img = el.querySelector('img');
+        var fade = function () {
+          el.classList.add('dissolve');
+        };
+        if (img && img.decode) {
+          img.decode().then(fade, fade);
+        } else {
+          fade();
+        }
       })();
     </script>
   )
@@ -124,16 +144,23 @@ const { state = 'in' } = Astro.props;
   }
 
   /* --- exit ---
-     Hidden by default on folder pages. Only the script adds
-     .dissolve, and only when you arrived from the desktop. */
+     Hidden by default on folder pages. The script adds .leaving the
+     moment it knows you came from the desktop, which holds her at full
+     opacity until her image is ready to paint; .dissolve then fades
+     her out. Arriving any other way, neither class is ever added and
+     she simply is not there. */
   .out {
     opacity: 0;
     visibility: hidden;
   }
 
-  /* A plain fade out. */
-  .out.dissolve {
+  .out.leaving {
+    opacity: 1;
     visibility: visible;
+  }
+
+  /* A plain fade out. */
+  .out.leaving.dissolve {
     animation: me-dissolve 0.5s ease-out both;
   }
 
@@ -156,7 +183,7 @@ const { state = 'in' } = Astro.props;
       animation: none;
     }
 
-    .out.dissolve {
+    .out.leaving {
       animation: none;
       opacity: 0;
       visibility: hidden;

@@ -66,6 +66,8 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **The folders never move.** The rail is `position: fixed` on the desktop — deliberately out of the document flow, so the window centres on the page instead of being pushed into whatever space is left beside it. The taskbar is fixed too.
 - **The window is centred** with `margin: auto` on `.stage`, not `justify-content: center` — auto margins centre a short page but never clip the top of a long one.
 - **`Ask` is a desktop icon**, drawn as a period help file beneath AI Fluency. It is where the chatbot will live. It is not in the taskbar.
+- **The product shots are cut out, never collaged.** Tia's source images are grids of products with names baked in, in a font that is not the site's. Each product is cut to its own transparent file and the name is set as real HTML, so the matrix stays one typeface. They run at 30px in a fixed square box with `object-fit: contain` — recognition, not decoration. The Matter mark is white and was recoloured to the site's ink; a white glyph is invisible on these cards.
+- **Tia's exit needs two things true on the first painted frame** or you get a blink: full opacity, and a decoded image. `.leaving` is added synchronously by the inline script so the class lands before first paint; `.dissolve` waits on `img.decode()`. Adding the fade class asynchronously puts one frame at opacity 0 first — that is the blink. Starting the fade before decode runs it over an empty box and she pops in halfway down. Both were bugs; do not undo either half.
 - **The clouds run off the wall clock.** Each page is a fresh document, so the animation would restart on every navigation. An inline script in `Sky.astro` sets a negative `animation-delay` from `Date.now() % cycle`, putting each layer exactly where it would have been — so moving between folders looks like one continuous sky. Without JS the clouds just start at the beginning.
 - **The window is a fixed frame, not a long page.** `.workspace` is exactly one viewport tall and the page itself does not scroll (`body:has(.workspace) { overflow: hidden }`). `GlassWin` fills that height, and its `.body` is the scroll container. That is what keeps the gap around all four edges constant and stops the page ever reading as a long column.
 - Because the scroll container is `.body`, the title bar needs no pinning — it sits outside the scrolling area and is simply always there. It also means `.slot` pins from `top: 0`, measured against that box rather than the viewport.
@@ -122,6 +124,7 @@ Internal assessment documents, interview notes, colleague names, or client proje
 | Add or edit a decision | `src/content/decisions/*.md` |
 | Hide a decision in progress | `draft: true` in its frontmatter |
 | Program copy, portfolio matrix | `src/data/programs.ts` |
+| A product shot in the matrix | `public/programs/<slug>.webp`, referenced by `icon` in `programs.ts` |
 | The six systems | `src/data/systems.ts` |
 | AI Fluency project cards | `src/data/ai.ts` |
 | The desktop landing | `src/layouts/Desktop.astro` |

@@ -13,7 +13,20 @@ import { programsLead, portfolio, programs } from '../data/programs';
           <p class="label">{col.label}</p>
           <ul>
             {col.items.map((item) => (
-              <li>{item}</li>
+              <li>
+                {item.icon && (
+                  <img
+                    class="shot"
+                    src={`/programs/${item.icon}.webp`}
+                    width="30"
+                    height="30"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                <span>{item.name}</span>
+              </li>
             ))}
           </ul>
         </div>
@@ -62,10 +75,23 @@ import { programsLead, portfolio, programs } from '../data/programs';
   }
 
   .col li {
+    display: flex;
+    align-items: center;
+    gap: 11px;
     padding: 7px 0;
     font-size: 13px;
     line-height: 1.45;
     color: var(--g-text-2);
+  }
+
+  /* A fixed box with `contain` inside it, so a tall remote and a wide
+     TV both sit on the same baseline and the rows stay even. */
+  .shot {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    object-position: center;
   }
 
   .col li + li {

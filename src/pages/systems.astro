@@ -1,6 +1,6 @@
 ---
 import Page from '../layouts/Page.astro';
-import { systemsLead, systems, systemsClosing } from '../data/systems';
+import { systemsLead, systems } from '../data/systems';
 ---
 
 <Page active="systems" lead={systemsLead}>
@@ -19,7 +19,6 @@ import { systemsLead, systems, systemsClosing } from '../data/systems';
     }
   </ol>
 
-  <p class="closing">{systemsClosing}</p>
 </Page>
 
 <style>
@@ -73,16 +72,6 @@ import { systemsLead, systems, systemsClosing } from '../data/systems';
     color: var(--g-text-2);
   }
 
-  .closing {
-    max-width: 76ch;
-    margin-top: 34px;
-    padding-top: 26px;
-    border-top: 1px solid var(--g-border-soft);
-    font-size: 13px;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--g-text-3);
-  }
 
   @media (max-width: 1000px) {
     .grid {

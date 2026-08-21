@@ -58,6 +58,3 @@ export const systems: System[] = [
       'Consolidated disparate program artifacts into a single access point, cutting onboarding time for extended team members.',
   },
 ];
-
-export const systemsClosing =
-  'Also built: the self-service intake protocol adopted across the organization, which enabled junior PgMs to execute complex recruitment without escalation, and redesigned the standard portfolio planning formats applied across the division.';

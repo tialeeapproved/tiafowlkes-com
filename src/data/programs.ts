@@ -7,53 +7,68 @@
 export const programsLead =
   'End-to-end program governance across full hardware and software lifecycles—driving cross-PA alignment, 3P partner integrations, and global launch execution.';
 
-export const portfolio = [
+/* An item is either a bare string or a name with a product shot.
+   The shots are cut out of Tia's own product images and live in
+   `public/programs`. They run at 30px — recognition, not decoration,
+   so the column stays as short as it was when it was a plain list. */
+export interface PortfolioItem {
+  name: string;
+  icon?: string;
+}
+
+export const portfolio: { label: string; items: PortfolioItem[] }[] = [
   {
     label: 'Strategic scope',
     items: [
-      'Google TV Streamer 4K',
-      'Chromecast with Google TV',
-      'Chromecast HD',
-      'LG webOS with Google Home',
-      'Nest Hub 7"',
-      'ADT with Nest Doorbell',
+      { name: 'Google TV Streamer 4K', icon: 'streamer-4k' },
+      { name: 'Chromecast with Google TV', icon: 'chromecast-gtv' },
+      { name: 'Chromecast HD', icon: 'chromecast-hd' },
+      { name: 'LG webOS with Google Home', icon: 'lg-webos' },
+      { name: 'Nest Hub 7"', icon: 'nest-hub-7' },
+      { name: 'ADT with Nest Doorbell', icon: 'nest-doorbell-adt' },
     ],
   },
   {
     label: 'Managed releases',
     items: [
-      'Google TV Streamer 4K',
-      'Chromecast with Google TV',
-      'Chromecast HD',
-      'Nest Mini',
-      'Nest Hub 10"',
-      'Nest Wifi',
-      'Nest Audio',
-      'Nest Hub 7"',
-      'Pixel Tablet',
-      'Pixel Buds',
-      'Pixel Buds Pro 2',
-      'Google Home app',
+      { name: 'Google TV Streamer 4K', icon: 'streamer-4k' },
+      { name: 'Chromecast with Google TV', icon: 'chromecast-gtv' },
+      { name: 'Chromecast HD', icon: 'chromecast-hd' },
+      { name: 'Nest Mini', icon: 'nest-mini' },
+      { name: 'Nest Hub 10"', icon: 'nest-hub-10' },
+      { name: 'Nest Wifi', icon: 'nest-wifi' },
+      { name: 'Nest Audio', icon: 'nest-audio' },
+      { name: 'Nest Hub 7"', icon: 'nest-hub-7' },
+      { name: 'Pixel Tablet', icon: 'pixel-tablet' },
+      { name: 'Pixel Buds', icon: 'pixel-buds' },
+      { name: 'Pixel Buds Pro 2', icon: 'pixel-buds-pro-2' },
+      { name: 'Google Home app', icon: 'home-app' },
     ],
   },
   {
     label: 'Ecosystem platforms',
-    items: ['Google TV', 'Google Home Platform', 'Matter', 'Assistant', 'Fitbit'],
+    items: [
+      { name: 'Google TV', icon: 'google-tv' },
+      { name: 'Google Home Platform', icon: 'home-platform' },
+      { name: 'Matter', icon: 'matter' },
+      { name: 'Assistant', icon: 'assistant' },
+      { name: 'Fitbit', icon: 'fitbit' },
+    ],
   },
   {
     label: 'Cross-functional governance',
     items: [
-      'Product Management',
-      'Technical Program Management',
-      'Software & Hardware Engineering',
-      'UX Design & Research',
-      'Legal',
-      'Product Marketing',
-      'PR',
-      'Regulatory Compliance',
-      'QA',
-      '3P Strategic Partners (LG, Walmart, ADT)',
-      'Global Vendor Operations',
+      { name: 'Product Management' },
+      { name: 'Technical Program Management' },
+      { name: 'Software & Hardware Engineering' },
+      { name: 'UX Design & Research' },
+      { name: 'Legal' },
+      { name: 'Product Marketing' },
+      { name: 'PR' },
+      { name: 'Regulatory Compliance' },
+      { name: 'QA' },
+      { name: '3P Strategic Partners (LG, Walmart, ADT)' },
+      { name: 'Global Vendor Operations' },
     ],
   },
 ];

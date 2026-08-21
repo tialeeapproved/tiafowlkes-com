@@ -1,6 +1,6 @@
 ---
 import Page from '../layouts/Page.astro';
-import { aiProjects, aiFramework, education } from '../data/ai';
+import { aiProjects, aiFramework } from '../data/ai';
 
 const lead =
   'Technical evaluation architecture and hands-on LLM development focused on rigorous model testing, hallucination mitigation, and deploying reliable generative features at scale.';
@@ -33,8 +33,6 @@ const lead =
       </div>
     )
   }
-
-  <p class="education meta">{education}</p>
 </Page>
 
 <style>
@@ -122,11 +120,6 @@ const lead =
     border-top: 1px solid var(--g-border-soft);
   }
 
-  .education {
-    margin-top: 40px;
-    padding-top: 24px;
-    border-top: 1px solid var(--g-border-soft);
-  }
 
   @media (max-width: 720px) {
     .cards {
