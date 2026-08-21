@@ -13,8 +13,15 @@
    Anthropic console, not this file.
    ============================================================ */
 
-const URL_ = import.meta.env.KV_REST_API_URL ?? process.env.KV_REST_API_URL;
-const TOKEN = import.meta.env.KV_REST_API_TOKEN ?? process.env.KV_REST_API_TOKEN;
+/* The Upstash integration does not always inject the same names —
+   `KV_REST_API_*` in some setups, `UPSTASH_REDIS_REST_*` in others.
+   Accept either, so a working database is never silently ignored
+   because it was connected a different way. */
+const env = (name: string) =>
+  (import.meta.env as Record<string, string | undefined>)[name] ?? process.env[name];
+
+const URL_ = env('KV_REST_API_URL') ?? env('UPSTASH_REDIS_REST_URL');
+const TOKEN = env('KV_REST_API_TOKEN') ?? env('UPSTASH_REDIS_REST_TOKEN');
 
 export const storeReady = Boolean(URL_ && TOKEN);
 

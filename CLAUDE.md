@@ -178,7 +178,7 @@ Internal assessment documents, interview notes, colleague names, or client proje
 | Name | Needed for | Missing? |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | everything | The bot returns "isn't configured yet" |
-| `KV_REST_API_URL` / `KV_REST_API_TOKEN` | per-IP cap, question log | Injected by the Upstash integration. Bot still works; cap becomes best-effort and nothing is logged |
+| `KV_REST_API_URL` / `KV_REST_API_TOKEN`, or `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | per-IP cap, question log | Injected by the Upstash integration, which uses either naming — `store.ts` accepts both. Bot still works without them; cap becomes best-effort and nothing is logged |
 | `ASK_LOG_KEY` | reading the log | `/ask/log` returns "Not found" to everyone, including Tia |
 
 **Rules:**
