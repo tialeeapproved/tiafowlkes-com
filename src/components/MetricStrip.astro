@@ -24,11 +24,16 @@ const { metrics } = Astro.props;
 
   .chip {
     padding: 7px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.7);
+    /* Tinted rather than white: the cards these sit on are themselves
+       near-opaque white, and a white chip on white is not a chip. */
+    border: 1px solid rgba(16, 23, 30, 0.09);
     border-radius: 100px;
-    background: rgba(255, 255, 255, 0.42);
+    background: rgba(16, 23, 30, 0.045);
     font-family: var(--g-mono);
     font-size: 12px;
+    /* The readout carries the section, so it is set heavier than
+       anything around it — the eye should land here first. */
+    font-weight: 600;
     line-height: 1.4;
     color: var(--g-text);
     white-space: nowrap;

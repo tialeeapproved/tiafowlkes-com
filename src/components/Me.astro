@@ -28,37 +28,28 @@ const { state = 'in' } = Astro.props;
 {
   state === 'out' && (
     <script is:inline>
-      {/* She should only dissolve when you have just arrived from the
-          desktop. Moving between folders would otherwise flash her in
-          and out on every navigation, since each page is a fresh
-          document that cannot know where you came from without asking.
-
-          Two things have to be true on the very first painted frame or
-          you get a blink. She has to be at full opacity — this script
-          is synchronous and sits right after the element, so the class
-          lands before that first paint — and her image has to be
-          painted. The fade itself therefore waits on `decode()`; coming
-          from the desktop the file is already in cache, so that is a
-          frame at most. Without it the animation would run over an
-          empty box and she would pop in halfway down. */}
+      {/* Whether she is on screen at all was already decided in the
+          head — see Base.astro. All this script does is start the
+          fade, and it waits for her image to be decoded first. Running
+          the animation over an image that has not painted yet makes her
+          pop in halfway down it. Coming from the desktop the file is in
+          cache, so the wait is a frame at most; the timeout is only
+          there so a failed decode cannot strand her on screen. */}
       (function () {
+        if (document.documentElement.getAttribute('data-from') !== 'desktop') return;
         var el = document.querySelector('.me.out');
         if (!el) return;
-        var cameFromDesktop = false;
-        try {
-          var u = new URL(document.referrer);
-          cameFromDesktop = u.origin === location.origin && u.pathname === '/';
-        } catch (e) {}
-        if (!cameFromDesktop) return;
 
-        el.classList.add('leaving');
-
-        var img = el.querySelector('img');
+        var started = false;
         var fade = function () {
+          if (started) return;
+          started = true;
           el.classList.add('dissolve');
         };
+        var img = el.querySelector('img');
         if (img && img.decode) {
           img.decode().then(fade, fade);
+          setTimeout(fade, 400);
         } else {
           fade();
         }
@@ -144,23 +135,23 @@ const { state = 'in' } = Astro.props;
   }
 
   /* --- exit ---
-     Hidden by default on folder pages. The script adds .leaving the
-     moment it knows you came from the desktop, which holds her at full
-     opacity until her image is ready to paint; .dissolve then fades
-     her out. Arriving any other way, neither class is ever added and
-     she simply is not there. */
+     Hidden by default on folder pages. `data-from` is stamped on the
+     document in the head, so the browser knows she is on screen before
+     it paints anything — no frame where she is missing, which is what
+     the blink was. .dissolve then fades her out. Arriving any other
+     way the attribute is never set and she simply is not there. */
   .out {
     opacity: 0;
     visibility: hidden;
   }
 
-  .out.leaving {
+  :global(html[data-from='desktop']) .out {
     opacity: 1;
     visibility: visible;
   }
 
   /* A plain fade out. */
-  .out.leaving.dissolve {
+  :global(html[data-from='desktop']) .out.dissolve {
     animation: me-dissolve 0.5s ease-out both;
   }
 
@@ -183,7 +174,7 @@ const { state = 'in' } = Astro.props;
       animation: none;
     }
 
-    .out.leaving {
+    :global(html[data-from='desktop']) .out {
       animation: none;
       opacity: 0;
       visibility: hidden;

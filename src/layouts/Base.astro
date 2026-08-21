@@ -26,6 +26,22 @@ const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#3b78a5" />
     <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
+
+    {/* Did you arrive from the desktop? This has to be answered in the
+        head, before a single pixel of the body is painted. Asking any
+        later — from a script next to the element — leaves a real
+        chance the browser paints one frame with Tia already hidden
+        before the answer lands, and that frame is the blink. */}
+    <script is:inline>
+      (function () {
+        try {
+          var u = new URL(document.referrer);
+          if (u.origin === location.origin && u.pathname === '/') {
+            document.documentElement.setAttribute('data-from', 'desktop');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {
       fonts && (
@@ -34,7 +50,7 @@ const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
           <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap"
           />
         </>
       )

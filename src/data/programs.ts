@@ -18,7 +18,7 @@ export interface PortfolioItem {
 
 export const portfolio: { label: string; items: PortfolioItem[] }[] = [
   {
-    label: 'Strategic scope',
+    label: 'Defined strategy',
     items: [
       { name: 'Google TV Streamer 4K', icon: 'streamer-4k' },
       { name: 'Chromecast with Google TV', icon: 'chromecast-gtv' },
@@ -76,6 +76,9 @@ export const portfolio: { label: string; items: PortfolioItem[] }[] = [
 export interface Program {
   id: string;
   name: string;
+  /* The product shot that opens the section, same slug set the
+     portfolio matrix uses. See `public/programs`. */
+  icon: string;
   descriptor: string;
   metrics: string[];
   points: string[];
@@ -85,6 +88,7 @@ export const programs: Program[] = [
   {
     id: 'streamer-4k',
     name: 'Google TV Streamer 4K',
+    icon: 'streamer-4k',
     descriptor: 'End-to-end validation architecture & executive release gating',
     metrics: ['2,600+ participants', '~10K devices', '≥95% production validation bar'],
     points: [
@@ -96,6 +100,7 @@ export const programs: Program[] = [
   {
     id: 'commercialization',
     name: 'Google TV Streamer 4K, commercialization',
+    icon: 'streamer-4k',
     descriptor: 'Global partner readiness, cross-PA launch, & go-to-market execution',
     metrics: ['$2M+ initial sales', '1M+ activations', '20 launch markets'],
     points: [
@@ -107,6 +112,7 @@ export const programs: Program[] = [
   {
     id: 'sonos',
     name: 'Sonos v. Google firmware release',
+    icon: 'nest-audio',
     descriptor: 'High-stakes court-mandated release governance',
     metrics: ['720K+ devices', '10M+ in market', '1 release window'],
     points: [
@@ -118,6 +124,7 @@ export const programs: Program[] = [
   {
     id: 'lg-webos',
     name: 'LG webOS with Google Home Platform',
+    icon: 'lg-webos',
     descriptor: '0-to-1 strategic 3P integration & platform expansion',
     metrics: ['2 enterprise entities', '0-to-1 framework', '1P & 3P alignment'],
     points: [
@@ -129,6 +136,7 @@ export const programs: Program[] = [
   {
     id: 'chromecast-hd',
     name: 'Chromecast HD',
+    icon: 'chromecast-hd',
     descriptor: 'Full-lifecycle program ownership from validation to post-launch',
     metrics: ['5.8K deployed units', '3.4K active users', 'Single-threaded lead'],
     points: [
