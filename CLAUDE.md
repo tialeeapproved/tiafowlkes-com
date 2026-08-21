@@ -41,31 +41,32 @@ The landing page is a bare desktop: four folders, nothing else. Each folder open
 
 **Tiebreaker** when something fits more than one: *if it still runs without her, it's a System. If it ended when it shipped, it's a Program. If the story is the call rather than the work, it's a Decision.*
 
-### The visual system — two worlds
+### The visual system — one desktop, glass windows
 
-**The desktop is Windows 95. Every page it opens is glass.** That split is deliberate: an old OS booting into a new one.
+**The desktop never changes.** Sky wallpaper with panning pixel clouds, large gold folder icons, and a taskbar carrying her name plus `?` and Résumé — identical on every page, including the four content pages. Only the window on top of it changes.
 
-**Desktop (`/`)** — sky wallpaper with panning pixel clouds, large gold folder icons, and a taskbar carrying only her name plus `?` and Résumé. Styles live in `global.css` + the Win95 half of `tokens.css`. The bevel language is two utility classes:
+**Windows are frosted glass.** `GlassWin.astro` is the panel: white at 0.82→0.68, `backdrop-filter: blur(30px) saturate(1.4)`, a hairline white edge, a lit top-left corner, and a soft drop shadow. The wallpaper stays visible and blurred behind it — **that blur is the entire effect, so a glass window must never sit on an opaque background.**
 
-- `.raised` — a surface that sticks out: windows, buttons. Highlight top/left, dark shadow bottom/right.
-- `.sunken` — a well that goes in. The reverse.
-- `.chrome` — 11px, font smoothing off, no text selection. Chrome only, never prose.
+Because the glass is light, the ink inside it is dark. Do not carry white-on-dark values into these panels.
 
-**Content pages** — `#050505` with a CSS-generated blurred atmosphere (`Mesh.astro` — layered radial gradients, no image, nothing external). Panels use one class:
+| Layer | Class | Where |
+|---|---|---|
+| Desktop chrome, bevels | `.raised` `.sunken` `.chrome` | `global.css`, Win95 half of `tokens.css` |
+| Frosted window | `GlassWin.astro` | every content page, and the 404 dialog stays Win95 |
+| Content type inside a window | `.g` wrapper, `.label`, `.meta`, `.pane`, `.rule` | `glass.css` |
 
-- `.glass` — diagonal white wash 0.06→0.01, `backdrop-filter: blur(28px)`, hairline border, deep shadow, lit top-left corner via `::before`.
+`.pane` is the lighter nested surface for cards and columns — **no backdrop blur on it**, the window already did that and stacking blurs costs performance for no visual gain.
 
-Type is Inter (300 for display, 400 body) with JetBrains Mono for labels and metrics. `.label` is the 10px tracked uppercase mono; `.meta` is the 11px mono. Radii are 24 / 16 / 8.
+**Rules:**
 
-**Rules that hold in both worlds:**
-
-- **Numbering appears only on Systems**, where the six are a genuine inventory. The index numerals on Decisions are orientation, kept at tertiary contrast so they never read as a ranking.
+- **Numbering appears only on Systems**, where the six are a genuine inventory. The index numerals on Decisions are orientation, kept at low contrast so they never read as a ranking.
 - **Sentence case headings throughout.** No title case.
-- **Metric strips are load-bearing** — a recruiter reads them before any prose. On glass pages they are mono chips on their own row.
-- Only the clouds and the atmosphere drift, and both stop under `prefers-reduced-motion`. Nothing else moves.
+- **Metric strips are load-bearing** — a recruiter reads them before any prose. They render as mono chips on their own row.
+- **Watch legibility over the clouds.** If a panel's frost drops too far, cloud shapes read through it and text becomes hard to scan. Raise `--g-panel` / `--g-panel-soft` before reaching for anything else.
+- Only the clouds move, and they stop under `prefers-reduced-motion`.
 - Responsive to 380px. Visible keyboard focus. Real contrast.
 
-The desktop loads **no webfonts** — Tahoma/Verdana/Geneva are already on the machine. Glass pages load Inter and JetBrains Mono.
+The desktop loads **no webfonts**. Content pages pass `fonts` to `Base.astro`, which pulls Inter and JetBrains Mono for the glass windows.
 
 ---
 
@@ -102,10 +103,10 @@ Internal assessment documents, interview notes, colleague names, or client proje
 | Desktop wallpaper and clouds | `src/components/Sky.astro` |
 | Taskbar | `src/components/Taskbar.astro` |
 | Win95 window chrome (404) | `src/components/Win.astro` |
-| Glass page frame | `src/layouts/Glass.astro` |
-| Glass top bar | `src/components/GlassBar.astro` |
-| The blurred atmosphere | `src/components/Mesh.astro` |
-| Glass material and shared type | `src/styles/glass.css` |
+| Page frame (desktop + window) | `src/layouts/Page.astro` |
+| The frosted window | `src/components/GlassWin.astro` |
+| Frost density | `src/styles/tokens.css` → `--g-panel` |
+| Content type inside windows | `src/styles/glass.css` |
 | Hero, links, email | `src/data/site.ts` |
 | Folder names and order | `src/data/folders.ts` |
 | Add or edit a decision | `src/content/decisions/*.md` |

@@ -1,15 +1,15 @@
 ---
-import Glass from '../layouts/Glass.astro';
+import Page from '../layouts/Page.astro';
 import MetricStrip from '../components/MetricStrip.astro';
 import { programsLead, portfolio, programs } from '../data/programs';
 ---
 
-<Glass active="programs" lead={programsLead}>
+<Page active="programs" lead={programsLead}>
   <!-- Breadth first. -->
   <section class="matrix" aria-label="Portfolio">
     {
       portfolio.map((col) => (
-        <div class="col glass">
+        <div class="col pane">
           <p class="label">{col.label}</p>
           <ul>
             {col.items.map((item) => (
@@ -25,7 +25,7 @@ import { programsLead, portfolio, programs } from '../data/programs';
   <section class="detail" aria-label="Program detail">
     {
       programs.map((p) => (
-        <article class="program glass" id={p.id}>
+        <article class="program pane" id={p.id}>
           <h2>{p.name}</h2>
           <p class="descriptor">{p.descriptor}</p>
 
@@ -40,7 +40,7 @@ import { programsLead, portfolio, programs } from '../data/programs';
       ))
     }
   </section>
-</Glass>
+</Page>
 
 <style>
   .matrix {
@@ -119,7 +119,7 @@ import { programsLead, portfolio, programs } from '../data/programs';
     width: 5px;
     height: 5px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.28);
+    background: rgba(16, 23, 30, 0.3);
   }
 
   @media (max-width: 1000px) {

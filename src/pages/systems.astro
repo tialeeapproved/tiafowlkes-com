@@ -1,13 +1,13 @@
 ---
-import Glass from '../layouts/Glass.astro';
+import Page from '../layouts/Page.astro';
 import { systemsLead, systems, systemsClosing } from '../data/systems';
 ---
 
-<Glass active="systems" lead={systemsLead}>
+<Page active="systems" lead={systemsLead}>
   <ol class="grid">
     {
       systems.map((s) => (
-        <li class="tile glass">
+        <li class="tile pane">
           <span class="n" aria-hidden="true">
             {String(s.n).padStart(2, '0')}
           </span>
@@ -20,7 +20,7 @@ import { systemsLead, systems, systemsClosing } from '../data/systems';
   </ol>
 
   <p class="closing">{systemsClosing}</p>
-</Glass>
+</Page>
 
 <style>
   .grid {
@@ -46,7 +46,7 @@ import { systemsLead, systems, systemsClosing } from '../data/systems';
     font-size: 30px;
     font-weight: 400;
     line-height: 1;
-    color: rgba(255, 255, 255, 0.22);
+    color: rgba(16, 23, 30, 0.24);
   }
 
   h2 {

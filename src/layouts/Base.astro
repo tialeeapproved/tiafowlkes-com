@@ -5,9 +5,12 @@ import { site } from '../data/site';
 interface Props {
   title?: string;
   description?: string;
+  /* Content pages need Inter and JetBrains Mono for the glass
+     windows. The desktop needs neither, so it loads neither. */
+  fonts?: boolean;
 }
 
-const { title, description = site.tagline } = Astro.props;
+const { title, description = site.tagline, fonts = false } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
 ---
 
@@ -23,8 +26,18 @@ const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site
     <meta property="og:type" content="website" />
     <meta name="theme-color" content="#3b78a5" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <!-- No webfonts. Tahoma/Verdana/Geneva are the period faces and
-         they already live on the machine, so the site paints instantly. -->
+    {
+      fonts && (
+        <>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap"
+          />
+        </>
+      )
+    }
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

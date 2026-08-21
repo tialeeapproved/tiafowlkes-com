@@ -1,120 +1,34 @@
-@import './tokens.css';
-
 /* ============================================================
-   GLASS PAGES
-   Loaded only by the four content pages. The desktop keeps its
-   own Windows 95 stylesheet.
+   GLASS CONTENT
+   Type and inner panels for whatever sits inside a frosted
+   window. The window itself is GlassWin.astro; the desktop
+   underneath keeps its own Windows 95 stylesheet.
    ============================================================ */
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body,
-h1,
-h2,
-h3,
-p,
-ul,
-ol,
-dl,
-dd,
-figure {
-  margin: 0;
-  padding: 0;
-}
-
-ul,
-ol {
-  list-style: none;
-}
-
-img {
-  display: block;
-  max-width: 100%;
-}
-
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  min-height: 100vh;
-  background: var(--g-bg);
-  color: var(--g-text);
+.g {
   font-family: var(--g-sans);
   font-size: 15px;
   font-weight: 400;
-  line-height: 1.6;
-  overflow-x: hidden;
+  line-height: 1.62;
+  color: var(--g-text);
   -webkit-font-smoothing: antialiased;
+  user-select: text;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.g h1,
+.g h2,
+.g h3 {
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1.14;
 }
 
-:focus-visible {
-  outline: 1px solid rgba(255, 255, 255, 0.6);
-  outline-offset: 3px;
-  border-radius: var(--r-sm);
+.g h1 {
+  font-size: clamp(30px, 4.4vw, 46px);
 }
 
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  top: 0;
-  z-index: 999;
-  padding: 8px 14px;
-  border-radius: var(--r-sm);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: var(--blur);
-}
-
-.skip-link:focus {
-  left: 16px;
-  top: 16px;
-}
-
-/* --- the glass surface ---
-   One class does the whole material: a diagonal wash, the blur
-   behind it, a hairline edge, and a lit top-left corner. */
-.glass {
-  position: relative;
-  overflow: hidden;
-  background: var(--g-panel);
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
-  border: 1px solid var(--g-border);
-  border-radius: var(--r-lg);
-  box-shadow:
-    0 24px 48px -12px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1px 0 var(--g-highlight),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
-}
-
-.glass::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at 20% 0%,
-    rgba(255, 255, 255, 0.08) 0%,
-    transparent 50%
-  );
-}
-
-.glass > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* --- shared type --- */
-.label {
+/* Tracked mono, used for every label on every page. */
+.g .label {
   font-family: var(--g-mono);
   font-size: 10px;
   font-weight: 400;
@@ -123,17 +37,24 @@ a {
   color: var(--g-text-3);
 }
 
-.meta {
+.g .meta {
   font-family: var(--g-mono);
   font-size: 11px;
   color: var(--g-text-3);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
+/* An inner pane — a lighter frost for panels nested inside the
+   window. No backdrop blur: the window already did that, and
+   stacking blurs is expensive for no visual gain. */
+.g .pane {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: var(--r-md);
+  background: var(--g-panel-soft);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.7);
+}
+
+.g .rule {
+  border: 0;
+  border-top: 1px solid var(--g-border-soft);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
 }

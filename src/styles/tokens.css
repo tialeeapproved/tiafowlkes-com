@@ -63,31 +63,35 @@
 }
 
 /* ============================================================
-   GLASS — the content pages.
-   The desktop stays Windows 95; every page it opens is glass.
+   GLASS — the windows that open on top of the desktop.
+   Frosted panels over the sky, so the ink is dark and the
+   surface is light. The wallpaper shows through, blurred.
    ============================================================ */
 
 :root {
-  --g-bg: #050505;
   --g-panel: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.06) 0%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(255, 255, 255, 0.82) 0%,
+    rgba(255, 255, 255, 0.68) 100%
   );
-  --g-panel-flat: rgba(255, 255, 255, 0.02);
-  --g-border: rgba(255, 255, 255, 0.08);
-  --g-border-soft: rgba(255, 255, 255, 0.05);
-  --g-highlight: rgba(255, 255, 255, 0.05);
-  --g-hover: rgba(255, 255, 255, 0.05);
+  --g-panel-soft: rgba(255, 255, 255, 0.55);
+  --g-panel-inner: rgba(255, 255, 255, 0.4);
+  --g-border: rgba(255, 255, 255, 0.75);
+  --g-border-soft: rgba(0, 0, 0, 0.09);
+  --g-highlight: rgba(255, 255, 255, 0.9);
+  --g-hover: rgba(255, 255, 255, 0.5);
 
-  --g-text: rgba(255, 255, 255, 0.9);
-  --g-text-2: rgba(255, 255, 255, 0.5);
-  --g-text-3: rgba(255, 255, 255, 0.3);
+  --g-text: #10171e;
+  --g-text-2: rgba(16, 23, 30, 0.72);
+  --g-text-3: rgba(16, 23, 30, 0.45);
 
-  --blur: blur(28px);
+  --g-title-from: rgba(255, 255, 255, 0.55);
+  --g-title-to: rgba(255, 255, 255, 0.3);
 
-  --r-lg: 24px;
-  --r-md: 16px;
+  --blur: blur(30px);
+
+  --r-lg: 20px;
+  --r-md: 14px;
   --r-sm: 8px;
 
   --g-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

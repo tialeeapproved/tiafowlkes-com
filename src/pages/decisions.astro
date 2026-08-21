@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import Glass from '../layouts/Glass.astro';
+import Page from '../layouts/Page.astro';
 
 const entries = (await getCollection('decisions', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -10,11 +10,11 @@ const lead =
   'A resume records program execution. This log documents strategic judgment. Eight pivotal program calls made under incomplete information, competing cross-functional priorities, and immovable launch windows.';
 ---
 
-<Glass active="decisions" lead={lead}>
+<Page active="decisions" lead={lead}>
   <div class="log">
     {
       entries.map((entry, i) => (
-        <article class="entry glass" id={entry.id.replace(/^\d+-/, '')}>
+        <article class="entry pane" id={entry.id.replace(/^\d+-/, '')}>
           <header class="head">
             <span class="meta idx">{String(i + 1).padStart(2, '0')}</span>
             <h2>{entry.data.headline}</h2>
@@ -38,7 +38,7 @@ const lead =
       ))
     }
   </div>
-</Glass>
+</Page>
 
 <style>
   .log {

@@ -1,0 +1,143 @@
+---
+/* A frosted window floating on the desktop. The wallpaper stays
+   visible and blurred behind it — that blur is the whole effect,
+   so this must never sit on an opaque background. */
+
+interface Props {
+  title: string;
+  close?: string;
+}
+
+const { title, close = '/' } = Astro.props;
+---
+
+<section class="win">
+  <header class="bar">
+    <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="title">{title}</span>
+    <a class="close" href={close} aria-label="Close window">
+      <span aria-hidden="true"></span>
+    </a>
+  </header>
+
+  <div class="body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .win {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--g-border);
+    border-radius: var(--r-lg);
+    background: var(--g-panel);
+    backdrop-filter: var(--blur) saturate(1.4);
+    -webkit-backdrop-filter: var(--blur) saturate(1.4);
+    box-shadow:
+      0 28px 60px -18px rgba(12, 30, 50, 0.45),
+      0 2px 8px rgba(12, 30, 50, 0.12),
+      inset 0 1px 0 0 var(--g-highlight);
+  }
+
+  /* The lit corner that sells the material. */
+  .win::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      circle at 18% 0%,
+      rgba(255, 255, 255, 0.55) 0%,
+      transparent 55%
+    );
+  }
+
+  .bar,
+  .body {
+    position: relative;
+    z-index: 1;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    background: linear-gradient(to bottom, var(--g-title-from), var(--g-title-to));
+  }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dots i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(16, 23, 30, 0.14);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  }
+
+  .title {
+    font-family: var(--g-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--g-text-2);
+  }
+
+  .close {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    margin-left: auto;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transition: background 0.18s;
+  }
+
+  .close:hover {
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .close span::before,
+  .close span::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 6px;
+    width: 10px;
+    height: 1.5px;
+    border-radius: 1px;
+    background: var(--g-text-2);
+  }
+
+  .close span::before {
+    transform: rotate(45deg);
+  }
+
+  .close span::after {
+    transform: rotate(-45deg);
+  }
+
+  .body {
+    padding: 38px 40px 42px;
+  }
+
+  @media (max-width: 720px) {
+    .win {
+      border-radius: var(--r-md);
+    }
+
+    .bar {
+      padding: 11px 13px;
+    }
+
+    .body {
+      padding: 24px 20px 28px;
+    }
+  }
+</style>
