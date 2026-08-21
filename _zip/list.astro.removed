@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import MenuBar from '../components/MenuBar.astro';
+import { folders } from '../data/folders';
+import { allUnits, displayOrg } from '../lib/query';
+
+/* View → as List.
+   Authentic to any real OS, and it doubles as the fast, semantic,
+   screen-reader-clean path for anyone who doesn't want the desktop. */
+
+const all = await allUnits();
+const groups = folders.map((f) => ({
+  folder: f,
+  units: all.filter((u) => u.data.tags.includes(f.tag as never)),
+}));
+---
+
+<Base title="List view" description="Everything, as a plain list.">
+  <MenuBar />
+
+  <main class="shell" id="main">
+    <header class="head">
+      <h1>Everything</h1>
+      <a href="/" class="mono">← as Icons</a>
+    </header>
+
+    {
+      groups.map(({ folder, units }) => (
+        <section class="group">
+          <h2>
+            {folder.label}
+            <span class="mono">{folder.caption}</span>
+          </h2>
+
+          {units.length === 0 ? (
+            <p class="empty mono">empty</p>
+          ) : (
+            <ul>
+              {units.map((unit) => (
+                <li>
+                  <a href={`/e/${unit.id}`}>
+                    <span class="t">{unit.data.title}</span>
+                    <span class="s">{unit.data.summary}</span>
+                    <span class="m mono">
+                      {displayOrg(unit)}
+                      {unit.data.period ? ` · ${unit.data.period}` : ''}
+                      {unit.data.outcome ? ` · ${unit.data.outcome.value}` : ''}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+  </main>
+</Base>
+
+<style>
+  .head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: var(--s4) 0 var(--s3);
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .group {
+    padding-bottom: var(--s4);
+  }
+
+  h2 {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s2);
+    padding-bottom: var(--s1);
+    border-bottom: 1px solid var(--border-soft);
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  li a {
+    display: block;
+    padding: var(--s2) 0;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .t {
+    display: block;
+    font-weight: 600;
+  }
+
+  .s {
+    display: block;
+    max-width: var(--measure);
+    color: var(--text-muted);
+    font-size: 0.92rem;
+  }
+
+  .m {
+    display: block;
+    margin-top: 0.3rem;
+  }
+
+  .empty {
+    padding: var(--s2) 0;
+  }
+</style>

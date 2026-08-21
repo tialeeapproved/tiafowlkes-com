@@ -1,0 +1,143 @@
+---
+/* Tia on the desktop, right third, standing on the taskbar.
+   `state="out"` fades her away — used on folder pages, so opening
+   a folder reads as her stepping aside for the window. */
+
+interface Props {
+  state?: 'in' | 'out';
+}
+
+const { state = 'in' } = Astro.props;
+---
+
+<div class:list={['me', state]} aria-hidden={state === 'out' ? 'true' : undefined}>
+  <p class="bubble chrome">
+    Hi, I'm Tia. I turn high-ambiguity strategy into scalable systems.
+  </p>
+
+  <img
+    src="/me/tia.webp"
+    srcset="/me/tia.webp 1x, /me/tia@2x.webp 2x"
+    width="312"
+    height="900"
+    alt="Tia Fowlkes"
+    decoding="async"
+  />
+</div>
+
+<style>
+  .me {
+    position: fixed;
+    right: 3vw;
+    bottom: var(--taskbar-h);
+    z-index: 15;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    /* Scenery — never in the way of a click. */
+    pointer-events: none;
+  }
+
+  .me img {
+    display: block;
+    height: min(74vh, 740px);
+    width: auto;
+    /* A soft contact shadow so she sits on the desktop rather
+       than floating above it. */
+    filter: drop-shadow(0 18px 22px rgba(10, 40, 70, 0.28));
+  }
+
+  /* Speaks from her left, tail pointing back at her. */
+  .bubble {
+    position: relative;
+    align-self: flex-start;
+    margin-top: 7vh;
+    max-width: 236px;
+    padding: 12px 14px;
+    border: 1px solid rgba(16, 23, 30, 0.12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 10px 22px -10px rgba(10, 40, 70, 0.4);
+    /* Same face as the folder titles. */
+    font-family: var(--font-ui);
+    font-size: 13px;
+    line-height: 1.5;
+    color: #10171e;
+    text-align: left;
+  }
+
+  .bubble::after,
+  .bubble::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    width: 0;
+    height: 0;
+    border: 9px solid transparent;
+    border-right: 0;
+  }
+
+  /* The border edge sits a pixel behind the fill. */
+  .bubble::before {
+    right: -10px;
+    border-left-color: rgba(16, 23, 30, 0.12);
+  }
+
+  .bubble::after {
+    right: -9px;
+    border-left-color: rgba(255, 255, 255, 0.94);
+  }
+
+  /* --- arrival and exit --- */
+  .in {
+    animation: me-in 0.55s ease-out both;
+  }
+
+  /* On a folder page she is rendered, then fades out — so the
+     transition happens even though every page is a fresh document
+     and CSS cannot animate across a navigation. */
+  .out {
+    animation: me-out 0.45s ease-in both;
+  }
+
+  @keyframes me-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes me-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .in {
+      animation: none;
+    }
+
+    .out {
+      animation: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  /* Below this the window and the folders need the whole screen,
+     and there is nowhere for her to stand. */
+  @media (max-width: 1180px) {
+    .me {
+      display: none;
+    }
+  }
+</style>

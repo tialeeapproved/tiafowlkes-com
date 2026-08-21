@@ -4,6 +4,7 @@ import Sky from '../components/Sky.astro';
 import Taskbar from '../components/Taskbar.astro';
 import FolderIcons from '../components/FolderIcons.astro';
 import GlassWin from '../components/GlassWin.astro';
+import Me from '../components/Me.astro';
 import '../styles/glass.css';
 import { getFolder, type FolderId } from '../data/folders';
 
@@ -38,6 +39,10 @@ const folder = getFolder(active)!;
       </GlassWin>
     </main>
   </div>
+
+  <!-- Rendered, then faded out — the transition has to happen on
+       arrival, since each page is a fresh document. -->
+  <Me state="out" />
 
   <Taskbar active={active} />
 </Base>

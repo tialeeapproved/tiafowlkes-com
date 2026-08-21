@@ -6,4 +6,8 @@ dist/
 .DS_Store
 .vercel/
 npm-debug.log*
-_zip/
+
+# Source photography — 10MB+ each. The optimised, cropped versions
+# that the site actually serves live in public/me/. Keep the
+# originals locally; don't carry them in git forever.
+assets/me/*.png

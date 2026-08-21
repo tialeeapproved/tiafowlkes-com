@@ -3,6 +3,7 @@ import Base from './Base.astro';
 import Sky from '../components/Sky.astro';
 import Taskbar from '../components/Taskbar.astro';
 import FolderIcons from '../components/FolderIcons.astro';
+import Me from '../components/Me.astro';
 import { site } from '../data/site';
 ---
 
@@ -12,6 +13,8 @@ import { site } from '../data/site';
   <main class="desktop" id="main">
     <FolderIcons />
   </main>
+
+  <Me />
 
   <Taskbar />
 </Base>
