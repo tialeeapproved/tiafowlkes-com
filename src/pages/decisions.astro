@@ -7,17 +7,17 @@ const entries = (await getCollection('decisions', ({ data }) => !data.draft)).so
 );
 
 const lead =
-  'A resume records program execution. This log documents strategic judgment. Eight pivotal program calls made under incomplete information, competing cross-functional priorities, and immovable launch windows.';
+  'Strategic calls made under ambiguity, competing priorities, and fixed timelines—documenting the judgment behind complex launch gates.';
 ---
 
 <Page active="decisions" lead={lead}>
   <div class="log stack">
     {
-      entries.map((entry, i) => (
+      entries.map((entry) => (
         <div class="slot">
         <article class="entry pane pop" id={entry.id.replace(/^\d+-/, '')}>
           <header class="head">
-            <span class="meta idx">{String(i + 1).padStart(2, '0')}</span>
+            <span class="check" aria-hidden="true">✓</span>
             <h2>{entry.data.headline}</h2>
           </header>
 
@@ -50,18 +50,23 @@ const lead =
 
   .head {
     display: flex;
-    align-items: baseline;
-    gap: 18px;
+    align-items: center;
+    gap: 16px;
     padding-bottom: 26px;
     margin-bottom: 26px;
     border-bottom: 1px solid var(--g-border-soft);
   }
 
-  /* The index is orientation, not a ranking — kept in mono at
-     tertiary weight so it never competes with the headline. */
-  .idx {
+  /* Same treatment as the desktop's help mark: the glyph alone,
+     bold, no container. Marks the call as made and settled. */
+  .check {
     flex: none;
-    padding-top: 0;
+    font-family: var(--font-ui);
+    font-size: 26px;
+    font-weight: bold;
+    line-height: 1;
+    color: #1f9d4d;
+    align-self: center;
   }
 
   h2 {

@@ -5,7 +5,7 @@
    ============================================================ */
 
 export const programsLead =
-  'Four years leading end-to-end program execution across Nest and Google TV within the entertainment vertical. Governing complex hardware/software integrations across 1P/3P ecosystems from early validation through global commercialization.';
+  'End-to-end program governance across full hardware and software lifecycles—driving cross-PA alignment, 3P partner integrations, and global launch execution.';
 
 export const portfolio = [
   {

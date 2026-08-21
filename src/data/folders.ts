@@ -12,8 +12,8 @@ export interface Folder {
   /* Sits under the icon like file metadata on a real desktop.
      This is where altitude gets asserted before any click. */
   caption: string;
-  /* The recruiter question this folder answers. */
-  question: string;
+  /* The tracked mono line above the page title. */
+  eyebrow: string;
   /* Tag matched against evidence frontmatter. */
   tag: string;
 }
@@ -23,28 +23,28 @@ export const folders: Folder[] = [
     id: 'decisions',
     label: 'Decisions',
     caption: 'gate reviews · KPIs · scope',
-    question: 'Does she think, or just execute?',
+    eyebrow: 'Strategic judgment',
     tag: 'decisions',
   },
   {
     id: 'programs',
     label: 'Programs',
     caption: '20 markets · 2M users',
-    question: 'Has she shipped real things at scale?',
+    eyebrow: 'Full-lifecycle scale',
     tag: 'programs',
   },
   {
     id: 'systems',
     label: 'Systems',
     caption: 'adopted by 4 orgs',
-    question: 'Does her impact outlive her programs?',
+    eyebrow: 'Institutional leverage',
     tag: 'systems',
   },
   {
     id: 'ai-fluency',
     label: 'AI Fluency',
     caption: 'shipped, not theoretical',
-    question: 'Can she work where the field is going?',
+    eyebrow: 'Technical evaluation',
     tag: 'ai',
   },
 ];

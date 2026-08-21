@@ -5,7 +5,7 @@
    ============================================================ */
 
 export const systemsLead =
-  'Programs complete on launch. Systems endure. Six institutional frameworks engineered to drive cross-functional rigor, voluntarily adopted across organizational lines.';
+  'Enduring operational frameworks built for cross-functional teams, engineered to drive alignment and outlive individual program cycles.';
 
 export interface System {
   n: number;

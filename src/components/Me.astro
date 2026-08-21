@@ -1,7 +1,7 @@
 ---
 /* Tia on the desktop, right third, standing on the taskbar.
-   `state="out"` fades her away — used on folder pages, so opening
-   a folder reads as her stepping aside for the window. */
+   `state="out"` renders her hidden and lets a script decide
+   whether to play the dissolve — see the note below. */
 
 interface Props {
   state?: 'in' | 'out';
@@ -25,6 +25,28 @@ const { state = 'in' } = Astro.props;
   />
 </div>
 
+{
+  state === 'out' && (
+    <script is:inline>
+      {/* She should only dissolve when you have just arrived from the
+          desktop. Moving between folders would otherwise flash her in
+          and out on every navigation, since each page is a fresh
+          document that cannot know where you came from without asking. */}
+      (function () {
+        var el = document.querySelector('.me.out');
+        if (!el) return;
+        var from = document.referrer;
+        var cameFromDesktop = false;
+        try {
+          var u = new URL(from);
+          cameFromDesktop = u.origin === location.origin && u.pathname === '/';
+        } catch (e) {}
+        if (cameFromDesktop) el.classList.add('dissolve');
+      })();
+    </script>
+  )
+}
+
 <style>
   .me {
     position: fixed;
@@ -33,8 +55,8 @@ const { state = 'in' } = Astro.props;
     z-index: 15;
     display: flex;
     align-items: flex-start;
-    gap: 16px;
-    /* Scenery — never in the way of a click. */
+    /* Tight to her shoulder — the tail should almost touch. */
+    gap: 2px;
     pointer-events: none;
   }
 
@@ -42,17 +64,15 @@ const { state = 'in' } = Astro.props;
     display: block;
     height: min(74vh, 740px);
     width: auto;
-    /* A soft contact shadow so she sits on the desktop rather
-       than floating above it. */
     filter: drop-shadow(0 18px 22px rgba(10, 40, 70, 0.28));
   }
 
-  /* Speaks from her left, tail pointing back at her. */
+  /* Speaks from her left, level with her face. The offset is a
+     share of her height so it tracks the image at any size. */
   .bubble {
     position: relative;
-    align-self: flex-start;
-    margin-top: 7vh;
-    max-width: 236px;
+    margin-top: calc(min(74vh, 740px) * 0.1);
+    max-width: 250px;
     padding: 12px 14px;
     border: 1px solid rgba(16, 23, 30, 0.12);
     border-radius: 14px;
@@ -70,14 +90,13 @@ const { state = 'in' } = Astro.props;
   .bubble::before {
     content: '';
     position: absolute;
-    top: 22px;
+    top: 20px;
     width: 0;
     height: 0;
     border: 9px solid transparent;
     border-right: 0;
   }
 
-  /* The border edge sits a pixel behind the fill. */
   .bubble::before {
     right: -10px;
     border-left-color: rgba(16, 23, 30, 0.12);
@@ -88,16 +107,9 @@ const { state = 'in' } = Astro.props;
     border-left-color: rgba(255, 255, 255, 0.94);
   }
 
-  /* --- arrival and exit --- */
+  /* --- arrival --- */
   .in {
     animation: me-in 0.55s ease-out both;
-  }
-
-  /* On a folder page she is rendered, then fades out — so the
-     transition happens even though every page is a fresh document
-     and CSS cannot animate across a navigation. */
-  .out {
-    animation: me-out 0.45s ease-in both;
   }
 
   @keyframes me-in {
@@ -111,13 +123,42 @@ const { state = 'in' } = Astro.props;
     }
   }
 
-  @keyframes me-out {
-    from {
+  /* --- exit ---
+     Hidden by default on folder pages. Only the script adds
+     .dissolve, and only when you arrived from the desktop. */
+  .out {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* A pixel dissolve rather than a smooth fade: a checkerboard mask
+     whose squares grow, stepped so it lands in discrete chunks the
+     way an old machine would have redrawn it. */
+  .out.dissolve {
+    visibility: visible;
+    -webkit-mask-image: repeating-conic-gradient(#000 0% 25%, transparent 0% 50%);
+    mask-image: repeating-conic-gradient(#000 0% 25%, transparent 0% 50%);
+    -webkit-mask-size: 4px 4px;
+    mask-size: 4px 4px;
+    animation: me-dissolve 0.6s steps(8, end) both;
+  }
+
+  @keyframes me-dissolve {
+    0% {
       opacity: 1;
+      -webkit-mask-size: 3px 3px;
+      mask-size: 3px 3px;
     }
-    to {
+    99% {
+      opacity: 0.35;
+      -webkit-mask-size: 34px 34px;
+      mask-size: 34px 34px;
+    }
+    100% {
       opacity: 0;
       visibility: hidden;
+      -webkit-mask-size: 40px 40px;
+      mask-size: 40px 40px;
     }
   }
 
@@ -126,15 +167,13 @@ const { state = 'in' } = Astro.props;
       animation: none;
     }
 
-    .out {
+    .out.dissolve {
       animation: none;
       opacity: 0;
       visibility: hidden;
     }
   }
 
-  /* Below this the window and the folders need the whole screen,
-     and there is nowhere for her to stand. */
   @media (max-width: 1180px) {
     .me {
       display: none;
