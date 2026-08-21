@@ -161,5 +161,27 @@ Internal assessment documents, interview notes, colleague names, or client proje
 
 ## Not yet built
 
-- [ ] Chatbot (`/api/chat`) — paste a role, get a match report **with gap bridging**. It may reframe a gap using real adjacent evidence; it may never invent experience. The only server route on the site.
+- [ ] Chatbot (`/api/chat`) — paste a role, get a match report. The only server route on the site. Knowledge base is **built** (see below); the route, the rate limits, and the log page are not.
+
+### The bot's knowledge base — `src/knowledge/`
+
+**The bot reads this folder and nothing else.** That is a structural guarantee, not a
+habit: there is no glob anywhere in the loader or the generator, so a file cannot be
+picked up by being nearby. Tia's client READMEs carry a staging password, a contract
+value and a client's phone number; the assessment docs carry colleague names and Google
+codenames. None of it can reach the folder by accident.
+
+| File | Source |
+|---|---|
+| `about.md`, `resume.md`, `targeting.md`, `bridging.md` | Hand-written. Edit directly. |
+| `decisions.md`, `programs.md`, `systems.md`, `ai-fluency.md` | **Generated** — `npm run knowledge`. Do not hand-edit; edits are overwritten. |
+
+The generated half comes from the same `src/data` files and decision markdown the pages
+render from, so the bot can never quote copy that is no longer live. **Run `npm run
+knowledge` after any copy change**, or the bot goes stale.
+
+`bridging.md` is the system prompt. Its load-bearing line is *"you may always reframe,
+you may never assert"* — reframe a requirement with real adjacent evidence, never claim
+experience the files do not contain. `targeting.md` says never to volunteer her internal
+Google level.
 - [ ] Custom domain cutover
