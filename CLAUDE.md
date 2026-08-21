@@ -41,14 +41,28 @@ The landing page is a bare desktop: four folders, nothing else. Each folder open
 
 **Tiebreaker** when something fits more than one: *if it still runs without her, it's a System. If it ended when it shipped, it's a Program. If the story is the call rather than the work, it's a Decision.*
 
-### Design rules from the copy brief
+### The visual system — Windows 95
 
-- **A record, not a pitch.** It should read like a well-set internal document that happens to be beautiful. Precision over warmth.
-- **Metric strips are load-bearing.** A recruiter reads them before any prose. They get the treatment of a program artifact — an allocation table with gate ticks, not a row of text.
-- **Numbering appears only on Systems**, where the six are a genuine inventory. Nothing else on the site is numbered.
+The site is a Windows-95-era desktop, taken from the template in `assets/`. Sky-gradient wallpaper with three layers of panning pixel clouds, gold folder icons, a taskbar, and every page rendered inside a beveled window.
+
+**The bevel is the entire design language.** Two utility classes in `global.css` do nearly all of it:
+
+- `.raised` — a surface that sticks out: windows, buttons, tiles. Highlight on top/left, dark shadow on bottom/right.
+- `.sunken` — a well that goes in: metric readouts, list panels, thumbnails. The reverse.
+
+Grooved dividers use the same trick: `border-bottom: 1px solid var(--ui-shadow)` plus `box-shadow: 0 1px 0 var(--ui-highlight)`.
+
+**Rules:**
+
+- **Chrome is 11px and pixel-crisp. Prose is not.** The `.chrome` class turns off font smoothing and locks 11px — title bars, labels, buttons, folder names. Body copy runs 14px with smoothing on, because there are eight decision entries to read and unsmoothed prose at length is punishing. Do not put `.chrome` on prose.
+- **Numbering appears only on Systems**, where the six are a genuine inventory. Nothing else is numbered.
 - **Sentence case headings throughout.** No title case.
-- **One signature mark**, carried everywhere: the accent gate tick. It marks each decision entry and each division in a metric strip. Structural, not decorative.
-- Motion restrained. Responsive to 380px. Visible keyboard focus. Reduced motion respected.
+- **Fieldsets carry structure.** The notched-legend panel from the Levels dialog holds Context / The call / What followed, and the portfolio columns. Reach for `Fieldset.astro` before inventing a new container.
+- **Metric strips are load-bearing** — a recruiter reads them before any prose. They render as sunken white wells in the mono face, the way dialog readouts do.
+- Only the clouds animate, and they stop entirely under `prefers-reduced-motion`. Nothing else moves.
+- Responsive to 380px. Visible keyboard focus (dotted, period-correct). Real contrast.
+
+**No webfonts.** Tahoma / Verdana / Geneva are the period faces and already live on the machine, so the site paints instantly.
 
 ---
 
@@ -81,8 +95,11 @@ Internal assessment documents, interview notes, colleague names, or client proje
 
 | To change this | Edit this |
 |---|---|
-| Accent color | `src/styles/tokens.css` — one line, marked |
-| Any color or spacing | `src/styles/tokens.css` — **never hardcode a hex anywhere else** |
+| Any colour, bevel, or spacing | `src/styles/tokens.css` — **never hardcode a hex anywhere else** |
+| The wallpaper and clouds | `src/components/Sky.astro` |
+| Taskbar and its buttons | `src/components/Taskbar.astro` |
+| Window chrome | `src/components/Win.astro` |
+| The notched-legend panel | `src/components/Fieldset.astro` |
 | Hero, links, email | `src/data/site.ts` |
 | Folder names and order | `src/data/folders.ts` |
 | Add or edit a decision | `src/content/decisions/*.md` |
@@ -101,8 +118,8 @@ Internal assessment documents, interview notes, colleague names, or client proje
 
 1. **Every folder is a URL** — `/decisions`, `/programs`. Back button works, any view is shareable.
 2. **Everything prerenders to static HTML.** The desktop is a shell over real pages, so it stays indexable and works with JS off.
-3. **No animation theater.** Windows open instantly. Boot sequences and fake Finder chrome read as a CodePen demo and undercut the work.
-4. **Mobile is a phone home screen**, not a shrunken desktop. Recruiters open links on phones constantly.
+3. **The desktop never scales down.** On a phone the folders become a row across the top, the window goes full width, and the taskbar stays. Same design, adapted — never a shrunken desktop.
+4. **No dragging, no boot sequence, no window management.** The chrome is the look; the site is still four pages and a back button.
 
 ---
 

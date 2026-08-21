@@ -1,8 +1,7 @@
 ---
-/* Load-bearing. A recruiter reads this before any prose, so it
-   gets the treatment of a real program artifact — an allocation
-   table, not a row of text. Tick marks at each division echo a
-   gate schedule. */
+/* Load-bearing. A recruiter reads these before any prose, so
+   they get the treatment of a real dialog readout: white sunken
+   wells in a row, the way the Levels inputs sit. */
 
 interface Props {
   metrics: string[];
@@ -11,97 +10,37 @@ interface Props {
 const { metrics } = Astro.props;
 ---
 
-<dl class="strip">
+<div class="strip">
   {
-    metrics.map((m) => {
-      /* Split the leading figure from its unit so the number can
-         carry the weight the way it would on a status sheet. */
-      const match = m.match(/^([~≥$]?[\d.,]+[KM+%]*\+?)\s+(.*)$/);
-      const value = match ? match[1] : m;
-      const label = match ? match[2] : '';
-      return (
-        <div class="cell">
-          <dt class="value">{value}</dt>
-          {label && <dd class="label">{label}</dd>}
-        </div>
-      );
-    })
+    metrics.map((m) => (
+      <span class="well sunken">{m}</span>
+    ))
   }
-</dl>
+</div>
 
 <style>
   .strip {
     display: flex;
     flex-wrap: wrap;
-    margin: 0 0 var(--s3);
-    border-top: 1px solid var(--accent-line);
-    border-bottom: 1px solid var(--border);
+    gap: var(--s1);
+    margin-bottom: var(--s3);
   }
 
-  .cell {
-    position: relative;
-    flex: 1 1 0;
-    min-width: 8rem;
-    padding: 0.7rem var(--s2) 0.7rem 0;
-  }
-
-  /* Tick marks — the gate-schedule cue. */
-  .cell + .cell {
-    padding-left: var(--s2);
-  }
-
-  .cell + .cell::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--border);
-  }
-
-  .cell + .cell::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -1px;
-    width: 1px;
-    height: 5px;
-    background: var(--accent);
-  }
-
-  .value {
+  .well {
+    flex: 1 1 auto;
+    min-width: 130px;
+    padding: 5px 8px;
     font-family: var(--font-mono);
-    font-size: 0.98rem;
-    font-weight: 500;
-    color: var(--text);
-    letter-spacing: -0.01em;
-  }
-
-  .label {
-    margin: 0.1rem 0 0;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 12px;
     line-height: 1.4;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    color: var(--text-faint);
+    color: var(--ui-text);
+    text-align: center;
   }
 
   @media (max-width: 620px) {
-    .cell {
+    .well {
       flex: 1 1 100%;
-      padding: 0.5rem 0;
-    }
-
-    .cell + .cell {
-      padding-left: 0;
-      border-top: 1px solid var(--border-soft);
-    }
-
-    .cell + .cell::before,
-    .cell + .cell::after {
-      display: none;
+      text-align: left;
     }
   }
 </style>

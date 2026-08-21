@@ -1,5 +1,6 @@
 ---
 import Page from '../layouts/Page.astro';
+import Fieldset from '../components/Fieldset.astro';
 import { aiProjects, aiFramework, education } from '../data/ai';
 
 const lead =
@@ -7,24 +8,26 @@ const lead =
 ---
 
 <Page active="ai-fluency" lead={lead}>
-  <p class="framework">{aiFramework}</p>
+  <Fieldset legend="Evaluation framework">
+    <p class="framework">{aiFramework}</p>
+  </Fieldset>
 
   {
     aiProjects.length > 0 && (
       <div class="cards">
         {aiProjects.map((p) => (
-          <a class="card" href={p.href} target="_blank" rel="noopener">
+          <a class="card raised" href={p.href} target="_blank" rel="noopener">
             {p.image ? (
-              <img src={p.image} alt="" loading="lazy" />
+              <img src={p.image} alt="" loading="lazy" class="sunken" />
             ) : (
-              <span class="thumb" aria-hidden="true" />
+              <span class="thumb sunken" aria-hidden="true" />
             )}
-            <div class="body">
-              <h2>{p.name}</h2>
-              <p class="descriptor">{p.descriptor}</p>
-              <p class="impact">{p.impact}</p>
-              <p class="tools">Built with: {p.tools.join(' · ')}</p>
-            </div>
+            <span class="body">
+              <span class="name">{p.name}</span>
+              <span class="descriptor">{p.descriptor}</span>
+              <span class="impact">{p.impact}</span>
+              <span class="tools">Built with: {p.tools.join(' · ')}</span>
+            </span>
           </a>
         ))}
       </div>
@@ -35,36 +38,29 @@ const lead =
 </Page>
 
 <style>
-  /* The opener is set as a pull quote by the Page layout's lead
-     treatment; this is the single line that sits beneath it. */
   .framework {
     max-width: var(--measure);
-    padding: var(--s3) 0 var(--s6);
-    border-top: 1px solid var(--accent-line);
-    font-size: 1.02rem;
-    line-height: 1.7;
-    color: var(--text);
+    font-size: var(--size-body);
+    line-height: 1.6;
   }
 
   .cards {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--s3);
+    margin-top: var(--s4);
   }
 
   .card {
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: var(--inset);
-    transition: border-color 0.15s ease;
+    display: block;
+    padding: var(--s2);
   }
 
-  .card:hover {
-    border-color: var(--accent-line);
-    color: inherit;
+  .card:active {
+    border-top-color: var(--ui-dark-shadow);
+    border-left-color: var(--ui-dark-shadow);
+    border-right-color: var(--ui-highlight);
+    border-bottom-color: var(--ui-highlight);
   }
 
   .card img,
@@ -73,58 +69,53 @@ const lead =
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
-    background: linear-gradient(140deg, #1b1b23, #101015);
-    border-bottom: 1px solid var(--border);
   }
 
   .body {
-    padding: var(--s2) var(--s3) var(--s3);
+    display: block;
+    padding-top: var(--s2);
   }
 
-  .card h2 {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-  }
-
-  .card:hover h2 {
-    color: var(--accent);
+  .name {
+    display: block;
+    font-size: 15px;
+    font-weight: bold;
   }
 
   .descriptor {
-    margin: 0.2rem 0 var(--s2);
+    display: block;
+    margin: 1px 0 6px;
     font-style: italic;
-    font-size: 0.94rem;
-    color: var(--text-faint);
+    font-size: 13px;
+    color: #333;
   }
 
   .impact {
-    font-size: 0.94rem;
-    line-height: 1.65;
-    color: var(--text-muted);
+    display: block;
+    font-size: 13px;
+    line-height: 1.55;
   }
 
   .tools {
+    display: block;
     margin-top: var(--s2);
-    padding-top: var(--s1);
-    border-top: 1px solid var(--border-soft);
+    padding-top: 6px;
+    border-top: 1px dotted var(--ui-face-line);
     font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.03em;
-    color: var(--text-faint);
+    font-size: 11px;
+    color: #444;
   }
 
   .education {
-    padding-top: var(--s6);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-faint);
+    margin-top: var(--s6);
+    padding-top: var(--s3);
+    border-top: 1px solid var(--ui-shadow);
+    box-shadow: 0 -1px 0 var(--ui-highlight) inset;
+    font-size: 12px;
+    color: #333;
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 720px) {
     .cards {
       grid-template-columns: 1fr;
     }

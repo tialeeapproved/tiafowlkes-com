@@ -1,66 +1,104 @@
 ---
 import Base from './Base.astro';
-import MenuBar from '../components/MenuBar.astro';
+import Sky from '../components/Sky.astro';
+import Taskbar from '../components/Taskbar.astro';
 import FolderIcons from '../components/FolderIcons.astro';
-import Window from '../components/Window.astro';
+import Win from '../components/Win.astro';
 import { getFolder, type FolderId } from '../data/folders';
 
 interface Props {
   active: FolderId;
   lead: string;
+  wide?: boolean;
 }
 
-const { active, lead } = Astro.props;
+const { active, lead, wide = false } = Astro.props;
 const folder = getFolder(active)!;
 ---
 
 <Base title={folder.label} description={lead}>
-  <MenuBar />
+  <Sky />
 
-  <main class="shell" id="main">
-    <div class="desk">
+  <div class="workspace">
+    <!-- Icons stay on the desktop behind the window, the way they
+         would on a real machine. On a phone they sit above it. -->
+    <div class="rail">
       <FolderIcons active={active} />
     </div>
 
-    <Window title={folder.label} path={`~/${active}`}>
-      <header class="lead">
-        <h1>{folder.label}</h1>
-        <p>{lead}</p>
-      </header>
+    <main class="stage" id="main">
+      <Win title={folder.label} wide={wide}>
+        <header class="lead">
+          <h1>{folder.label}</h1>
+          <p>{lead}</p>
+        </header>
 
-      <slot />
-    </Window>
-  </main>
+        <slot />
+      </Win>
+    </main>
+  </div>
+
+  <Taskbar active={active} />
 </Base>
 
 <style>
-  .desk {
-    padding: var(--s4) 0 var(--s3);
+  .workspace {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    min-height: calc(100vh - var(--taskbar-h));
+    padding: 20px;
+  }
+
+  .rail {
+    flex: none;
+  }
+
+  .stage {
+    flex: 1;
+    min-width: 0;
+    padding-bottom: var(--s6);
   }
 
   .lead {
-    max-width: var(--measure);
     padding-bottom: var(--s4);
+    border-bottom: 1px solid var(--ui-shadow);
+    box-shadow: 0 1px 0 var(--ui-highlight);
+    margin-bottom: var(--s4);
   }
 
   h1 {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 4.5vw, 2.9rem);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
     margin-bottom: var(--s2);
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: -0.01em;
   }
 
   .lead p {
-    font-size: 1.06rem;
-    line-height: 1.65;
-    color: var(--text-muted);
+    max-width: var(--measure);
+    font-size: var(--size-lede);
+    line-height: 1.6;
   }
 
-  @media (max-width: 760px) {
-    .desk {
-      padding: var(--s3) 0 var(--s2);
+  @media (max-width: 720px) {
+    .workspace {
+      flex-direction: column;
+      gap: 18px;
+      padding: 14px;
+    }
+
+    .rail {
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 21px;
+    }
+
+    .lead p {
+      font-size: 15px;
     }
   }
 </style>

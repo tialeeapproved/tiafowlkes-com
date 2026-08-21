@@ -1,0 +1,60 @@
+---
+/* The grouped panel with a notched legend, straight from the
+   Levels dialog. It carries Context / The call / What followed
+   on Decisions and the metric strips on Programs. */
+
+interface Props {
+  legend: string;
+}
+
+const { legend } = Astro.props;
+---
+
+<div class="fieldset">
+  <span class="legend chrome">{legend}</span>
+  <div class="inner">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .fieldset {
+    position: relative;
+    margin-top: 8px;
+    padding: 14px 10px 10px;
+    border-top: 1px solid var(--ui-shadow);
+    border-left: 1px solid var(--ui-shadow);
+    border-right: 1px solid var(--ui-highlight);
+    border-bottom: 1px solid var(--ui-highlight);
+  }
+
+  /* The second, offset border is what gives the groove its depth. */
+  .fieldset::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: -1px;
+    bottom: -1px;
+    border-top: 1px solid var(--ui-highlight);
+    border-left: 1px solid var(--ui-highlight);
+    border-right: 1px solid var(--ui-shadow);
+    border-bottom: 1px solid var(--ui-shadow);
+    pointer-events: none;
+  }
+
+  .legend {
+    position: absolute;
+    top: -7px;
+    left: 8px;
+    z-index: 1;
+    padding: 0 4px;
+    background: var(--ui-bg);
+    font-weight: bold;
+  }
+
+  .inner {
+    position: relative;
+    z-index: 1;
+  }
+</style>

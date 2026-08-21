@@ -9,26 +9,15 @@ interface Props {
 const { active } = Astro.props;
 ---
 
-<nav class="icons" aria-label="Folders">
+<nav class="icons chrome" aria-label="Folders">
   {
     folders.map((f) => (
       <a
         href={`/${f.id}`}
-        class:list={['icon', { active: f.id === active }]}
+        class:list={['icon', { on: f.id === active }]}
         aria-current={f.id === active ? 'page' : undefined}
       >
-        <span class="glyph" aria-hidden="true">
-          <svg viewBox="0 0 64 50" width="64" height="50">
-            <path
-              d="M2 8a6 6 0 0 1 6-6h14.9a6 6 0 0 1 4.24 1.76L30.6 7.3H56a6 6 0 0 1 6 6v29a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V8Z"
-              class="folder-back"
-            />
-            <path
-              d="M2 16h60v26a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V16Z"
-              class="folder-front"
-            />
-          </svg>
-        </span>
+        <span class="folder" aria-hidden="true" />
         <span class="label">{f.label}</span>
       </a>
     ))
@@ -38,65 +27,87 @@ const { active } = Astro.props;
 <style>
   .icons {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--s6);
+    flex-direction: column;
+    gap: 26px;
+    width: 84px;
   }
 
   .icon {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.6rem;
-    padding: var(--s1);
-    border-radius: var(--radius);
+    width: 84px;
+    cursor: pointer;
   }
 
-  .icon:hover {
-    color: inherit;
+  /* Gold folder with a tab, drawn in bevels rather than an image
+     so it stays crisp at any density. */
+  .folder {
+    position: relative;
+    width: 32px;
+    height: 26px;
+    background: var(--folder);
+    border: 1px solid #000;
+    box-shadow:
+      inset 1px 1px 0 #fff,
+      inset -1px -1px 0 var(--folder-dark),
+      1px 1px 0 #000;
   }
 
-  .folder-back {
-    fill: #2b2b36;
-    transition: fill 0.15s ease;
-  }
-
-  .folder-front {
-    fill: #383844;
-    transition: fill 0.15s ease;
-  }
-
-  .icon:hover .folder-back,
-  .icon.active .folder-back {
-    fill: var(--accent-line);
-  }
-
-  .icon:hover .folder-front,
-  .icon.active .folder-front {
-    fill: var(--accent);
+  .folder::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -1px;
+    width: 14px;
+    height: 6px;
+    background: var(--folder);
+    border: 1px solid #000;
+    border-bottom: none;
+    box-shadow: inset 1px 1px 0 #fff;
   }
 
   .label {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    transition: color 0.15s ease;
+    margin-top: 6px;
+    padding: 1px 3px;
+    text-align: center;
+    line-height: 1.25;
+    color: #fff;
+    text-shadow: 1px 1px 0 #000;
   }
 
+  /* Period-correct selection: navy fill, dotted marching border. */
   .icon:hover .label,
-  .icon.active .label {
-    color: var(--accent);
+  .icon:focus-visible .label,
+  .icon.on .label {
+    background: var(--select-bg);
+    border: 1px dotted #fff;
+    padding: 0 2px;
+    text-shadow: none;
   }
 
-  @media (max-width: 760px) {
+  .icon:hover .folder,
+  .icon.on .folder {
+    filter: brightness(1.12);
+  }
+
+  .icon:active .folder {
+    filter: brightness(0.8);
+  }
+
+  /* Phone: icons run as a grid across the top, the way a
+     home screen does, instead of a left-hand column. */
+  @media (max-width: 720px) {
     .icons {
-      gap: var(--s4) var(--s3);
-      justify-content: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 16px 10px;
+      width: 100%;
     }
 
     .icon {
-      width: calc(50% - var(--s3));
-      align-items: flex-start;
+      width: calc(25% - 8px);
+      min-width: 68px;
     }
   }
 </style>

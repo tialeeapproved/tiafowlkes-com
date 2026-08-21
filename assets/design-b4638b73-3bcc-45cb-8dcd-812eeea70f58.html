@@ -1,0 +1,560 @@
+<html lang="en" vid="0"><head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">Atmospheric Levels</title>
+    
+    <style vid="5">
+        
+        :root {
+            --ui-bg: #E4E4E4; 
+            --ui-text: #000000;
+            --ui-highlight: #FFFFFF;
+            --ui-shadow: #888888;
+            --ui-dark-shadow: #404040;
+            --desktop-bg: #3B78A5; 
+            --window-title-bg: #899BB1; 
+            --window-title-text: #000000;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Tahoma', 'MS Sans Serif', 'Geneva', sans-serif;
+            font-size: 11px;
+            color: var(--ui-text);
+            background-color: var(--desktop-bg);
+            
+            -webkit-font-smoothing: none;
+            font-smooth: never;
+        }
+
+        
+        #environment {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, #4A90E2 0%, #87CEEB 60%, #B0E0E6 100%);
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .cloud-layer {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-repeat: repeat-x;
+            image-rendering: pixelated; 
+        }
+
+        
+        
+        .layer-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="none"/><path d="M10,80 h20 v-10 h10 v-10 h20 v10 h10 v-10 h20 v20 h-80 z" fill="rgba(255,255,255,0.4)" shape-rendering="crispEdges"/></svg>');
+            background-size: 300px;
+            background-position: 0 40%;
+            animation: panClouds 120s linear infinite;
+        }
+
+        
+        .layer-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="none"/><path d="M0,90 h15 v-15 h15 v-15 h30 v15 h15 v-15 h30 v30 h-105 z" fill="rgba(255,255,255,0.6)" shape-rendering="crispEdges"/></svg>');
+            background-size: 400px;
+            background-position: 0 55%;
+            animation: panClouds 75s linear infinite;
+        }
+
+        
+        .layer-3 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="none"/><path d="M-20,120 h40 v-20 h30 v-20 h50 v20 h40 v-30 h40 v50 h-200 z" fill="rgba(255,255,255,0.9)" shape-rendering="crispEdges"/></svg>');
+            background-size: 600px;
+            background-position: 0 70%;
+            animation: panClouds 40s linear infinite;
+        }
+
+        @keyframes panClouds {
+            from { background-position-x: 0; }
+            to { background-position-x: 100vw; } 
+        }
+
+        
+        @keyframes panClouds {
+            from { background-position: 0 70%; }
+            to { background-position: 1200px 70%; } 
+        }
+        .layer-1 { animation: pan1 180s linear infinite; }
+        .layer-2 { animation: pan2 90s linear infinite; }
+        .layer-3 { animation: pan3 45s linear infinite; }
+        
+        @keyframes pan1 { from { background-position: 0 40%; } to { background-position: 1200px 40%; } }
+        @keyframes pan2 { from { background-position: 0 55%; } to { background-position: 1200px 55%; } }
+        @keyframes pan3 { from { background-position: 0 75%; } to { background-position: 1200px 75%; } }
+
+
+        
+        #desktop-icons {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            z-index: 10;
+        }
+
+        .icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 64px;
+            cursor: pointer;
+        }
+
+        .folder-graphic {
+            width: 32px;
+            height: 32px;
+            
+            background-color: #FFD700;
+            position: relative;
+            box-shadow: 
+                inset 1px 1px 0 #FFF,
+                inset -1px -1px 0 #B8860B,
+                1px 1px 0 #000;
+            border: 1px solid #000;
+        }
+        .folder-graphic::before {
+            content: '';
+            position: absolute;
+            top: -6px; left: -1px;
+            width: 14px; height: 6px;
+            background-color: #FFD700;
+            border: 1px solid #000;
+            border-bottom: none;
+            box-shadow: inset 1px 1px 0 #FFF;
+        }
+
+        .icon-label {
+            margin-top: 4px;
+            background: transparent;
+            color: white;
+            padding: 1px 3px;
+            text-align: center;
+            line-height: 1.2;
+            text-shadow: 1px 1px 0 #000;
+        }
+
+        .icon:active .icon-label,
+        .icon:focus .icon-label,
+        .icon.selected .icon-label {
+            background: #000080;
+            border: 1px dotted #FFF;
+            text-shadow: none;
+        }
+
+        .icon:active .folder-graphic {
+            filter: brightness(0.8);
+        }
+
+        
+        .window {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--ui-bg);
+            
+            border-top: 2px solid var(--ui-highlight);
+            border-left: 2px solid var(--ui-highlight);
+            border-right: 2px solid var(--ui-dark-shadow);
+            border-bottom: 2px solid var(--ui-dark-shadow);
+            box-shadow: 
+                inset -1px -1px 0 var(--ui-shadow), 
+                inset 1px 1px 0 var(--ui-bg),
+                10px 10px 15px rgba(0,0,0,0.3); 
+            padding: 2px;
+            width: 360px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title-bar {
+            background: var(--window-title-bg);
+            
+            background: linear-gradient(to right, #899BB1, #C4D3E0);
+            padding: 2px 4px 2px 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: default;
+            border-top: 1px solid var(--ui-highlight);
+            border-left: 1px solid var(--ui-highlight);
+            border-right: 1px solid var(--ui-shadow);
+            border-bottom: 1px solid var(--ui-shadow);
+            height: 22px;
+        }
+
+        .title-text {
+            font-weight: bold;
+            color: var(--window-title-text);
+            letter-spacing: 0.5px;
+        }
+
+        .close-btn {
+            width: 14px;
+            height: 14px;
+            background: var(--ui-bg);
+            border-top: 1px solid var(--ui-highlight);
+            border-left: 1px solid var(--ui-highlight);
+            border-right: 1px solid var(--ui-dark-shadow);
+            border-bottom: 1px solid var(--ui-dark-shadow);
+            box-shadow: inset -1px -1px 0 var(--ui-shadow);
+            position: relative;
+        }
+        .close-btn:active {
+            border-top: 1px solid var(--ui-dark-shadow);
+            border-left: 1px solid var(--ui-dark-shadow);
+            border-right: 1px solid var(--ui-highlight);
+            border-bottom: 1px solid var(--ui-highlight);
+            box-shadow: inset 1px 1px 0 var(--ui-shadow);
+        }
+        .close-btn::before, .close-btn::after {
+            content: ''; position: absolute;
+            width: 8px; height: 1px; background: #000;
+            top: 5px; left: 2px;
+        }
+        .close-btn::before { transform: rotate(45deg); }
+        .close-btn::after { transform: rotate(-45deg); }
+
+        .window-content {
+            padding: 10px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .main-panel {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        
+        .fieldset {
+            position: relative;
+            border-top: 1px solid var(--ui-shadow);
+            border-left: 1px solid var(--ui-shadow);
+            border-right: 1px solid var(--ui-highlight);
+            border-bottom: 1px solid var(--ui-highlight);
+            padding: 12px 8px 8px 8px;
+            margin-top: 6px;
+        }
+        .fieldset::before {
+            
+            content: ''; position: absolute;
+            top: 0; left: 0; right: -1px; bottom: -1px;
+            border-top: 1px solid var(--ui-highlight);
+            border-left: 1px solid var(--ui-highlight);
+            border-right: 1px solid var(--ui-shadow);
+            border-bottom: 1px solid var(--ui-shadow);
+            pointer-events: none;
+        }
+
+        .legend {
+            position: absolute;
+            top: -7px; left: 8px;
+            background: var(--ui-bg);
+            padding: 0 4px;
+            z-index: 1;
+        }
+
+        
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+        .control-row:last-child { margin-bottom: 0; }
+
+        .label-text {
+            width: 65px;
+            text-align: right;
+        }
+
+        
+        .input-inset {
+            background: #FFF;
+            border-top: 1px solid var(--ui-dark-shadow);
+            border-left: 1px solid var(--ui-dark-shadow);
+            border-right: 1px solid var(--ui-highlight);
+            border-bottom: 1px solid var(--ui-highlight);
+            box-shadow: inset 1px 1px 0 var(--ui-shadow);
+            padding: 2px 4px;
+            font-family: inherit;
+            font-size: inherit;
+            color: #000;
+        }
+
+        .select-box {
+            width: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .select-arrow {
+            width: 14px; height: 16px;
+            background: var(--ui-bg);
+            border-top: 1px solid var(--ui-highlight);
+            border-left: 1px solid var(--ui-highlight);
+            border-right: 1px solid var(--ui-dark-shadow);
+            border-bottom: 1px solid var(--ui-dark-shadow);
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2px;
+        }
+        
+        .select-arrow::before { content: ''; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 3px solid #000; }
+        .select-arrow::after { content: ''; border-left: 3px solid transparent; border-right: 3px solid transparent; border-top: 3px solid #000; }
+
+        .input-levels-group {
+            display: flex;
+            gap: 4px;
+        }
+        .level-input { width: 35px; text-align: center; }
+        .level-input:nth-child(2) { width: 40px; }
+
+        
+        .histogram-container {
+            background: #FFF;
+            border-top: 1px solid var(--ui-dark-shadow);
+            border-left: 1px solid var(--ui-dark-shadow);
+            border-right: 1px solid var(--ui-highlight);
+            border-bottom: 1px solid var(--ui-highlight);
+            box-shadow: inset 1px 1px 0 var(--ui-shadow);
+            width: 100%;
+            height: 120px;
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        
+        #histogram-path {
+            fill: #000;
+            
+            animation: breathe 4s ease-in-out infinite alternate;
+            transform-origin: bottom center;
+        }
+
+        @keyframes breathe {
+            0% { transform: scaleY(1); }
+            100% { transform: scaleY(1.02); }
+        }
+
+        
+        .button-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 75px;
+        }
+
+        .pill-btn {
+            background: var(--ui-bg);
+            
+            border: 1px solid var(--ui-dark-shadow);
+            border-radius: 12px;
+            padding: 3px 0;
+            text-align: center;
+            font-family: inherit;
+            font-size: inherit;
+            color: #000;
+            box-shadow: 
+                inset 0 1px 2px rgba(255,255,255,0.8),
+                inset 0 -1px 1px rgba(0,0,0,0.2),
+                1px 1px 0 rgba(255,255,255,0.5);
+            cursor: default;
+        }
+        
+        
+        .pill-btn.primary {
+            border: 2px solid #5C8CD9;
+            box-shadow: 
+                inset 0 1px 2px rgba(255,255,255,0.8),
+                inset 0 -1px 2px #5C8CD9,
+                0 0 3px rgba(92,140,217,0.5);
+            padding: 2px 0; 
+        }
+
+        .pill-btn:active {
+            box-shadow: 
+                inset 0 2px 4px rgba(0,0,0,0.3);
+            background: #D0D0D0;
+        }
+
+        
+        .gradient-bar {
+            height: 12px;
+            width: 100%;
+            background: linear-gradient(to right, #000, #FFF);
+            border-top: 1px solid var(--ui-dark-shadow);
+            border-left: 1px solid var(--ui-dark-shadow);
+            border-right: 1px solid var(--ui-highlight);
+            border-bottom: 1px solid var(--ui-highlight);
+            box-shadow: inset 1px 1px 0 var(--ui-shadow);
+            margin-top: 4px;
+        }
+        
+        .output-levels-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+        }
+
+    </style>
+</head>
+<body vid="6">
+
+    
+    <div id="environment" vid="7">
+        <div class="cloud-layer layer-1" vid="8"></div>
+        <div class="cloud-layer layer-2" vid="9"></div>
+        <div class="cloud-layer layer-3" vid="10"></div>
+    </div>
+
+    
+    <div id="desktop-icons" vid="11">
+        <div class="icon" onclick="this.classList.toggle('selected')" vid="12">
+            <div class="folder-graphic" vid="13"></div>
+            <div class="icon-label" vid="14">System</div>
+        </div>
+        <div class="icon" onclick="this.classList.toggle('selected')" vid="15">
+            <div class="folder-graphic" vid="16"></div>
+            <div class="icon-label" vid="17">Atmosphere</div>
+        </div>
+        <div class="icon" onclick="this.classList.toggle('selected')" vid="18">
+            <div class="folder-graphic" vid="19"></div>
+            <div class="icon-label" vid="20">Cloud_Data</div>
+        </div>
+    </div>
+
+    
+    <div class="window" id="levels-window" vid="21">
+        <div class="title-bar" id="title-bar" vid="22">
+            <div class="title-text" vid="23">Levels</div>
+            <div class="close-btn" vid="24"></div>
+        </div>
+        
+        <div class="window-content" vid="25">
+            <div class="main-panel" vid="26">
+                
+                <div class="control-row" style="padding-left: 4px;" vid="27">
+                    <div class="label-text" vid="28">Channel:</div>
+                    <div class="input-inset select-box" vid="29">
+                        <span style="padding-left: 2px;" vid="30">CMYK</span>
+                        <div class="select-arrow" vid="31"></div>
+                    </div>
+                </div>
+
+                <div class="fieldset" vid="32">
+                    <div class="legend" vid="33">Input Levels:</div>
+                    
+                    <div class="control-row" style="justify-content: center; margin-top: 4px;" vid="34">
+                        <div class="input-levels-group" vid="35">
+                            <input type="text" class="input-inset level-input" value="0" vid="36">
+                            <input type="text" class="input-inset level-input" value="1.00" vid="37">
+                            <input type="text" class="input-inset level-input" value="255" vid="38">
+                        </div>
+                    </div>
+
+                    <div class="histogram-container" vid="39">
+                        <svg width="100%" height="100%" viewBox="0 0 255 120" preserveAspectRatio="none" vid="40">
+                            
+                            <path id="histogram-path" d="
+                                M 0 120
+                                L 0 110 L 5 108 L 10 112 L 15 95 L 20 80 L 25 85 L 28 82 L 32 90 L 38 95 L 42 92 L 48 98 
+                                L 55 90 L 60 85 L 65 88 L 70 70 L 75 60 L 80 65 L 85 50 L 90 40 L 95 45 L 100 25 L 105 15 
+                                L 110 20 L 115 10 L 120 5 L 125 12 L 130 8 L 135 25 L 140 30 L 145 28 L 150 40 L 155 45 L 160 55 
+                                L 165 65 L 170 60 L 175 75 L 180 80 L 185 85 L 190 82 L 195 90 L 200 95 L 205 92 L 210 100 
+                                L 215 98 L 220 105 L 225 102 L 230 110 L 235 112 L 240 108 L 245 115 L 250 118 L 255 115
+                                L 255 120 Z" vid="41"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="fieldset" vid="42">
+                    <div class="legend" vid="43">Output Levels:</div>
+                    <div class="gradient-bar" vid="44"></div>
+                    <div class="output-levels-group" vid="45">
+                        <input type="text" class="input-inset level-input" value="0" vid="46">
+                        <input type="text" class="input-inset level-input" value="255" vid="47">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="button-panel" vid="48">
+                <div class="pill-btn primary" vid="49">OK</div>
+                <div class="pill-btn" vid="50">Cancel</div>
+                <div style="height: 10px;" vid="51"></div> 
+                <div class="pill-btn" vid="52">Load...</div>
+                <div class="pill-btn" vid="53">Save...</div>
+                <div style="height: 10px;" vid="54"></div> 
+                <div class="pill-btn" vid="55">Auto</div>
+                <div style="height: 10px;" vid="56"></div> 
+                <div class="pill-btn" style="padding-top: 1px; padding-bottom: 5px;" vid="57">Options...</div>
+            </div>
+        </div>
+    </div>
+
+    <script vid="58">
+        
+        const windowEl = document.getElementById('levels-window');
+        const titleBar = document.getElementById('title-bar');
+        
+        let isDragging = false;
+        let offsetX, offsetY;
+
+        titleBar.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            
+            const rect = windowEl.getBoundingClientRect();
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            
+            
+            windowEl.style.transform = 'none';
+            
+            windowEl.style.left = rect.left + 'px';
+            windowEl.style.top = rect.top + 'px';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            let newX = e.clientX - offsetX;
+            let newY = e.clientY - offsetY;
+            
+            
+            newX = Math.max(0, Math.min(newX, window.innerWidth - windowEl.offsetWidth));
+            newY = Math.max(0, Math.min(newY, window.innerHeight - windowEl.offsetHeight));
+
+            windowEl.style.left = newX + 'px';
+            windowEl.style.top = newY + 'px';
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        
+        document.getElementById('environment').addEventListener('mousedown', () => {
+            document.querySelectorAll('.icon').forEach(icon => icon.classList.remove('selected'));
+        });
+    </script>
+
+</body></html>

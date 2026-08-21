@@ -1,32 +1,103 @@
 ---
 import Base from '../layouts/Base.astro';
-import MenuBar from '../components/MenuBar.astro';
-import Window from '../components/Window.astro';
+import Sky from '../components/Sky.astro';
+import Taskbar from '../components/Taskbar.astro';
+import Win from '../components/Win.astro';
 ---
 
 <Base title="Not found">
-  <MenuBar />
-  <main class="shell">
-    <div class="pad">
-      <Window title="Not found" path="~/404">
-        <p>That file isn't on this desktop.</p>
-        <p><a href="/">Back to the desktop →</a></p>
-      </Window>
+  <Sky />
+
+  <main class="stage" id="main">
+    <div class="dialog">
+      <Win title="Error">
+        <div class="row">
+          <span class="bang" aria-hidden="true">!</span>
+          <div>
+            <p>That file cannot be found on this desktop.</p>
+            <p class="hint">It may have been moved, renamed, or it never existed.</p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a href="/" class="btn">OK</a>
+        </div>
+      </Win>
     </div>
   </main>
+
+  <Taskbar />
 </Base>
 
 <style>
-  .pad {
-    padding-top: var(--s6);
+  .stage {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - var(--taskbar-h));
+    padding: 20px;
+  }
+
+  .dialog {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s3);
+  }
+
+  .bang {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--select-bg);
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 30px;
+    text-align: center;
   }
 
   p {
-    color: var(--text-muted);
-    margin-bottom: var(--s2);
+    font-size: var(--size-body);
   }
 
-  a {
-    color: var(--accent);
+  .hint {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #444;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--s4);
+  }
+
+  .btn {
+    min-width: 84px;
+    padding: 4px 14px;
+    text-align: center;
+    background: var(--ui-bg);
+    border-top: 2px solid var(--ui-highlight);
+    border-left: 2px solid var(--ui-highlight);
+    border-right: 2px solid var(--ui-dark-shadow);
+    border-bottom: 2px solid var(--ui-dark-shadow);
+    box-shadow: inset -1px -1px 0 var(--ui-shadow);
+    font-size: var(--size-ui);
+  }
+
+  .btn:active {
+    border-top-color: var(--ui-dark-shadow);
+    border-left-color: var(--ui-dark-shadow);
+    border-right-color: var(--ui-highlight);
+    border-bottom-color: var(--ui-highlight);
+    box-shadow: inset 1px 1px 0 var(--ui-shadow);
   }
 </style>

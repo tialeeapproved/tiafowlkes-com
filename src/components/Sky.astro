@@ -1,0 +1,65 @@
+---
+/* The desktop wallpaper: a gradient sky with three layers of
+   pixel clouds panning at different speeds. Purely decorative —
+   hidden from assistive tech, and it stops entirely under
+   prefers-reduced-motion. */
+---
+
+<div id="sky" aria-hidden="true">
+  <div class="cloud layer-1"></div>
+  <div class="cloud layer-2"></div>
+  <div class="cloud layer-3"></div>
+</div>
+
+<style>
+  #sky {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: linear-gradient(
+      to bottom,
+      var(--sky-top) 0%,
+      var(--sky-mid) 60%,
+      var(--sky-low) 100%
+    );
+  }
+
+  .cloud {
+    position: absolute;
+    inset: 0;
+    background-repeat: repeat-x;
+    image-rendering: pixelated;
+  }
+
+  .layer-1 {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M10,80 h20 v-10 h10 v-10 h20 v10 h10 v-10 h20 v20 h-80 z" fill="rgba(255,255,255,0.4)" shape-rendering="crispEdges"/></svg>');
+    background-size: 300px;
+    animation: pan1 180s linear infinite;
+  }
+
+  .layer-2 {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><path d="M0,90 h15 v-15 h15 v-15 h30 v15 h15 v-15 h30 v30 h-105 z" fill="rgba(255,255,255,0.6)" shape-rendering="crispEdges"/></svg>');
+    background-size: 400px;
+    animation: pan2 90s linear infinite;
+  }
+
+  .layer-3 {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><path d="M-20,120 h40 v-20 h30 v-20 h50 v20 h40 v-30 h40 v50 h-200 z" fill="rgba(255,255,255,0.9)" shape-rendering="crispEdges"/></svg>');
+    background-size: 600px;
+    animation: pan3 45s linear infinite;
+  }
+
+  @keyframes pan1 {
+    from { background-position: 0 40%; }
+    to { background-position: 1200px 40%; }
+  }
+  @keyframes pan2 {
+    from { background-position: 0 55%; }
+    to { background-position: 1200px 55%; }
+  }
+  @keyframes pan3 {
+    from { background-position: 0 75%; }
+    to { background-position: 1200px 75%; }
+  }
+</style>

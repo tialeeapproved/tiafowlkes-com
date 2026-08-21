@@ -7,10 +7,6 @@
   box-sizing: border-box;
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
-}
-
 body,
 h1,
 h2,
@@ -19,6 +15,8 @@ h4,
 p,
 ul,
 ol,
+dl,
+dd,
 figure {
   margin: 0;
   padding: 0;
@@ -35,30 +33,38 @@ svg {
   max-width: 100%;
 }
 
-button {
+button,
+input {
   font: inherit;
   color: inherit;
-  background: none;
-  border: none;
-  cursor: pointer;
 }
 
-/* --- base --- */
+/* --- desktop ground --- */
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
-  min-height: 100vh;
-  background:
-    radial-gradient(
-      1100px 620px at 50% -12%,
-      var(--bg-grad) 0%,
-      var(--bg) 62%
-    ),
-    var(--bg);
-  background-attachment: fixed;
-  color: var(--text);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+  margin: 0;
+  padding-bottom: var(--taskbar-h);
+  font-family: var(--font-ui);
+  font-size: var(--size-body);
+  line-height: 1.55;
+  color: var(--ui-text);
+  background: var(--desktop-bg);
+}
+
+/* Chrome is pixel-crisp like the era. Prose is not — unsmoothed
+   body copy at length is genuinely hard to read, and there are
+   eight decision entries to get through. */
+.chrome,
+.chrome * {
+  font-size: var(--size-ui);
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  user-select: none;
 }
 
 a {
@@ -66,41 +72,43 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  color: var(--accent);
+/* --- bevels: the whole language of this UI ---
+   .raised = a surface that sticks out (windows, buttons)
+   .sunken = a well that goes in (fields, panels, histograms) */
+.raised {
+  border-top: 2px solid var(--ui-highlight);
+  border-left: 2px solid var(--ui-highlight);
+  border-right: 2px solid var(--ui-dark-shadow);
+  border-bottom: 2px solid var(--ui-dark-shadow);
+  box-shadow:
+    inset -1px -1px 0 var(--ui-shadow),
+    inset 1px 1px 0 var(--ui-bg);
+  background: var(--ui-bg);
 }
 
+.sunken {
+  border-top: 1px solid var(--ui-dark-shadow);
+  border-left: 1px solid var(--ui-dark-shadow);
+  border-right: 1px solid var(--ui-highlight);
+  border-bottom: 1px solid var(--ui-highlight);
+  box-shadow: inset 1px 1px 0 var(--ui-shadow);
+  background: var(--well);
+}
+
+/* --- focus: visible and period-appropriate --- */
 :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-  border-radius: var(--radius-sm);
-}
-
-/* --- shared type --- */
-.mono {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-}
-
-.shell {
-  width: 100%;
-  max-width: var(--shell-max);
-  margin: 0 auto;
-  padding: 0 var(--s3);
+  outline: 1px dotted var(--ui-text);
+  outline-offset: 2px;
 }
 
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 0;
-  z-index: 100;
+  z-index: 999;
   padding: var(--s1) var(--s2);
-  background: var(--window);
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
+  background: var(--ui-bg);
+  border: 2px outset var(--ui-highlight);
 }
 
 .skip-link:focus {
@@ -108,12 +116,22 @@ a:hover {
   top: var(--s2);
 }
 
+/* --- shared prose --- */
+.prose p {
+  max-width: var(--measure);
+  margin-bottom: var(--s3);
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
 /* --- motion --- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+    animation: none !important;
+    transition: none !important;
   }
 }

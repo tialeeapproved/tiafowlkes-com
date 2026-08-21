@@ -1,52 +1,63 @@
 /* ============================================================
-   DESIGN TOKENS — the whole look lives here.
-   Change the accent on ONE line below.
+   DESIGN TOKENS — Windows 95 era.
+   Every colour, bevel, and metric lives here. Never hardcode
+   a hex anywhere else.
    ============================================================ */
 
 :root {
-  /* --- surfaces --- */
-  --bg: #0b0b0f;            /* desktop backdrop */
-  --bg-grad: #101017;       /* subtle backdrop wash */
-  --window: #14141a;        /* window body */
-  --window-bar: #1a1a22;    /* window title bar */
-  --inset: #101015;
-  --border: #24242e;
-  --border-soft: #1c1c24;
+  /* --- system chrome --- */
+  --ui-bg: #e4e4e4;          /* window body, buttons, taskbar */
+  --ui-bg-alt: #d8d8d8;
+  --ui-text: #000000;
+  --ui-highlight: #ffffff;   /* top / left bevel */
+  --ui-shadow: #888888;      /* inner bevel */
+  --ui-dark-shadow: #404040; /* bottom / right bevel */
+  --ui-face-line: #b8b8b8;
 
-  /* --- type --- */
-  --text: #ededf2;
-  --text-muted: #8a8a99;
-  --text-faint: #5a5a68;
+  /* --- desktop --- */
+  --desktop-bg: #3b78a5;
+  --sky-top: #4a90e2;
+  --sky-mid: #87ceeb;
+  --sky-low: #b0e0e6;
 
-  /* --- ACCENT — swap this one line ---
-     ember   #ff6b35
-     lime    #c6f24e
-     blue    #5b8cff
-     none    #ededf2                                        */
-  --accent: #ff6b35;
-  --accent-dim: rgba(255, 107, 53, 0.14);
-  --accent-line: rgba(255, 107, 53, 0.35);
+  /* --- title bar --- */
+  --title-from: #899bb1;
+  --title-to: #c4d3e0;
+  --title-text: #000000;
+  --title-from-inactive: #a8a8a8;
+  --title-to-inactive: #d4d4d4;
 
-  /* --- fonts --- */
-  /* Display face carries the personality; body face holds the
-     long-form reading; mono is reserved for metric strips,
-     labels, and tools strips. Three faces, each with a job. */
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  --font-display: 'Space Grotesk', 'Inter Tight', var(--font-body);
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* --- selection (the one accent) --- */
+  --select-bg: #000080;
+  --select-text: #ffffff;
+  --focus-ring: #000080;
 
-  /* --- scale (8px base) --- */
-  --s1: 0.5rem;
-  --s2: 1rem;
-  --s3: 1.5rem;
-  --s4: 2rem;
-  --s6: 3rem;
-  --s8: 4.5rem;
+  /* --- folders --- */
+  --folder: #ffd700;
+  --folder-dark: #b8860b;
 
-  --radius-window: 12px;
-  --radius: 8px;
-  --radius-sm: 5px;
+  /* --- inset fields (white wells) --- */
+  --well: #ffffff;
 
-  --measure: 68ch;
-  --shell-max: 1180px;
+  /* --- type ---
+     Tahoma is the period face and ships on Windows; Verdana and
+     Geneva cover macOS. Chrome runs at 11px like the real thing,
+     prose runs larger so eight decision entries stay readable. */
+  --font-ui: Tahoma, Verdana, Geneva, 'DejaVu Sans', sans-serif;
+  --font-mono: 'Lucida Console', 'Courier New', ui-monospace, monospace;
+
+  --size-ui: 11px;      /* title bars, labels, buttons */
+  --size-body: 14px;    /* prose */
+  --size-lede: 16px;
+
+  /* --- metrics --- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 14px;
+  --s4: 22px;
+  --s6: 34px;
+  --s8: 48px;
+
+  --taskbar-h: 30px;
+  --measure: 74ch;
 }

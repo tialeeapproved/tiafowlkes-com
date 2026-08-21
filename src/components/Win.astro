@@ -1,0 +1,120 @@
+---
+/* A Windows-95 era window. Everything on this site lives inside
+   one. `close` points at wherever the X should take you. */
+
+interface Props {
+  title: string;
+  close?: string;
+  wide?: boolean;
+}
+
+const { title, close = '/', wide = false } = Astro.props;
+---
+
+<section class:list={['win', { wide }]}>
+  <div class="bar chrome">
+    <span class="bar-title">{title}</span>
+    <a class="close" href={close} aria-label="Close window">
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+
+  <div class="content">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .win {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 940px;
+    margin: 0 auto;
+    padding: 3px;
+    background: var(--ui-bg);
+    border-top: 2px solid var(--ui-highlight);
+    border-left: 2px solid var(--ui-highlight);
+    border-right: 2px solid var(--ui-dark-shadow);
+    border-bottom: 2px solid var(--ui-dark-shadow);
+    box-shadow:
+      inset -1px -1px 0 var(--ui-shadow),
+      inset 1px 1px 0 var(--ui-bg),
+      6px 6px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .wide {
+    max-width: 1120px;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 22px;
+    padding: 2px 3px 2px 8px;
+    background: linear-gradient(to right, var(--title-from), var(--title-to));
+  }
+
+  .bar-title {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: var(--title-text);
+  }
+
+  .close {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    background: var(--ui-bg);
+    border-top: 1px solid var(--ui-highlight);
+    border-left: 1px solid var(--ui-highlight);
+    border-right: 1px solid var(--ui-dark-shadow);
+    border-bottom: 1px solid var(--ui-dark-shadow);
+    box-shadow: inset -1px -1px 0 var(--ui-shadow);
+  }
+
+  .close:active {
+    border-top-color: var(--ui-dark-shadow);
+    border-left-color: var(--ui-dark-shadow);
+    border-right-color: var(--ui-highlight);
+    border-bottom-color: var(--ui-highlight);
+    box-shadow: inset 1px 1px 0 var(--ui-shadow);
+  }
+
+  .close span::before,
+  .close span::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 3px;
+    width: 8px;
+    height: 1px;
+    background: var(--ui-text);
+  }
+
+  .close span::before {
+    transform: rotate(45deg);
+  }
+
+  .close span::after {
+    transform: rotate(-45deg);
+  }
+
+  .content {
+    padding: var(--s4);
+  }
+
+  @media (max-width: 720px) {
+    .win {
+      box-shadow:
+        inset -1px -1px 0 var(--ui-shadow),
+        inset 1px 1px 0 var(--ui-bg),
+        3px 3px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .content {
+      padding: var(--s3);
+    }
+  }
+</style>

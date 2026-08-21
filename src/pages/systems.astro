@@ -3,11 +3,11 @@ import Page from '../layouts/Page.astro';
 import { systemsLead, systems, systemsClosing } from '../data/systems';
 ---
 
-<Page active="systems" lead={systemsLead}>
+<Page active="systems" lead={systemsLead} wide>
   <ol class="grid">
     {
       systems.map((s) => (
-        <li class="tile">
+        <li class="tile raised">
           <span class="n" aria-hidden="true">
             {String(s.n).padStart(2, '0')}
           </span>
@@ -26,59 +26,54 @@ import { systemsLead, systems, systemsClosing } from '../data/systems';
   .grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
+    gap: var(--s3);
   }
 
   .tile {
-    position: relative;
     padding: var(--s3);
-    background: var(--window);
   }
 
   /* The only numerals on the site. These six are an inventory,
-     which is what earns them. */
+     which is what earns them. Set in the mono face and sunken
+     like a readout. */
   .n {
-    display: block;
+    display: inline-block;
     margin-bottom: var(--s2);
+    padding: 1px 7px;
+    background: var(--select-bg);
+    color: var(--select-text);
     font-family: var(--font-mono);
-    font-size: 1.6rem;
-    font-weight: 500;
-    line-height: 1;
-    color: var(--accent);
+    font-size: 15px;
+    line-height: 1.3;
   }
 
-  .tile h2 {
+  h2 {
     margin-bottom: var(--s2);
-    font-family: var(--font-display);
-    font-size: 1.05rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    line-height: 1.3;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.35;
   }
 
   .served,
   .changed {
-    font-size: 0.88rem;
-    line-height: 1.6;
+    font-size: 13px;
+    line-height: 1.55;
   }
 
   .served {
-    margin-bottom: 0.5rem;
-    color: var(--text-faint);
-  }
-
-  .changed {
-    color: var(--text-muted);
+    margin-bottom: 6px;
+    color: #444;
   }
 
   .closing {
     max-width: var(--measure);
-    padding-top: var(--s4);
-    font-size: 0.92rem;
-    line-height: 1.7;
-    color: var(--text-faint);
+    margin-top: var(--s6);
+    padding-top: var(--s3);
+    border-top: 1px solid var(--ui-shadow);
+    box-shadow: 0 -1px 0 var(--ui-highlight) inset;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
   }
 
   @media (max-width: 900px) {

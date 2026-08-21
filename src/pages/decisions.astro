@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Page from '../layouts/Page.astro';
+import Fieldset from '../components/Fieldset.astro';
 
 const entries = (await getCollection('decisions', ({ data }) => !data.draft)).sort(
   (a, b) => a.data.order - b.data.order
@@ -10,7 +11,7 @@ const lead =
   'A resume records program execution. This log documents strategic judgment. Eight pivotal program calls made under incomplete information, competing cross-functional priorities, and immovable launch windows.';
 ---
 
-<Page active="decisions" lead={lead}>
+<Page active="decisions" lead={lead} wide>
   <div class="log">
     {
       entries.map((entry) => (
@@ -18,18 +19,15 @@ const lead =
           <h2>{entry.data.headline}</h2>
 
           <div class="blocks">
-            <div class="block">
-              <h3>Context</h3>
+            <Fieldset legend="Context">
               <p>{entry.data.context}</p>
-            </div>
-            <div class="block">
-              <h3>The call</h3>
+            </Fieldset>
+            <Fieldset legend="The call">
               <p>{entry.data.call}</p>
-            </div>
-            <div class="block">
-              <h3>What followed</h3>
+            </Fieldset>
+            <Fieldset legend="What followed">
               <p>{entry.data.followed}</p>
-            </div>
+            </Fieldset>
           </div>
         </article>
       ))
@@ -38,37 +36,27 @@ const lead =
 </Page>
 
 <style>
-  .log {
-    border-top: 1px solid var(--border);
-  }
-
   .entry {
-    position: relative;
-    padding: var(--s4) 0;
-    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--s6);
+    margin-bottom: var(--s6);
+    /* The era's divider: a groove, not a hairline. */
+    border-bottom: 1px solid var(--ui-shadow);
+    box-shadow: 0 1px 0 var(--ui-highlight);
   }
 
-  /* Gate tick — the signature mark, carried from the metric
-     strips. Structural: it marks each entry the way a schedule
-     marks a phase boundary. */
-  .entry::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -1px;
-    width: 28px;
-    height: 2px;
-    background: var(--accent);
+  .entry:last-child {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+    box-shadow: none;
   }
 
   h2 {
-    max-width: 22ch;
-    font-family: var(--font-display);
-    font-size: clamp(1.45rem, 3vw, 2.05rem);
-    font-weight: 600;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-    margin-bottom: var(--s3);
+    max-width: 34ch;
+    margin-bottom: var(--s2);
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 1.3;
   }
 
   .blocks {
@@ -77,20 +65,9 @@ const lead =
     gap: var(--s3);
   }
 
-  h3 {
-    margin-bottom: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-  }
-
-  .block p {
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: var(--text-muted);
+  .blocks p {
+    font-size: var(--size-body);
+    line-height: 1.6;
   }
 
   @media (max-width: 900px) {
@@ -98,9 +75,11 @@ const lead =
       grid-template-columns: 1fr;
       gap: var(--s2);
     }
+  }
 
-    .block {
-      max-width: var(--measure);
+  @media (max-width: 720px) {
+    h2 {
+      font-size: 17px;
     }
   }
 </style>
