@@ -11,3 +11,6 @@ npm-debug.log*
 # that the site actually serves live in public/me/. Keep the
 # originals locally; don't carry them in git forever.
 assets/me/*.png
+
+# Local transfer folder — never part of the site.
+_zip/
