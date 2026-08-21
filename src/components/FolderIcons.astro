@@ -22,6 +22,11 @@ const { active } = Astro.props;
       </a>
     ))
   }
+
+  <button type="button" class="icon help" aria-label="Ask about Tia's experience" disabled>
+    <span class="sheet" aria-hidden="true">?</span>
+    <span class="label">Ask</span>
+  </button>
 </nav>
 
 <style>
@@ -65,6 +70,44 @@ const { active } = Astro.props;
     border: 1px solid #000;
     border-bottom: none;
     box-shadow: inset 2px 2px 0 #fff;
+  }
+
+  /* A help file, not a folder — the era drew these as a page
+     with a turned corner. */
+  .help {
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    cursor: default;
+    opacity: 0.65;
+  }
+
+  .sheet {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 48px;
+    background: #fff;
+    border: 1px solid #000;
+    box-shadow: 2px 2px 0 #000;
+    font-family: var(--font-ui);
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--select-bg);
+  }
+
+  /* The folded corner. */
+  .sheet::after {
+    content: '';
+    position: absolute;
+    top: -1px;
+    right: -1px;
+    border-width: 0 0 11px 11px;
+    border-style: solid;
+    border-color: transparent transparent var(--ui-bg) transparent;
+    box-shadow: -1px 1px 0 #000;
   }
 
   .label {

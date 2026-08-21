@@ -76,7 +76,8 @@
    makes its own containing block and breaks the pinning. */
 .slot {
   position: sticky;
-  top: var(--stack-top, 22px);
+  /* Clears the pinned title bar. */
+  top: var(--stack-top, 62px);
   padding-bottom: 22px;
 }
 

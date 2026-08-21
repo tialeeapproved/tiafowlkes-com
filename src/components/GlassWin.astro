@@ -56,20 +56,28 @@ const { title, close = '/' } = Astro.props;
     );
   }
 
-  .bar,
   .body {
     position: relative;
     z-index: 1;
   }
 
+  /* The title bar holds position while the window's contents
+     scroll under it, so the page you're in is always named. It
+     runs denser than the window and carries its own blur —
+     content passing beneath would otherwise show through. */
   .bar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 13px 16px;
     border-radius: calc(var(--r-lg) - 1px) calc(var(--r-lg) - 1px) 0 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-    background: linear-gradient(to bottom, var(--g-title-from), var(--g-title-to));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+    background: rgba(233, 241, 252, 0.86);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
   }
 
   .dots {

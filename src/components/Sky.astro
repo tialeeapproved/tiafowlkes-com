@@ -11,6 +11,23 @@
   <div class="cloud layer-3"></div>
 </div>
 
+<script is:inline>
+  /* Every page is a fresh document, so the cloud animations would
+     restart from zero on each navigation. Offsetting each layer by
+     a negative delay derived from the wall clock puts it exactly
+     where it would have been had it never stopped — so moving
+     between folders looks like one continuous sky.
+     Without JS the clouds simply start at the beginning. */
+  (function () {
+    var now = Date.now();
+    var cycles = { 'layer-1': 180000, 'layer-2': 90000, 'layer-3': 45000 };
+    Object.keys(cycles).forEach(function (name) {
+      var el = document.querySelector('.' + name);
+      if (el) el.style.animationDelay = '-' + (now % cycles[name]) + 'ms';
+    });
+  })();
+</script>
+
 <style>
   #sky {
     position: fixed;

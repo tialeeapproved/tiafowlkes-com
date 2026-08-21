@@ -47,25 +47,27 @@ const folder = getFolder(active)!;
     position: relative;
     z-index: 10;
     display: flex;
-    align-items: flex-start;
-    gap: 28px;
+    flex-direction: column;
     min-height: calc(100vh - var(--taskbar-h));
     padding: 22px;
   }
 
-  /* The folders never move. They sit on the desktop, and the
-     window scrolls past them. */
+  /* The folders sit on the desktop, not in the document flow —
+     so the window can centre on the page rather than being
+     pushed to whatever space is left beside them. */
   .rail {
-    position: sticky;
+    position: fixed;
     top: 22px;
-    align-self: flex-start;
-    flex: none;
+    left: 22px;
+    z-index: 20;
   }
 
+  /* margin:auto rather than justify-content:center — it centres
+     a short page but never clips the top of a long one. */
   .stage {
-    flex: 1;
-    min-width: 0;
-    max-width: 1080px;
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
     padding-bottom: 34px;
   }
 
@@ -103,6 +105,7 @@ const folder = getFolder(active)!;
     .rail {
       position: static;
       width: 100%;
+      margin-bottom: 18px;
     }
 
     .stage {
