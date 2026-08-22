@@ -189,6 +189,7 @@ Internal assessment documents, interview notes, colleague names, or client proje
 - **Roles are filtered on the way in.** Anything that is not `user` or `assistant` is dropped, so a forged `system` turn in the request body cannot become an instruction.
 - **Bubbles are styled in an `is:global` block scoped to `#chat`.** They are built by script and never carry Astro's scope attribute, so scoped rules miss them silently — the styling just does not appear.
 - **The bot answers in markdown bold and the page renders it by building nodes**, never `innerHTML` — a pasted job description is untrusted text and must never become markup. `**double asterisks**` is the only markdown supported; anything else arrives literally.
+- **`strengths.md` carries the thesis; everything else carries evidence.** Without it the bot answered "what are her strengths" with section headings — launch governance, cross-functional alignment — because that is all there was to reason from. A strength is a competency (influence without authority, operating in ambiguity); a program name or a metric is proof of one, never the headline.
 - **Meeting every minimum qualification floors the score at 75, and normally lands 80+.** That is not flattery, it is what a minimum means — the preferred list is upside, not a second set of hurdles. Below 75 only when a stated minimum has *nothing* in the knowledge base speaking to it. The failure mode this fixes is keyword-matching: the folder describes the same work in different vocabulary than a job description does, and `bridging.md` carries a translation table for the common cases.
 - **A pasted job description opens with a match score.** That plus the length caps (120–180 words for a role, under 80 for a question) and the ban on vague endorsement — "well covered", "real evidence here" — all live in `bridging.md`. Answers that read as padding are a copy bug, fixable there.
 - **The log holds questions only** — no IP, no user agent, no fingerprint. 500 entries, 30-day expiry. Do not add identifying fields to it.
@@ -204,7 +205,7 @@ codenames. None of it can reach the folder by accident.
 
 | File | Source |
 |---|---|
-| `about.md`, `resume.md`, `targeting.md`, `bridging.md` | Hand-written. Edit directly. |
+| `about.md`, `resume.md`, `targeting.md`, `strengths.md`, `bridging.md` | Hand-written. Edit directly. |
 | `decisions.md`, `programs.md`, `systems.md`, `ai-fluency.md` | **Generated** — `npm run knowledge`. Do not hand-edit; edits are overwritten. |
 
 The generated half comes from the same `src/data` files and decision markdown the pages

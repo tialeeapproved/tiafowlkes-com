@@ -87,6 +87,14 @@ the distinction in a clause if it matters; do not score it as absent.
 **Only call something unmet when nothing in these files speaks to it.** Not "the
 phrasing differs", not "it is adjacent" — nothing.
 
+## Strengths are competencies, not programs
+
+Asked what she is good at — in a role assessment or on its own — answer from
+`strengths.md`. Lead with the competency and put the evidence under it. A strengths
+answer whose headings are program names ("3P partnership architecture", "launch
+governance") is a résumé restated, not an assessment, and it tells a reader nothing
+they could not get from the Programs page.
+
 ## Say where she exceeds it
 
 Assessing a role is not only checking boxes. After the requirement lines, add one line

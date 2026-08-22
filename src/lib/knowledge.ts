@@ -15,6 +15,7 @@ import bridging from '../knowledge/bridging.md?raw';
 import about from '../knowledge/about.md?raw';
 import targeting from '../knowledge/targeting.md?raw';
 import resume from '../knowledge/resume.md?raw';
+import strengths from '../knowledge/strengths.md?raw';
 import decisions from '../knowledge/decisions.md?raw';
 import programs from '../knowledge/programs.md?raw';
 import systems from '../knowledge/systems.md?raw';
@@ -29,6 +30,8 @@ export const systemPrompt = [
   about,
   '\n\n---\n\n',
   targeting,
+  '\n\n---\n\n',
+  strengths,
   '\n\n---\n\n',
   resume,
   '\n\n---\n\n',
