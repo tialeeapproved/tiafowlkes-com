@@ -2,10 +2,20 @@
 import Page from '../layouts/Page.astro';
 
 const lead =
-  "Paste a role and I'll tell you where Tia fits it — and where the closest evidence sits when the match isn't direct. I answer from what's on this site and her résumé, and nothing else.";
+  "Paste a job description to see how Tia's experience aligns. I'll map her direct accomplishments from her resume and portfolio, and highlight parallel evidence for adjacent skills.";
+
+/* Openers. Each one has a real answer in the knowledge base —
+   Programs, Decisions, AI Fluency, and the targeting rules — so
+   the first thing a visitor tries never comes back empty. */
+const starters = [
+  "What's the biggest launch she's owned?",
+  'How does she handle risk when the date cannot move?',
+  'What has she shipped with AI?',
+  'Is she open to roles outside New York?',
+];
 ---
 
-<Page active="ask" title="Ask" eyebrow="Match a role" lead={lead}>
+<Page active="ask" title="Ask Tia-GPT" eyebrow="Match a role" lead={lead}>
   <div class="chat pane" id="chat">
     <ol class="thread" id="thread" aria-live="polite" aria-atomic="false">
       <li class="msg bot">
@@ -14,6 +24,18 @@ const lead =
         </p>
       </li>
     </ol>
+
+    <ul class="starters" id="starters">
+      {
+        starters.map((q) => (
+          <li>
+            <button type="button" class="starter" data-q={q}>
+              {q}
+            </button>
+          </li>
+        ))
+      }
+    </ul>
 
     <form class="composer" id="composer">
       <label class="sr-only" for="q">Your question</label>
@@ -28,7 +50,7 @@ const lead =
     </form>
 
     <p class="foot meta" id="foot">
-      Answers come from this site and Tia's résumé. Nothing you type is tied to you.
+      All prompts are private and completely unlinked to your identity.
     </p>
   </div>
 </Page>
@@ -39,6 +61,7 @@ const lead =
   const input = document.getElementById('q') as HTMLTextAreaElement;
   const send = document.getElementById('send') as HTMLButtonElement;
   const foot = document.getElementById('foot') as HTMLParagraphElement;
+  const starters = document.getElementById('starters') as HTMLUListElement;
 
   const MAX_TURNS = 12;
   const STORE = 'ask.thread';
@@ -71,6 +94,18 @@ const lead =
   /* Replay anything the tab already had. */
   for (const m of messages) bubble(m.role === 'user' ? 'user' : 'bot', m.content);
 
+  /* The openers are scaffolding — once there is a conversation they
+     are noise, so they go and do not come back. */
+  const hideStarters = () => starters?.remove();
+  if (messages.length) hideStarters();
+
+  starters?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('.starter') as HTMLButtonElement | null;
+    if (!btn) return;
+    input.value = btn.dataset.q ?? '';
+    form.requestSubmit();
+  });
+
   const grow = () => {
     input.style.height = 'auto';
     input.style.height = Math.min(input.scrollHeight, 190) + 'px';
@@ -96,6 +131,7 @@ const lead =
       return;
     }
 
+    hideStarters();
     busy = true;
     send.disabled = true;
     input.value = '';
@@ -225,6 +261,37 @@ const lead =
     padding: 26px 26px 22px;
   }
 
+  /* Openers, offered once. Quiet enough that the input is still
+     obviously the main thing to do. */
+  .starters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 26px 20px;
+  }
+
+  .starter {
+    padding: 8px 14px;
+    border: 1px solid rgba(16, 23, 30, 0.12);
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.62);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--g-text-2);
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .starter:hover,
+  .starter:focus-visible {
+    border-color: rgba(16, 23, 30, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--g-text);
+  }
+
   .composer {
     display: flex;
     align-items: flex-end;
@@ -297,6 +364,10 @@ const lead =
   @media (max-width: 720px) {
     .thread {
       padding: 18px 16px 14px;
+    }
+
+    .starters {
+      padding: 0 16px 16px;
     }
 
     .composer {
