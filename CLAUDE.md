@@ -112,6 +112,10 @@ again.
 - Every claim names a program and a figure. Vague endorsement — "well covered", "real
   evidence here", "she's got" — is the failure mode.
 - Bold sparingly. If more than a fifth of the words are bold, none of them work.
+- **Her email is not a sign-off.** The default is no contact line. It appears only
+  after a role assessment, when the answer cannot be given from the folder, or when
+  something does not line up — and always as an invitation with a reason attached
+  ("reach out to her directly at…"), never the bare fact of an address.
 
 **Substance**
 
