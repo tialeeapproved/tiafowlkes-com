@@ -18,24 +18,14 @@ const starters = [
 <Page active="ask" title="Ask Tia-GPT" eyebrow="Match a role" lead={lead}>
   <div class="chat pane" id="chat">
     <ol class="thread" id="thread" aria-live="polite" aria-atomic="false">
-      <li class="msg bot">
-        <p>
-          Paste a job description, or ask about a program, a decision, or how she works.
-        </p>
+      <li class="suggest-row" id="suggest">
+        {/* One opener at a time, cycling. Clicking asks whichever is
+            showing, so the suggestion is also the shortcut. */}
+        <button type="button" class="suggest" id="suggest-btn" data-qs={JSON.stringify(starters)}>
+          <span id="suggest-text">{starters[0]}</span>
+        </button>
       </li>
     </ol>
-
-    <ul class="starters" id="starters">
-      {
-        starters.map((q) => (
-          <li>
-            <button type="button" class="starter" data-q={q}>
-              {q}
-            </button>
-          </li>
-        ))
-      }
-    </ul>
 
     <form class="composer" id="composer">
       <label class="sr-only" for="q">Your question</label>
@@ -61,7 +51,9 @@ const starters = [
   const input = document.getElementById('q') as HTMLTextAreaElement;
   const send = document.getElementById('send') as HTMLButtonElement;
   const foot = document.getElementById('foot') as HTMLParagraphElement;
-  const starters = document.getElementById('starters') as HTMLUListElement;
+  const suggest = document.getElementById('suggest') as HTMLLIElement | null;
+  const suggestBtn = document.getElementById('suggest-btn') as HTMLButtonElement | null;
+  const suggestText = document.getElementById('suggest-text') as HTMLSpanElement | null;
 
   const MAX_TURNS = 12;
   const STORE = 'ask.thread';
@@ -94,17 +86,53 @@ const starters = [
   /* Replay anything the tab already had. */
   for (const m of messages) bubble(m.role === 'user' ? 'user' : 'bot', m.content);
 
-  /* The openers are scaffolding — once there is a conversation they
-     are noise, so they go and do not come back. */
-  const hideStarters = () => starters?.remove();
-  if (messages.length) hideStarters();
+  /* The opener is scaffolding — once there is a conversation it is
+     noise, so it goes and does not come back. */
+  let rotate: number | undefined;
+  const hideStarters = () => {
+    clearInterval(rotate);
+    suggest?.remove();
+  };
 
-  starters?.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest('.starter') as HTMLButtonElement | null;
-    if (!btn) return;
-    input.value = btn.dataset.q ?? '';
-    form.requestSubmit();
-  });
+  if (messages.length) {
+    hideStarters();
+  } else if (suggestBtn && suggestText) {
+    const questions: string[] = JSON.parse(suggestBtn.dataset.qs ?? '[]');
+    let i = 0;
+    let paused = false;
+
+    const label = () => suggestBtn.setAttribute('aria-label', `Ask: ${questions[i]}`);
+    label();
+
+    /* Cross-fade: the text swaps while it is invisible, so the width
+       change never reads as a jump. */
+    const advance = () => {
+      if (paused || questions.length < 2) return;
+      suggestText.classList.add('fading');
+      setTimeout(() => {
+        i = (i + 1) % questions.length;
+        suggestText.textContent = questions[i];
+        label();
+        suggestText.classList.remove('fading');
+      }, 320);
+    };
+
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!still) rotate = window.setInterval(advance, 5000);
+
+    /* Hold still while someone is deciding whether to click it. */
+    const hold = () => (paused = true);
+    const release = () => (paused = false);
+    suggestBtn.addEventListener('mouseenter', hold);
+    suggestBtn.addEventListener('mouseleave', release);
+    suggestBtn.addEventListener('focus', hold);
+    suggestBtn.addEventListener('blur', release);
+
+    suggestBtn.addEventListener('click', () => {
+      input.value = questions[i];
+      form.requestSubmit();
+    });
+  }
 
   const grow = () => {
     input.style.height = 'auto';
@@ -261,35 +289,43 @@ const starters = [
     padding: 26px 26px 22px;
   }
 
-  /* Openers, offered once. Quiet enough that the input is still
-     obviously the main thing to do. */
-  .starters {
+  /* One opener at a time, cycling every five seconds. Shaped like
+     the assistant's own bubble, because that is what it is — a
+     suggestion — and clicking it asks the question. */
+  .suggest-row {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 0 26px 20px;
   }
 
-  .starter {
-    padding: 8px 14px;
-    border: 1px solid rgba(16, 23, 30, 0.12);
-    border-radius: 100px;
-    background: rgba(255, 255, 255, 0.62);
+  .suggest {
+    max-width: 42rem;
+    padding: 13px 18px;
+    border: 1px solid rgba(16, 23, 30, 0.07);
+    border-radius: 16px;
+    border-bottom-left-radius: 5px;
+    background: rgba(255, 255, 255, 0.72);
     font: inherit;
-    font-size: 13px;
-    font-weight: 400;
-    line-height: 1.4;
+    font-size: 14px;
+    line-height: 1.65;
     color: var(--g-text-2);
     text-align: left;
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    transition: background 0.25s, border-color 0.25s, color 0.25s;
   }
 
-  .starter:hover,
-  .starter:focus-visible {
-    border-color: rgba(16, 23, 30, 0.3);
-    background: rgba(255, 255, 255, 0.9);
+  .suggest:hover,
+  .suggest:focus-visible {
+    border-color: rgba(16, 23, 30, 0.24);
+    background: rgba(255, 255, 255, 0.95);
     color: var(--g-text);
+  }
+
+  .suggest span {
+    display: block;
+    transition: opacity 0.32s ease;
+  }
+
+  .suggest span.fading {
+    opacity: 0;
   }
 
   .composer {
@@ -364,10 +400,6 @@ const starters = [
   @media (max-width: 720px) {
     .thread {
       padding: 18px 16px 14px;
-    }
-
-    .starters {
-      padding: 0 16px 16px;
     }
 
     .composer {
