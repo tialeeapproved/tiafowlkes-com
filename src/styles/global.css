@@ -141,6 +141,28 @@ a {
   margin-bottom: 0;
 }
 
+/* --- navigation ---
+   Opening a folder cross-fades instead of cutting. This is the native
+   cross-document transition, not a client-side router: every navigation
+   is still a real page load, so the `data-from` script in the head still
+   runs, the sky still sets its clock, and nothing needs hydrating.
+   Browsers without support simply cut, exactly as before. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.32s;
+  animation-timing-function: ease;
+}
+
+/* The sky and the taskbar are identical on every page, so cross-fading
+   the whole document is invisible on them and reads as the window
+   itself dissolving. That is the intent — do not name sub-elements as
+   separate transition groups expecting them to move; they do not move,
+   they are already in the same place. */
+
 /* --- motion --- */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -148,5 +170,10 @@ a {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  /* A cross-fade is motion too. */
+  @view-transition {
+    navigation: none;
   }
 }

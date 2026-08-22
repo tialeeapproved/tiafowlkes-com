@@ -82,6 +82,23 @@
   padding-bottom: 22px;
 }
 
+/* Phone and small tablet: no pinning.
+   The stack needs the card to be shorter than the scroll container —
+   the whole effect is one card holding still while the next rides over
+   it. On a phone the window is short and the cards are long, so a
+   sticky card pins at the top with its own bottom below the fold and
+   nothing scrolls it back into view. The text is simply unreachable.
+   A plain column is also the better read at this width, so this is not
+   a compromise. Do not lower this breakpoint to buy the effect back on
+   tablets without checking the tallest card against the shortest
+   window. */
+@media (max-width: 900px) {
+  .slot {
+    position: static;
+    padding-bottom: 16px;
+  }
+}
+
 /* A stacked card slides over the one before it, so it has to
    occlude — a translucent card would ghost the text underneath.
    These run near-opaque. The glass reading comes from the window

@@ -181,9 +181,71 @@ const { state = 'in' } = Astro.props;
     }
   }
 
+  /* ---- tablet and phone ----
+     Below 1180px she does not fit beside a window, so on the folder
+     pages she is simply not there — `.out` is the state those pages
+     render, and a full-height figure over a near-full-screen window
+     would cover the content it is meant to introduce.
+
+     The landing page is the opposite case: the folders moved to a strip
+     across the top and left the whole screen empty under them. So `.in`
+     stays, at a size that clears the strip, with the bubble moved above
+     her head — there is no room for it beside her at this width. */
   @media (max-width: 1180px) {
-    .me {
+    .out {
       display: none;
+    }
+
+    .me.in {
+      right: 0;
+      left: 0;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .me.in img {
+      height: min(52vh, 460px);
+    }
+
+    .me.in .bubble {
+      margin-top: 0;
+      margin-bottom: 10px;
+      max-width: min(78vw, 300px);
+      text-align: center;
+    }
+
+    /* The tail turns to point down at her rather than sideways. */
+    .me.in .bubble::before,
+    .me.in .bubble::after {
+      top: auto;
+      right: auto;
+      left: 50%;
+      margin-left: -9px;
+      border: 9px solid transparent;
+      border-bottom: 0;
+    }
+
+    .me.in .bubble::before {
+      bottom: -10px;
+      border-top-color: rgba(16, 23, 30, 0.12);
+    }
+
+    .me.in .bubble::after {
+      bottom: -9px;
+      border-top-color: rgba(255, 255, 255, 0.94);
+    }
+  }
+
+  /* Under ~380px her head starts crowding the folder strip. */
+  @media (max-width: 400px) {
+    .me.in img {
+      height: min(44vh, 380px);
+    }
+
+    .me.in .bubble {
+      font-size: 12px;
+      padding: 10px 12px;
     }
   }
 </style>

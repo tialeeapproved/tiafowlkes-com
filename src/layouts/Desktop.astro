@@ -20,16 +20,13 @@ import { site } from '../data/site';
 </Base>
 
 <style>
+  /* The inset comes from `--desk-x` / `--desk-y`, shared with
+     `.workspace` on the folder pages, so the folder strip sits in
+     exactly the same place before and after a navigation. */
   .desktop {
     position: relative;
     z-index: 10;
     min-height: calc(100vh - var(--taskbar-h));
-    padding: 22px;
-  }
-
-  @media (max-width: 720px) {
-    .desktop {
-      padding: 18px 14px;
-    }
+    padding: var(--desk-y) var(--desk-x);
   }
 </style>

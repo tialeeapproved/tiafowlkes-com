@@ -64,6 +64,30 @@
      the folders on a narrow laptop or an iPad. */
   --rail-w: 116px;
   --measure: 74ch;
+
+  /* The inset from the screen edge to the desktop chrome — the folder
+     rail on every page, and the window frame on content pages. It is a
+     token because two different layouts position against it: `.desktop`
+     on the landing page and `.workspace` on the folders. When they each
+     carried their own values they drifted, and the folder strip visibly
+     jumped 4px left and 8px up on every navigation. The desktop must be
+     identical on every page; this is what makes that literally true. */
+  --desk-x: 22px;
+  --desk-y: 22px;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --desk-x: 14px;
+    --desk-y: 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --desk-x: 10px;
+    --desk-y: 10px;
+  }
 }
 
 /* ============================================================

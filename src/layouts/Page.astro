@@ -62,7 +62,8 @@ const kicker = eyebrow ?? folder!.eyebrow;
        does — so the gap around the frame is always visible. */
     height: calc(100vh - var(--taskbar-h));
     height: calc(100dvh - var(--taskbar-h));
-    padding: 22px;
+    /* Shared with `.desktop` on the landing page — see `--desk-x`. */
+    padding: var(--desk-y) var(--desk-x);
   }
 
   /* The folders sit on the desktop, not in the document flow —
@@ -70,8 +71,8 @@ const kicker = eyebrow ?? folder!.eyebrow;
      pushed to whatever space is left beside them. */
   .rail {
     position: fixed;
-    top: 22px;
-    left: 22px;
+    top: var(--desk-y);
+    left: var(--desk-x);
     z-index: 20;
   }
 
@@ -122,7 +123,6 @@ const kicker = eyebrow ?? folder!.eyebrow;
   @media (max-width: 900px) {
     .workspace {
       gap: 16px;
-      padding: 14px 14px 16px;
     }
 
     .rail {
@@ -152,7 +152,6 @@ const kicker = eyebrow ?? folder!.eyebrow;
 
   @media (max-width: 560px) {
     .workspace {
-      padding: 10px 10px 12px;
       gap: 12px;
     }
 

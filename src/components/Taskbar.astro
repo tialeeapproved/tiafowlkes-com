@@ -103,10 +103,89 @@ import { site } from '../data/site';
     cursor: default;
   }
 
-  /* On a phone the bar only has room for the name. */
+  /* ---- phone ----
+     The bar has room for one fact, not three. Rather than dropping
+     them, they take turns in the same slot: each holds for about six
+     seconds, so a reader who glances twice sees two different facts and
+     one who stays sees all three. Stacked absolutely so the bar never
+     changes width as they swap — a taskbar that reflows every six
+     seconds would be worse than showing nothing. */
   @media (max-width: 720px) {
+    /* `.start` is content-sized by default, so a `flex: 1` on `.facts`
+       alone resolves against a zero basis and the text renders at no
+       width at all — present in the DOM, fully opaque, invisible. The
+       grow has to start here. */
+    .start {
+      flex: 1;
+      min-width: 0;
+    }
+
     .facts {
-      display: none;
+      position: relative;
+      display: block;
+      flex: 1;
+      min-width: 0;
+      height: 15px;
+      padding-left: 10px;
+      font-size: 11px;
+    }
+
+    .facts span {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 0;
+      opacity: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      animation: fact-cycle 18s infinite;
+    }
+
+    /* Each waits out the two before it. */
+    .facts span:nth-child(2) {
+      animation-delay: 6s;
+    }
+
+    .facts span:nth-child(3) {
+      animation-delay: 12s;
+    }
+
+    /* The separator belongs to a row, and this is not one. */
+    .facts span + span::before {
+      content: none;
+    }
+  }
+
+  /* 18s cycle, three facts: about a second to fade, five to hold. */
+  @keyframes fact-cycle {
+    0%,
+    1% {
+      opacity: 0;
+    }
+    5%,
+    30% {
+      opacity: 1;
+    }
+    34%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Rotating text is motion. Reduced-motion readers get the first
+     fact, held still. */
+  @media (prefers-reduced-motion: reduce) {
+    .facts span {
+      animation: none;
+    }
+
+    .facts span:first-child {
+      opacity: 1;
+    }
+
+    .facts span:not(:first-child) {
+      opacity: 0;
     }
   }
 </style>
