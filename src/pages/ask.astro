@@ -72,11 +72,30 @@ const starters = [
     } catch {}
   };
 
+  /* The bot writes **bold** to mark the load-bearing terms. Render it
+     by building nodes — never innerHTML — so a stray angle bracket in
+     a pasted job description can never become markup. */
+  function render(el: HTMLElement, text: string) {
+    el.textContent = '';
+    const parts = text.split(/\*\*([^*]+)\*\*/g);
+    parts.forEach((part, i) => {
+      if (!part) return;
+      if (i % 2 === 1) {
+        const b = document.createElement('strong');
+        b.textContent = part;
+        el.append(b);
+      } else {
+        el.append(document.createTextNode(part));
+      }
+    });
+  }
+
   function bubble(role: 'user' | 'bot', text: string) {
     const li = document.createElement('li');
     li.className = `msg ${role}`;
     const p = document.createElement('p');
-    p.textContent = text;
+    if (role === 'bot') render(p, text);
+    else p.textContent = text;
     li.append(p);
     thread.append(li);
     li.scrollIntoView({ block: 'end', behavior: 'smooth' });
@@ -155,7 +174,7 @@ const starters = [
     if (!question || busy) return;
 
     if (messages.length >= MAX_TURNS) {
-      bubble('bot', 'That’s as far as one conversation goes. Email tiafowlkes@gmail.com.');
+      bubble('bot', 'That is the end of this conversation. Her email is tiafowlkes@gmail.com.');
       return;
     }
 
@@ -188,15 +207,15 @@ const starters = [
         const { done, value } = await reader.read();
         if (done) break;
         answer += dec.decode(value, { stream: true });
-        out.textContent = answer;
+        render(out, answer);
         out.parentElement!.classList.remove('thinking');
         out.scrollIntoView({ block: 'end' });
       }
     } catch {
       answer =
         answer ||
-        'Something went wrong reaching the assistant. Email tiafowlkes@gmail.com — she answers.';
-      out.textContent = answer;
+        'Something went wrong reaching the assistant. Her email is tiafowlkes@gmail.com.';
+      render(out, answer);
     }
 
     out.parentElement!.classList.remove('thinking');
@@ -207,7 +226,7 @@ const starters = [
     if (left <= 3 && left > 0) {
       foot.textContent = `${Math.ceil(left / 2)} more question${left > 2 ? 's' : ''} in this conversation.`;
     } else if (left <= 0) {
-      foot.textContent = 'Conversation complete. Email tiafowlkes@gmail.com to keep going.';
+      foot.textContent = 'Conversation complete. Her email is tiafowlkes@gmail.com.';
       input.disabled = true;
     }
 
@@ -228,6 +247,11 @@ const starters = [
     font-size: 14px;
     line-height: 1.65;
     white-space: pre-wrap;
+  }
+
+  #chat .msg strong {
+    font-weight: 600;
+    color: var(--g-text);
   }
 
   #chat .msg.bot {

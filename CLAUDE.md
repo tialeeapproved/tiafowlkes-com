@@ -188,6 +188,8 @@ Internal assessment documents, interview notes, colleague names, or client proje
 - **The conversation lives in the visitor's tab**, in `sessionStorage`, and is posted in full on every turn. That is how a follow-up knows its antecedent. The server holds no conversation state and should not start.
 - **Roles are filtered on the way in.** Anything that is not `user` or `assistant` is dropped, so a forged `system` turn in the request body cannot become an instruction.
 - **Bubbles are styled in an `is:global` block scoped to `#chat`.** They are built by script and never carry Astro's scope attribute, so scoped rules miss them silently — the styling just does not appear.
+- **The bot answers in markdown bold and the page renders it by building nodes**, never `innerHTML` — a pasted job description is untrusted text and must never become markup. `**double asterisks**` is the only markdown supported; anything else arrives literally.
+- **A pasted job description opens with a match score.** That plus the length caps (120–180 words for a role, under 80 for a question) and the ban on vague endorsement — "well covered", "real evidence here" — all live in `bridging.md`. Answers that read as padding are a copy bug, fixable there.
 - **The log holds questions only** — no IP, no user agent, no fingerprint. 500 entries, 30-day expiry. Do not add identifying fields to it.
 - **`ANTHROPIC_BASE_URL`** exists so the streaming path can be exercised against a local mock without a real key. Leave it unset in production.
 

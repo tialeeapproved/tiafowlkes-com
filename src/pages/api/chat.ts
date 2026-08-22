@@ -36,7 +36,7 @@ const text = (body: string, status = 200) =>
 export const POST: APIRoute = async ({ request, clientAddress }) => {
   const key = import.meta.env.ANTHROPIC_API_KEY ?? process.env.ANTHROPIC_API_KEY;
   if (!key) {
-    return text("The assistant isn't configured yet. Email tiafowlkes@gmail.com.", 503);
+    return text("The assistant is not available yet. Her email is tiafowlkes@gmail.com.", 503);
   }
 
   /* ---- read and validate ---- */
@@ -58,7 +58,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   if (messages.length > MAX_TURNS) {
     return text(
-      "That's as far as I go in one conversation. Start a new one, or email Tia directly at tiafowlkes@gmail.com — she answers.",
+      "That is the end of this conversation. Start a new one, or contact Tia directly — her email is tiafowlkes@gmail.com.",
       429
     );
   }
@@ -67,7 +67,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   const quota = await checkDailyQuota(clientAddress ?? 'unknown', MAX_PER_DAY);
   if (!quota.allowed) {
     return text(
-      "You've reached today's limit. Email Tia directly at tiafowlkes@gmail.com.",
+      "You have reached today's limit. Her email is tiafowlkes@gmail.com.",
       429
     );
   }
@@ -105,7 +105,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     });
   } catch {
     return text(
-      "I can't reach my brain right now. Try again in a moment, or email tiafowlkes@gmail.com.",
+      "The assistant is unreachable right now. Try again shortly, or her email is tiafowlkes@gmail.com.",
       502
     );
   }
@@ -114,7 +114,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     /* Out of credits, rate limited upstream, bad key — the visitor
        does not need the detail, only a way forward. */
     return text(
-      "I'm not able to answer right now. Email Tia directly at tiafowlkes@gmail.com.",
+      "The assistant is unavailable right now. Her email is tiafowlkes@gmail.com.",
       502
     );
   }
