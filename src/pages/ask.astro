@@ -78,6 +78,11 @@ const starters = [
      a pasted job description can never become markup. */
   function render(el: HTMLElement, text: string) {
     el.textContent = '';
+    /* An odd number of markers means one never closed — mid-stream, or
+       a cut-off answer. Drop the orphan rather than printing `**`. */
+    if ((text.match(/\*\*/g) || []).length % 2 === 1) {
+      text = text.replace(/\*\*(?![\s\S]*\*\*)/, '');
+    }
     const parts = text.split(/\*\*([^*]+)\*\*/g);
     parts.forEach((part, i) => {
       if (!part) return;

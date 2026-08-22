@@ -13,7 +13,10 @@ import { checkDailyQuota, logQuestion } from '../../lib/store';
 export const prerender = false;
 
 const MODEL = 'claude-sonnet-5';
-const MAX_TOKENS = 1024;
+/* A full role assessment runs longer than it looks. At 1024 the model
+   was being cut mid-word — the visible symptom was a stray `**` where
+   a bold marker never closed. */
+const MAX_TOKENS = 1600;
 
 /* Two caps. Neither is the real spend ceiling — that is the
    monthly limit set in the Anthropic console, which holds even

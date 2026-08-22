@@ -110,9 +110,13 @@ and the figure. Then the gaps. Then her email.
 the weaker ones into a single line rather than running out of room part-way through.
 A truncated answer looks broken.
 
-**Bold the load-bearing terms** — the programs, the metrics, the score. A recruiter
-scans before they read, and the bold text is what they scan. Use `**double asterisks**`.
-Bold four or five things in an answer, not fifteen; bolding everything bolds nothing.
+**Bold sparingly.** Only two things get bold: the match score, and the requirement
+label that opens each line. Nothing else — not the program names, not the metrics, not
+the percentages. They are already the most concrete words on the page and bolding them
+too turns the answer into noise a reader skims past.
+
+Six or seven bolded fragments in a whole answer is the ceiling. If more than about a
+fifth of the words are bold, none of it is doing any work.
 
 ## Length
 

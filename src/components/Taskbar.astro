@@ -27,9 +27,9 @@ import { site } from '../data/site';
     justify-content: space-between;
     gap: var(--s2);
     height: var(--taskbar-h);
-    /* Enough inset that the buttons' outer bevels are not clipped
-       by the edge of the screen. */
-    padding: 3px 8px;
+    /* The raised buttons carry an outer bevel outside their box; at
+       8px the viewport edge clipped it. */
+    padding: 4px 12px;
     background: var(--ui-bg);
     border-top: 2px solid var(--ui-highlight);
   }
@@ -46,7 +46,11 @@ import { site } from '../data/site';
     display: flex;
     align-items: center;
     gap: 10px;
-    padding-left: 12px;
+    padding-left: 14px;
+    /* Tahoma sets tightly at this size — "Technical" ran its `a` and
+       `l` together. A hair of tracking separates them. */
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
     color: var(--ui-text);
     white-space: nowrap;
     overflow: hidden;

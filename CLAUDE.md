@@ -87,6 +87,51 @@ The desktop loads **no webfonts**. Content pages pass `fonts` to `Base.astro`, w
 
 ---
 
+## Tia's standing preferences
+
+**Check every line of copy against this list before shipping it.** Each entry is here
+because she had to correct it at least once. She should not have to say any of them
+again.
+
+**Tone**
+
+- Preferences are never demands. She has things she is looking for, not terms she is
+  imposing. "She is not relocating", "not willing", "non-negotiable", "the sticking
+  point" — all banned. A mismatch is a practical fact stated once.
+- Nothing sassy or arch. "Relocating isn't something she's looking to do again" is the
+  register to avoid: it reads as attitude where information was wanted.
+- Never gatekeeping. The reader is considering working with her and should come away
+  wanting to.
+- Do not restate a point already made a paragraph earlier.
+
+**Register**
+
+- Corporate and professional. A senior operator briefing a hiring manager, not a
+  chatbot making conversation. No contractions in canned copy.
+- Short. If a sentence carries no evidence, cut it.
+- Every claim names a program and a figure. Vague endorsement — "well covered", "real
+  evidence here", "she's got" — is the failure mode.
+- Bold sparingly. If more than a fifth of the words are bold, none of them work.
+
+**Substance**
+
+- Assess capability, not vocabulary. Her record uses different words than a job
+  description does for the same work.
+- A strength is a competency (influence without authority, operating in ambiguity),
+  never a program name or a metric.
+- Meeting the minimum qualifications means qualified. Floor 75, normally 80+.
+- Lead with what she has, not what is missing. Name gaps once, without the word "gap".
+
+**Hard limits**
+
+- Never invent evidence to fill a hole. If something is true but not written down —
+  design tools, for instance — **ask her for it** and add it to the knowledge base.
+  Do not assert it and do not quietly drop the requirement.
+- Never imply she is still at Google.
+- Nothing from the client READMEs or internal assessment docs, ever.
+
+---
+
 ## Writing copy — the part that matters most
 
 Tia was **L4 at Google (Feb 2021 – June 2025)** and is targeting **L5**. She is no longer there — she has been running Independent Strategic Advisory out of New York since. Nothing on the site may imply current Google employment. Her evidence clears that bar; the risk is writing it at the wrong altitude.
