@@ -196,9 +196,15 @@ const { state = 'in' } = Astro.props;
       display: none;
     }
 
+    /* Anchored right, the way she is on a desktop — not centred.
+       The column is only as wide as the bubble, so centring inside it
+       still leaves the whole group hard against the right edge, and the
+       tail can stay at 50% and always land on her. Pinning her to the
+       right and the bubble separately would need her rendered width,
+       which moves with the viewport height. */
     .me.in {
-      right: 0;
-      left: 0;
+      right: 2vw;
+      left: auto;
       flex-direction: column;
       align-items: center;
       gap: 0;
@@ -211,7 +217,7 @@ const { state = 'in' } = Astro.props;
     .me.in .bubble {
       margin-top: 0;
       margin-bottom: 10px;
-      max-width: min(78vw, 300px);
+      max-width: min(62vw, 240px);
       text-align: center;
     }
 
