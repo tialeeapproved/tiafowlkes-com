@@ -22,7 +22,7 @@ Built with: Claude Code, Gemini.
 
 *Custom web platforms and user interfaces built via AI-driven development workflows*
 
-Sites designed and shipped end to end: Living on Purpose (built with Claude Code), Frequency 313 (built with Claude Code), Two-Six Project, Zoe's Kitchen, 5 Star Carolina, Purposely Prepared, Jive Turkeys, JC-Eyes, Brows by Lolo.
+Sites designed and shipped end to end: tiafowlkes.com (built with Claude Code), Living on Purpose (built with Claude Code), Frequency 313 (built with Claude Code), Two-Six Project, Zoe's Kitchen, 5 Star Carolina, Purposely Prepared, Jive Turkeys, JC-Eyes, Brows by Lolo.
 
 ## Working toolkit
 

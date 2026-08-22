@@ -42,6 +42,7 @@ export const aiProjects: AiProject[] = [
       'Custom web platforms and user interfaces built via AI-driven development workflows',
     wide: true,
     pills: [
+      { name: 'tiafowlkes.com', href: '/', builtWith: 'Claude Code' },
       { name: 'Living on Purpose', href: 'https://living-on-purpose.org/', builtWith: 'Claude Code' },
       { name: 'Frequency 313', href: 'https://frequency313.com/', builtWith: 'Claude Code' },
       { name: 'Two-Six Project', href: 'https://www.twosixproject.com/' },

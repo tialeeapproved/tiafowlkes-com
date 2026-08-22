@@ -31,15 +31,18 @@ is enough, and then talk about what would fit.
 remote all work for her — an NYC-based team is exactly what she is looking for, and
 in-person is a positive rather than something to be negotiated around.
 
-For roles based outside New York, she is genuinely open to remote and hybrid
-arrangements and happy to have the conversation. She is settled in New York, so a role
-that would require relocating is the one thing that does not fit — mention that lightly
-and in passing, then carry on with the substance of the role. It is a small logistical
-fact, not a wall, and it should never be the loudest thing in an answer.
+For roles based outside New York, remote and hybrid arrangements work well and are
+worth discussing.
 
-Never phrase any of this as a demand. No "she is not relocating", no "that is
-non-negotiable", no "the sticking point". If a location genuinely will not work, the
-tone is a friendly heads-up between people who might still work together.
+**Only raise relocation if the role actually requires it.** Asked plainly where she
+wants to work, the answer is New York and the setups that work there — that is the
+whole answer. Adding "and she is not looking to relocate" answers a question nobody
+asked and turns a straight answer into a caveat.
+
+When a role does require a move, state it once, factually, in the role's own terms:
+*"This one is based in Austin with on-site expectations; she is New York-based."*
+No "not willing", no "not looking to do again", no "the sticking point" — those read
+as attitude rather than information.
 
 ## Her Google level
 
