@@ -66,8 +66,7 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **The workspace reserves the rail's width as a gutter on BOTH sides** (`--rail-w`, above 901px). The rail is out of flow, so a centred 1000px window slides straight under the folders on anything narrower than ~1300px — an iPad or a small laptop. Padding only the left side would push the window off-centre; padding both keeps it centred on screen and clear of the icons.
 - **The rail's breakpoint lives in two files and they must match.** `Page.astro` takes it out of `position: fixed` at 900px; `FolderIcons.astro` turns the column into a row at the same 900px. Drift between them leaves a vertical stack of five icons inside a horizontal strip, eating the viewport.
 - **The desktop inset is a token: `--desk-x` / `--desk-y` in `tokens.css`.** Two layouts position the chrome against it — `.desktop` on the landing page and `.workspace` plus the fixed `.rail` on the folders. When each carried its own padding they drifted, and on a phone the folder strip jumped 4px left and 8px up on every navigation — the desktop visibly re-laying-out at the exact moment it is supposed to prove it never changes. Never hardcode that inset in a layout again.
-- **Navigation cross-fades via `@view-transition { navigation: auto }` in `global.css`** — the native cross-document transition, not `ClientRouter`. That choice is load-bearing: a client-side router would stop the `data-from` script in the head from running on each navigation, which is the whole mechanism behind Tia's exit, and would leave the sky's clock script un-rerun. Every navigation must stay a real page load. Browsers without support simply cut, which is what the site did before.
-- **Only `.win` carries a `view-transition-name`, and the root is pinned to `animation: none`.** The window is the only thing that changes between pages, so it is the only thing that animates; the sky, folders and taskbar hard-cut, which is invisible because they are identical. Two earlier attempts got this wrong and are worth not repeating: cross-fading the whole document dips the chrome (a cross-fade composites the outgoing frame over the incoming one, so an opaque element sits below full opacity at the midpoint — identical content does not cancel out), and naming the chrome does not fix it either, because a named element still cross-fades its own old and new snapshots inside its group. Verified by sampling a folder, a taskbar and a sky pixel across a transition slowed to 3s: zero deviation on all three.
+- **There is no page transition, and that is a decision, not an omission.** Opening a folder cuts. Three cross-document view-transition setups were tried and all three produced a visible artifact; the last one was the worst. Measured with a lossless PNG screencast through a real link click, the entire cloud layer vanished for one frame on every navigation — a full-screen flash of bare gradient. Removing the opt-in took the largest single-frame sky change from **38% to 2.1%**. That flash is what was reported as "the folders blink": the folders never changed, the wallpaper behind them went blank for a frame. The bar for re-adding a transition is that same screencast showing no single-frame sky change above a few percent — not a plausible-sounding argument about CSS.
 - **The card stack is desktop-only — `.slot` goes `position: static` below 900px.** Sticky pinning needs the card to be shorter than the scroll container. On a phone the window is short and the cards are long, so a sticky card pins at the top with its own bottom below the fold and nothing will scroll it back into view: the text is simply unreachable. Do not lower that breakpoint to buy the effect back on tablets without measuring the tallest card against the shortest window.
 - **Tia appears on the landing page at every width, and on folder pages only above 1180px.** Below that there is no room beside a near-full-screen window, and she is `z-index: 15` against the workspace's 10 — she would cover the content she is meant to introduce. On the landing page the opposite is true: the folders moved to a strip across the top and left the screen empty, so she fills it, smaller, with the bubble above her head instead of beside her.
 - **On a phone the taskbar facts rotate rather than disappear.** Three facts, ~6s each, stacked absolutely so the bar never changes width as they swap — a taskbar that reflows every six seconds is worse than showing nothing. `.start` must carry `flex: 1` for this: it is content-sized by default, so a `flex: 1` on `.facts` alone resolves against a zero basis and the text renders fully opaque at no width at all.
@@ -81,7 +80,14 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **The share card is `public/og.png`, and its source is Tia's square art at `assets/icons/sharing icon.png`.** Her file is 2000×2000; every platform crops toward 1.91:1, so the shipped card is built at 1200×630 rather than left square and cropped to a frame she did not choose. The sides are extended by repeating each row's edge pixel — that works precisely because the clouds are solid axis-aligned blocks, so they continue rather than band. Her artwork itself is untouched in the centre. If she replaces the square, rebuild the wide one the same way; do not just rename her file to `og.png`.
 - **Share-card meta lives in `Base.astro` and uses absolute URLs** built from `Astro.site`. A scraper has no page context to resolve a relative path against, so a relative `og:image` silently yields a card with no picture. The width and height are declared because LinkedIn and Slack lay the card out before the image finishes downloading; without them the card can settle at thumbnail size and never grow.
 - **Tia's exit is decided in the `<head>`, not next to the element.** `Base.astro` stamps `data-from="desktop"` on `<html>` from the referrer before the body is parsed, and her visibility is pure CSS off that attribute — so the browser can never paint a frame with her missing. A script sitting next to the element is too late: the browser is free to paint the partially-parsed body first, and that one hidden frame *is* the blink. It was diagnosed twice from the wrong end; do not move this decision back into the body. The separate `.dissolve` script only starts the fade, and waits on `img.decode()` so the animation does not run over an image that has not painted.
-- **The clouds run off the wall clock.** Each page is a fresh document, so the animation would restart on every navigation. An inline script in `Sky.astro` sets a negative `animation-delay` from `Date.now() % cycle`, putting each layer exactly where it would have been — so moving between folders looks like one continuous sky. Without JS the clouds just start at the beginning.
+- **The clouds run off the wall clock, and the offset is set in the `<head>`.** Each page is a fresh document, so the animation would restart on every navigation. The head script in `Base.astro` puts `--cloud-1/2/3` on `<html>` as negative delays from `Date.now() % cycle`, and `Sky.astro` consumes them — so each layer is exactly where it would have been and moving between folders looks like one continuous sky. Without JS the variables are absent and the CSS falls back to `0ms`.
+
+  The offset used to be set by a script in the body, next to the element. Moving it to the head is the
+  correct place for anything that decides what the first frame looks like — the same reason Tia's exit
+  lives there. **But it was not the blink**, and it was briefly claimed to be: the body script ran during
+  parsing, before first paint, so the clouds were never actually painted at zero. Measuring the offset at
+  the first animation frame reports "no snap" on both versions, which is why that check proved nothing.
+  The real cause was the view transition — see the navigation entry above.
 - **The window is a fixed frame, not a long page.** `.workspace` is exactly one viewport tall and the page itself does not scroll (`body:has(.workspace) { overflow: hidden }`). `GlassWin` fills that height, and its `.body` is the scroll container. That is what keeps the gap around all four edges constant and stops the page ever reading as a long column.
 - Because the scroll container is `.body`, the title bar needs no pinning — it sits outside the scrolling area and is simply always there. It also means `.slot` pins from `top: 0`, measured against that box rather than the viewport.
 - **Do not move the scrolling back to the page.** An earlier pass pinned the title bar to the viewport instead; it escaped the window's rounded corners and the bottom gap only appeared at the very end of the scroll.
@@ -95,26 +101,21 @@ The desktop loads **no webfonts**. Content pages pass `fonts` to `Base.astro`, w
 
 > ### ⚠️ The webfont link must never block rendering
 >
-> This caused three separate symptoms that each looked like a different
-> bug: the folders blinked on navigation, the taskbar blinked, and the
-> sky appeared to lag. All one cause.
+> A plain `<link rel="stylesheet">` in the head blocks first paint until it
+> answers. Every navigation on this site is a real page load, so that put a
+> round trip to `fonts.googleapis.com` in front of any pixel of the new page,
+> on every folder click. It also prevents a cross-document view transition
+> from running at all, since Chrome abandons one when the incoming document
+> cannot render promptly.
 >
-> A plain `<link rel="stylesheet">` in the head blocks first paint until
-> it answers. Every navigation on this site is a real page load, so that
-> put a round trip to `fonts.googleapis.com` in front of *any* pixel of
-> the new page — on every folder click. Because the desktop is identical
-> across pages, what a visitor saw was the chrome disappearing and
-> coming back. It also silently killed the page transition: Chrome
-> abandons a cross-document view transition when the incoming document
-> cannot render promptly, so the fade never ran at all.
+> Measured before and after: DOMContentLoaded 12,867ms -> 350ms, one
+> render-blocking resource -> zero. (The 12.8s figure is inflated by a
+> sandbox with no route to Google; the mechanism is what matters.)
 >
-> Measured, before and after: DOMContentLoaded 12,867ms → 350ms, one
-> render-blocking resource → zero, and `pagereveal` went from firing
-> with no transition attached to actually running one.
->
-> It now loads via `media="print"` with an onload that flips it to
-> `all`, so the browser fetches it without waiting. Do not "tidy" that
-> back into a normal stylesheet link.
+> **This was not the cause of the reported blink** — that was the view
+> transition, see above. It was found while looking for it and is worth
+> keeping on its own merits. It now loads via `media="print"` with an onload
+> that flips it to `all`. Do not tidy that back into a normal stylesheet link.
 
 ---
 

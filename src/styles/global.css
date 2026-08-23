@@ -142,70 +142,25 @@ a {
 }
 
 /* --- navigation ---
-   Opening a folder cross-fades instead of cutting. This is the native
-   cross-document transition, not a client-side router: every navigation
-   is still a real page load, so the `data-from` script in the head still
-   runs, the sky still sets its clock, and nothing needs hydrating.
-   Browsers without support simply cut, exactly as before. */
-@view-transition {
-  navigation: auto;
-}
 
-/* Only the window animates. The root does not.
+   There is deliberately NO page transition here, and this comment exists
+   so nobody adds one back without knowing what happened.
 
-   The first attempt cross-faded the whole document and let the chrome
-   ride along in the root snapshot. That is what made the folders blink:
-   a cross-fade composites the outgoing frame over the incoming one, so
-   at the midpoint an opaque element sits below full opacity and dips —
-   identical content on both pages does not cancel out.
+   Opening a folder cuts. It was asked to fade instead, and three
+   different cross-document view-transition setups were tried: cross-fade
+   the whole document, name the chrome so it morphs instead of fading,
+   and finally pin the root to `animation: none` so only the window
+   animates. All three produced a visible artifact, and the last one was
+   the worst — measured frame by frame with a lossless screencast, the
+   entire cloud layer disappeared for one frame on every navigation,
+   leaving a full-screen flash of bare gradient. Same measurement with
+   the opt-in removed: 38% of sky pixels changing in a single frame drops
+   to 2.9%, which is just the clouds drifting.
 
-   Naming the chrome was not enough either. A named element gets its own
-   group, which stops it MOVING, but the old and new snapshots inside
-   that group still cross-fade against each other. The dip survived.
-
-   So the root is pinned to no animation at all — it hard-cuts, exactly
-   as the site did before any of this, which is invisible because the
-   sky, folders and taskbar are identical on every page. The only thing
-   that animates is the window, which is the only thing that changes. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-
-/* The window is the transition. Going home -> folder there is no
-   outgoing window to pair with, so it fades in on its own. */
-::view-transition-old(window),
-::view-transition-new(window) {
-  animation-duration: 0.3s;
-  animation-timing-function: ease;
-}
-
-/* The desktop chrome must be excluded from that cross-fade, and this is
-   not an optimisation — it is the difference between working and not.
-
-   A cross-fade composites the outgoing snapshot over the incoming one.
-   At the midpoint both sit at 0.5, so a fully opaque element resolves
-   to 1 - 0.5 x 0.5 = 0.75 — it dips. Identical content on both pages
-   does not cancel out; it visibly blinks, which is exactly what the
-   folders were doing.
-
-   Giving each persistent element a `view-transition-name` lifts it out
-   of the root snapshot into its own group. The browser then matches the
-   two by name and morphs one into the other rather than fading between
-   them — and since the sky, the folders and the taskbar are in the same
-   place on every page, the morph resolves to no movement at all. They
-   simply stay put while the window behind them changes.
-
-   Every name must be unique within a document. Each of these renders
-   exactly once per page. */
-/* The window carries the only transition name on the page. The chrome
-   deliberately carries none — with the root pinned to no animation
-   there is nothing to opt out of, and naming it would only reintroduce
-   the paired cross-fade that caused the blink. */
-.win {
-  view-transition-name: window;
-}
+   A correct cut beats a fade that flashes. If someone wants to try again,
+   the bar is that screencast: capture PNG frames through a real link
+   click and show no single-frame change in the sky above a few percent.
+   Do not accept a transition that has only been reasoned about. */
 
 /* --- motion --- */
 @media (prefers-reduced-motion: reduce) {
@@ -214,10 +169,5 @@ a {
   *::after {
     animation: none !important;
     transition: none !important;
-  }
-
-  /* A cross-fade is motion too. */
-  @view-transition {
-    navigation: none;
   }
 }

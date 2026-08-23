@@ -68,6 +68,29 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
             document.documentElement.setAttribute('data-from', 'desktop');
           }
         } catch (e) {}
+
+        /* Where the clouds are is decided here for the same reason Tia's
+           visibility is: the answer has to exist before the first paint.
+
+           Each page is a fresh document, so the pan animations would
+           restart from zero on every navigation. A negative delay off
+           the wall clock puts each layer where it would have been had it
+           never stopped. That part was always right — but the script
+           setting it lived in the body, next to the element, so the
+           browser painted a frame with the clouds at zero and then
+           snapped them somewhere else. On every single folder click the
+           whole sky jumped, which is what read as the desktop blinking
+           and the background lagging.
+
+           Setting custom properties on <html> here, before the body is
+           parsed, means the very first frame is already correct. With no
+           JS the variables are simply absent and the CSS falls back to
+           0ms — the clouds start at the beginning, as before. */
+        var now = Date.now();
+        var cycles = { '--cloud-1': 180000, '--cloud-2': 90000, '--cloud-3': 45000 };
+        for (var key in cycles) {
+          document.documentElement.style.setProperty(key, '-' + (now % cycles[key]) + 'ms');
+        }
       })();
     </script>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

@@ -11,22 +11,9 @@
   <div class="cloud layer-3"></div>
 </div>
 
-<script is:inline>
-  /* Every page is a fresh document, so the cloud animations would
-     restart from zero on each navigation. Offsetting each layer by
-     a negative delay derived from the wall clock puts it exactly
-     where it would have been had it never stopped — so moving
-     between folders looks like one continuous sky.
-     Without JS the clouds simply start at the beginning. */
-  (function () {
-    var now = Date.now();
-    var cycles = { 'layer-1': 180000, 'layer-2': 90000, 'layer-3': 45000 };
-    Object.keys(cycles).forEach(function (name) {
-      var el = document.querySelector('.' + name);
-      if (el) el.style.animationDelay = '-' + (now % cycles[name]) + 'ms';
-    });
-  })();
-</script>
+{/* The clock offset is computed in the head — see Base.astro. It has to
+    be known before the first paint, or the browser draws the clouds at
+    zero and then snaps them into place. Do not move it back down here. */}
 
 <style>
   #sky {
@@ -53,18 +40,24 @@
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M10,80 h20 v-10 h10 v-10 h20 v10 h10 v-10 h20 v20 h-80 z" fill="rgba(255,255,255,0.28)" shape-rendering="crispEdges"/></svg>');
     background-size: 300px;
     animation: pan1 180s linear infinite;
+    /* Offset set on <html> in the head, before first paint. */
+    animation-delay: var(--cloud-1, 0ms);
   }
 
   .layer-2 {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><path d="M0,90 h15 v-15 h15 v-15 h30 v15 h15 v-15 h30 v30 h-105 z" fill="rgba(255,255,255,0.4)" shape-rendering="crispEdges"/></svg>');
     background-size: 400px;
     animation: pan2 90s linear infinite;
+    /* Offset set on <html> in the head, before first paint. */
+    animation-delay: var(--cloud-2, 0ms);
   }
 
   .layer-3 {
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><path d="M-20,120 h40 v-20 h30 v-20 h50 v20 h40 v-30 h40 v50 h-200 z" fill="rgba(255,255,255,0.55)" shape-rendering="crispEdges"/></svg>');
     background-size: 600px;
     animation: pan3 45s linear infinite;
+    /* Offset set on <html> in the head, before first paint. */
+    animation-delay: var(--cloud-3, 0ms);
   }
 
   @keyframes pan1 {
