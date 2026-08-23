@@ -23,6 +23,35 @@ const raw = (Astro.url.searchParams.get('key') ?? '').trim();
 const given = [raw, raw.replace(/ /g, '+')];
 const ok = Boolean(expected) && given.includes(expected);
 
+/* Diagnostic for a mismatch. Lengths and a character-class summary only —
+   never the values, and never enough to reconstruct either one. It is here
+   because "wrong key" and "right key mangled in transit" render identically,
+   and guessing between them from the outside wasted several rounds.
+
+   Equal lengths that still do not match means the two strings are genuinely
+   different. A short `given` means the URL truncated it — `#` ends a query,
+   and `&` starts a new parameter, so a key containing either arrives cut off. */
+const classes = (s: string) =>
+  [
+    /[A-Za-z]/.test(s) ? 'letters' : null,
+    /[0-9]/.test(s) ? 'digits' : null,
+    /[+/=]/.test(s) ? 'base64 punctuation' : null,
+    /[^A-Za-z0-9+/=]/.test(s) ? 'other characters' : null,
+  ]
+    .filter(Boolean)
+    .join(', ') || 'empty';
+
+const diagnosis = !ok && raw
+  ? {
+      expectedLen: expected.length,
+      givenLen: raw.length,
+      expectedClasses: classes(expected),
+      givenClasses: classes(raw),
+      truncated: raw.length > 0 && raw.length < expected.length,
+      sameLength: raw.length === expected.length,
+    }
+  : null;
+
 const entries = ok ? await readLog() : [];
 const fmt = (iso: string) =>
   new Date(iso).toLocaleString('en-US', {
@@ -43,8 +72,38 @@ const fmt = (iso: string) =>
               tell them apart from outside. */}
           <p>
             {expected
-              ? 'That key does not match. Compare it against ASK_LOG_KEY in Vercel — reveal the value there rather than trusting what you pasted, since a trailing newline is easy to catch and impossible to see.'
+              ? 'That key does not match.'
               : 'ASK_LOG_KEY is not set on this deployment, so there is nothing to check the key against. Add it in Vercel and redeploy.'}
+          </p>
+
+          {diagnosis && (
+            <dl class="diag">
+              <div>
+                <dt>Key in Vercel</dt>
+                <dd>
+                  {diagnosis.expectedLen} characters — {diagnosis.expectedClasses}
+                </dd>
+              </div>
+              <div>
+                <dt>Key in your URL</dt>
+                <dd>
+                  {diagnosis.givenLen} characters — {diagnosis.givenClasses}
+                </dd>
+              </div>
+              <div>
+                <dt>Reading</dt>
+                <dd>
+                  {diagnosis.truncated
+                    ? 'Your URL is shorter than the stored key, so it is being cut off in transit. A key containing # or & will do this: # ends the query and & starts a new parameter. Percent-encode them as %23 and %26.'
+                    : diagnosis.sameLength
+                      ? 'Same length, different content — these are two different strings, not one mangled string. The value in Vercel is not the one you are pasting.'
+                      : 'Your URL is longer than the stored key, so something extra is coming along — usually a quote mark or a stray character copied with it.'}
+                </dd>
+              </div>
+            </dl>
+          )}
+          <p class="diag-note">
+            Lengths and character classes only. Neither key is shown.
           </p>
         </div>
       ) : (
@@ -104,6 +163,37 @@ const fmt = (iso: string) =>
     font-size: 14px;
     line-height: 1.6;
     color: #4a545f;
+  }
+
+  .diag {
+    margin: 18px 0 14px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    background: rgba(16, 23, 30, 0.05);
+  }
+
+  .diag div + div {
+    margin-top: 10px;
+  }
+
+  .diag dt {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8892a0;
+  }
+
+  .diag dd {
+    margin: 2px 0 0;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #253039;
+  }
+
+  .diag-note {
+    font-size: 12px !important;
+    color: #8892a0 !important;
   }
 
   h1 {
