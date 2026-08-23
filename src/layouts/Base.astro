@@ -74,12 +74,45 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     {
       fonts && (
         <>
+          {/* ⚠️ This stylesheet must never block rendering. Read this
+              before changing it back to a plain <link rel="stylesheet">.
+
+              A stylesheet in the head blocks first paint until it
+              answers. Because every navigation here is a real page
+              load, that meant a round trip to fonts.googleapis.com
+              before ANY pixel of the new page could be drawn — on every
+              single folder click. The desktop is identical across
+              pages, so what a visitor saw was the sky, the folders and
+              the taskbar going away and coming back: the blink.
+
+              It also silently disabled the page transition. Chrome
+              abandons a cross-document view transition when the
+              incoming document cannot render promptly, so the fade was
+              never running — measured, not assumed.
+
+              `media="print"` makes the browser fetch it without waiting
+              on it; the onload flips it to apply. The page paints
+              immediately in the fallback stack and swaps when the
+              webfont lands. */}
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
           <link
-            rel="stylesheet"
+            rel="preload"
+            as="style"
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap"
           />
+          <link
+            rel="stylesheet"
+            media="print"
+            onload="this.media='all';this.onload=null"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap"
+          />
+          <noscript>
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;600&display=swap"
+            />
+          </noscript>
         </>
       )
     }

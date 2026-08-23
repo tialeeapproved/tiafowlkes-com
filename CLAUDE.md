@@ -67,7 +67,7 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - **The rail's breakpoint lives in two files and they must match.** `Page.astro` takes it out of `position: fixed` at 900px; `FolderIcons.astro` turns the column into a row at the same 900px. Drift between them leaves a vertical stack of five icons inside a horizontal strip, eating the viewport.
 - **The desktop inset is a token: `--desk-x` / `--desk-y` in `tokens.css`.** Two layouts position the chrome against it — `.desktop` on the landing page and `.workspace` plus the fixed `.rail` on the folders. When each carried its own padding they drifted, and on a phone the folder strip jumped 4px left and 8px up on every navigation — the desktop visibly re-laying-out at the exact moment it is supposed to prove it never changes. Never hardcode that inset in a layout again.
 - **Navigation cross-fades via `@view-transition { navigation: auto }` in `global.css`** — the native cross-document transition, not `ClientRouter`. That choice is load-bearing: a client-side router would stop the `data-from` script in the head from running on each navigation, which is the whole mechanism behind Tia's exit, and would leave the sky's clock script un-rerun. Every navigation must stay a real page load. Browsers without support simply cut, which is what the site did before.
-- **The desktop chrome carries a `view-transition-name` and must keep it.** `#sky`, `.icons` and `.taskbar` are each lifted into their own transition group. Without that they ride in the root snapshot and get cross-faded like everything else — and a cross-fade composites the outgoing frame over the incoming one, so at the midpoint an opaque element resolves to 1 − 0.5 × 0.5 = 0.75 and visibly dips. Identical content on both pages does not cancel out; the folders blink. With a name the browser matches the two by name and morphs instead, which resolves to no movement because they are already in the same place. Names must be unique per document — each of these renders once. This is also why the `--desk-x` token matters twice over: if the rail sat at different coordinates on the two pages, the morph would slide it.
+- **Only `.win` carries a `view-transition-name`, and the root is pinned to `animation: none`.** The window is the only thing that changes between pages, so it is the only thing that animates; the sky, folders and taskbar hard-cut, which is invisible because they are identical. Two earlier attempts got this wrong and are worth not repeating: cross-fading the whole document dips the chrome (a cross-fade composites the outgoing frame over the incoming one, so an opaque element sits below full opacity at the midpoint — identical content does not cancel out), and naming the chrome does not fix it either, because a named element still cross-fades its own old and new snapshots inside its group. Verified by sampling a folder, a taskbar and a sky pixel across a transition slowed to 3s: zero deviation on all three.
 - **The card stack is desktop-only — `.slot` goes `position: static` below 900px.** Sticky pinning needs the card to be shorter than the scroll container. On a phone the window is short and the cards are long, so a sticky card pins at the top with its own bottom below the fold and nothing will scroll it back into view: the text is simply unreachable. Do not lower that breakpoint to buy the effect back on tablets without measuring the tallest card against the shortest window.
 - **Tia appears on the landing page at every width, and on folder pages only above 1180px.** Below that there is no room beside a near-full-screen window, and she is `z-index: 15` against the workspace's 10 — she would cover the content she is meant to introduce. On the landing page the opposite is true: the folders moved to a strip across the top and left the screen empty, so she fills it, smaller, with the bubble above her head instead of beside her.
 - **On a phone the taskbar facts rotate rather than disappear.** Three facts, ~6s each, stacked absolutely so the bar never changes width as they swap — a taskbar that reflows every six seconds is worse than showing nothing. `.start` must carry `flex: 1` for this: it is content-sized by default, so a `flex: 1` on `.facts` alone resolves against a zero basis and the text renders fully opaque at no width at all.
@@ -92,6 +92,29 @@ Because the glass is light, the ink inside it is dark. Do not carry white-on-dar
 - Responsive to 380px. Visible keyboard focus. Real contrast.
 
 The desktop loads **no webfonts**. Content pages pass `fonts` to `Base.astro`, which pulls Inter and JetBrains Mono for the glass windows.
+
+> ### ⚠️ The webfont link must never block rendering
+>
+> This caused three separate symptoms that each looked like a different
+> bug: the folders blinked on navigation, the taskbar blinked, and the
+> sky appeared to lag. All one cause.
+>
+> A plain `<link rel="stylesheet">` in the head blocks first paint until
+> it answers. Every navigation on this site is a real page load, so that
+> put a round trip to `fonts.googleapis.com` in front of *any* pixel of
+> the new page — on every folder click. Because the desktop is identical
+> across pages, what a visitor saw was the chrome disappearing and
+> coming back. It also silently killed the page transition: Chrome
+> abandons a cross-document view transition when the incoming document
+> cannot render promptly, so the fade never ran at all.
+>
+> Measured, before and after: DOMContentLoaded 12,867ms → 350ms, one
+> render-blocking resource → zero, and `pagereveal` went from firing
+> with no transition attached to actually running one.
+>
+> It now loads via `media="print"` with an onload that flips it to
+> `all`, so the browser fetches it without waiting. Do not "tidy" that
+> back into a normal stylesheet link.
 
 ---
 
