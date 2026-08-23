@@ -151,9 +151,33 @@ a {
   navigation: auto;
 }
 
+/* Only the window animates. The root does not.
+
+   The first attempt cross-faded the whole document and let the chrome
+   ride along in the root snapshot. That is what made the folders blink:
+   a cross-fade composites the outgoing frame over the incoming one, so
+   at the midpoint an opaque element sits below full opacity and dips —
+   identical content on both pages does not cancel out.
+
+   Naming the chrome was not enough either. A named element gets its own
+   group, which stops it MOVING, but the old and new snapshots inside
+   that group still cross-fade against each other. The dip survived.
+
+   So the root is pinned to no animation at all — it hard-cuts, exactly
+   as the site did before any of this, which is invisible because the
+   sky, folders and taskbar are identical on every page. The only thing
+   that animates is the window, which is the only thing that changes. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.32s;
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* The window is the transition. Going home -> folder there is no
+   outgoing window to pair with, so it fades in on its own. */
+::view-transition-old(window),
+::view-transition-new(window) {
+  animation-duration: 0.3s;
   animation-timing-function: ease;
 }
 
@@ -175,16 +199,12 @@ a {
 
    Every name must be unique within a document. Each of these renders
    exactly once per page. */
-.icons {
-  view-transition-name: rail;
-}
-
-.taskbar {
-  view-transition-name: taskbar;
-}
-
-#sky {
-  view-transition-name: sky;
+/* The window carries the only transition name on the page. The chrome
+   deliberately carries none — with the root pinned to no animation
+   there is nothing to opt out of, and naming it would only reintroduce
+   the paired cross-fade that caused the blink. */
+.win {
+  view-transition-name: window;
 }
 
 /* --- motion --- */

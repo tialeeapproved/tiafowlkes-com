@@ -22,7 +22,19 @@ const fmt = (iso: string) =>
   <main class="wrap">
     {
       !ok ? (
-        <p class="gate">Not found.</p>
+        <div class="gate">
+          <h1>Not found.</h1>
+          {/* Distinguishing "no key configured" from "wrong key" gives
+              away nothing — a deployment with no key set is not
+              protecting anything in the first place, and without this
+              both cases render the same page and there is no way to
+              tell them apart from outside. */}
+          <p>
+            {expected
+              ? 'That key does not match. Check ASK_LOG_KEY in Vercel, and watch for a trailing space when pasting.'
+              : 'ASK_LOG_KEY is not set on this deployment, so there is nothing to check the key against. Add it in Vercel and redeploy.'}
+          </p>
+        </div>
       ) : (
         <>
           <header>
@@ -61,7 +73,26 @@ const fmt = (iso: string) =>
     color: #10171e;
   }
 
-  .gate { color: #6b7480; }
+  /* This used to be one line of pale grey on the blue desktop, which
+     read as an empty page rather than as an answer. */
+  .gate {
+    max-width: 34rem;
+    margin-top: 12vh;
+    padding: 26px 28px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 18px 40px -22px rgba(12, 30, 50, 0.5);
+  }
+
+  .gate h1 {
+    margin-bottom: 10px;
+  }
+
+  .gate p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4a545f;
+  }
 
   h1 {
     font-size: 26px;
