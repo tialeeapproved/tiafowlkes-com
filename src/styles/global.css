@@ -157,11 +157,35 @@ a {
   animation-timing-function: ease;
 }
 
-/* The sky and the taskbar are identical on every page, so cross-fading
-   the whole document is invisible on them and reads as the window
-   itself dissolving. That is the intent — do not name sub-elements as
-   separate transition groups expecting them to move; they do not move,
-   they are already in the same place. */
+/* The desktop chrome must be excluded from that cross-fade, and this is
+   not an optimisation — it is the difference between working and not.
+
+   A cross-fade composites the outgoing snapshot over the incoming one.
+   At the midpoint both sit at 0.5, so a fully opaque element resolves
+   to 1 - 0.5 x 0.5 = 0.75 — it dips. Identical content on both pages
+   does not cancel out; it visibly blinks, which is exactly what the
+   folders were doing.
+
+   Giving each persistent element a `view-transition-name` lifts it out
+   of the root snapshot into its own group. The browser then matches the
+   two by name and morphs one into the other rather than fading between
+   them — and since the sky, the folders and the taskbar are in the same
+   place on every page, the morph resolves to no movement at all. They
+   simply stay put while the window behind them changes.
+
+   Every name must be unique within a document. Each of these renders
+   exactly once per page. */
+.icons {
+  view-transition-name: rail;
+}
+
+.taskbar {
+  view-transition-name: taskbar;
+}
+
+#sky {
+  view-transition-name: sky;
+}
 
 /* --- motion --- */
 @media (prefers-reduced-motion: reduce) {
