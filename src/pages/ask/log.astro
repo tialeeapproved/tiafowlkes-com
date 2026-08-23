@@ -7,9 +7,21 @@ import { readLog, storeReady } from '../../lib/store';
 
 export const prerender = false;
 
-const expected = import.meta.env.ASK_LOG_KEY ?? process.env.ASK_LOG_KEY;
-const given = Astro.url.searchParams.get('key');
-const ok = Boolean(expected) && given === expected;
+const expected = (import.meta.env.ASK_LOG_KEY ?? process.env.ASK_LOG_KEY ?? '').trim();
+const raw = (Astro.url.searchParams.get('key') ?? '').trim();
+
+/* A random key is usually base64, and base64 contains `+`. In a query
+   string `+` is the legacy encoding for a space, so `?key=a+b` arrives
+   here as `a b` and the comparison fails on a key that is actually
+   correct. Rather than making her percent-encode by hand every time,
+   accept the space-for-plus reading as well.
+
+   Both sides are trimmed too: pasting into Vercel's env var field
+   picks up a trailing newline more often than you would think, and a
+   key that is right apart from an invisible character is the most
+   annoying possible failure. */
+const given = [raw, raw.replace(/ /g, '+')];
+const ok = Boolean(expected) && given.includes(expected);
 
 const entries = ok ? await readLog() : [];
 const fmt = (iso: string) =>
@@ -31,7 +43,7 @@ const fmt = (iso: string) =>
               tell them apart from outside. */}
           <p>
             {expected
-              ? 'That key does not match. Check ASK_LOG_KEY in Vercel, and watch for a trailing space when pasting.'
+              ? 'That key does not match. Compare it against ASK_LOG_KEY in Vercel — reveal the value there rather than trusting what you pasted, since a trailing newline is easy to catch and impossible to see.'
               : 'ASK_LOG_KEY is not set on this deployment, so there is nothing to check the key against. Add it in Vercel and redeploy.'}
           </p>
         </div>
