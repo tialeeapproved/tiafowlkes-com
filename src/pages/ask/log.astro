@@ -107,7 +107,7 @@ const fmt = (iso: string) =>
           </p>
         </div>
       ) : (
-        <>
+        <div class="sheet">
           <header>
             <h1>What people are asking</h1>
             <p class="meta">
@@ -129,19 +129,43 @@ const fmt = (iso: string) =>
               ))}
             </ol>
           )}
-        </>
+        </div>
       )
     }
   </main>
 </Base>
 
 <style>
+  /* Dark ink was being set straight onto the blue desktop, with nothing
+     behind it — legible in theory, unreadable in practice. This page has
+     no glass window of its own, so it brings its own panel. Same reading
+     surface as the rest of the site: light card, dark text. */
   .wrap {
     max-width: 46rem;
     margin: 0 auto;
-    padding: 48px 24px 80px;
+    padding: 40px 24px 72px;
     font-family: var(--font-body, system-ui), sans-serif;
-    color: #10171e;
+  }
+
+  .sheet {
+    padding: 36px 40px 44px;
+    border-radius: 14px;
+    background: #fbfcfd;
+    box-shadow:
+      0 22px 50px -24px rgba(12, 30, 50, 0.55),
+      0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    color: #14202b;
+  }
+
+  @media (max-width: 620px) {
+    .wrap {
+      padding: 20px 14px 48px;
+    }
+
+    .sheet {
+      padding: 24px 20px 30px;
+      border-radius: 12px;
+    }
   }
 
   /* This used to be one line of pale grey on the blue desktop, which
@@ -200,11 +224,12 @@ const fmt = (iso: string) =>
     font-size: 26px;
     font-weight: 300;
     letter-spacing: -0.02em;
+    color: #0d1620;
   }
 
   header .meta { margin-top: 8px; }
 
-  .empty { margin-top: 28px; color: #6b7480; }
+  .empty { margin-top: 28px; color: #5a6570; }
 
   ol {
     margin-top: 28px;
@@ -212,24 +237,30 @@ const fmt = (iso: string) =>
   }
 
   li {
-    padding: 16px 0;
-    border-top: 1px solid rgba(16, 23, 30, 0.1);
+    padding: 18px 0;
+    border-top: 1px solid rgba(16, 23, 30, 0.11);
   }
 
   .when { margin-bottom: 6px; }
 
+  /* The question is the content — it gets the strongest ink on the
+     page. Pasted job descriptions arrive as multi-line text, so the
+     wrapping is preserved. */
   .q {
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.62;
     white-space: pre-wrap;
-    color: #253039;
+    color: #14202b;
   }
 
+  /* Timestamps are orientation, not content: quiet, but still a real
+     4.5:1 against the card rather than the pale grey they were, which
+     only worked on a white page that this never was. */
   .meta {
     font-family: ui-monospace, monospace;
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #8892a0;
+    color: #67717c;
   }
 </style>
