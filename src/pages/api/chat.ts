@@ -12,7 +12,13 @@ import { checkDailyQuota, logQuestion } from '../../lib/store';
 
 export const prerender = false;
 
-const MODEL = 'claude-sonnet-5';
+/* Pinned deliberately. Model IDs retire — `claude-sonnet-5` was
+   valid when this was built and later stopped resolving, which the
+   API answers with a 404. From the outside that looked identical to
+   an expired key or an empty balance, because the route threw the
+   status away. Check this against the current model list before
+   assuming a billing problem. */
+const MODEL = 'claude-sonnet-5-5';
 /* A full role assessment runs longer than it looks. At 1024 the model
    was being cut mid-word — the visible symptom was a stray `**` where
    a bold marker never closed. */
@@ -114,8 +120,15 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   }
 
   if (!upstream.ok || !upstream.body) {
-    /* Out of credits, rate limited upstream, bad key — the visitor
-       does not need the detail, only a way forward. */
+    /* Out of credits, rate limited upstream, bad key, retired model —
+       the visitor does not need the detail, only a way forward. But
+       somebody does: without this line every one of those failures is
+       the same sentence on screen and nothing in the logs, which is
+       exactly how a dead model ID hid for weeks. Shows up in Vercel
+       under the /api/chat function's runtime logs. */
+    let detail = '';
+    try { detail = (await upstream.text()).slice(0, 400); } catch {}
+    console.error('[ask] upstream %s %s — %s', upstream.status, upstream.statusText, detail);
     return text(
       "The assistant is unavailable right now. Her email is tiafowlkes@gmail.com.",
       502
